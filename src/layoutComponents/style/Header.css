@@ -1,0 +1,38 @@
+.Header {
+    background-color: #381431;
+    color: white; 
+    padding: 10px 20px; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+  }
+  
+  nav ul {
+    list-style-type: none; 
+    padding: 0;
+    margin: 0; 
+    display: flex;
+  }
+  
+  nav ul li {
+    margin-left: 40px; /* Spacing between list items */
+  }
+  
+  nav ul li:first-child {
+    margin-left: 0; /* Remove margin from the first list item */
+  }
+  
+  nav a {
+    color: white;
+    text-decoration: none; 
+    font-weight: bold; 
+    font-size: 1.2em; 
+    transition: font-size 0.2s ease; 
+  }
+  
+  nav a:hover {
+    color: #EFDAD1;
+    font-size: 1.3em; 
+  }
+  
+  
