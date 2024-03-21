@@ -2,7 +2,14 @@
   width: 100%;
   
 }
-
+img{
+  width: 100%;
+}
+h1{
+  margin: auto;
+  text-align: center;
+  padding: 5px;
+}
 .logo {
   height: 6em;
   padding: 1.5em;
@@ -37,4 +44,49 @@
 
 .read-the-docs {
   color: #888;
+}
+
+.content-container {
+  padding: 20px; /* Adjust the padding value as needed */
+}
+
+.image-container {
+  position: relative;
+}
+
+.image-container img {
+  max-width: 100%;
+  height: auto;
+}
+
+.overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.button-container {
+  display: flex;
+}
+
+.button {
+  padding: 15px 30px;
+  background-color: transparent; /* Set default background color to transparent */
+  color: #fff; /* Set default text color to white */
+  text-decoration: none;
+  font-size: 20px;
+  margin: 10px;
+  border-radius: 5px;
+  border: 3px solid white; /* Add border to maintain button size */
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease; /* Add transition effect */
+}
+
+.button:hover,
+.button:focus {
+  background-color: #fff; /* Change background color to white on hover or focus */
+  color: #333; /* Change text color to dark on hover or focus */
+  border-color: #fff; /* Change border color to white on hover or focus */
 }

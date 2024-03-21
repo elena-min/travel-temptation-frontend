@@ -10,13 +10,10 @@ function Header() {
             <Link to="/">Home</Link>
             <ul>       
                 <li>
-                    <Link to="excursions">Excursions</Link>
+                    <Link to="tips">Travel Tips</Link>
                 </li>
                 <li>
-                    <Link to="explore">Explore</Link>
-                </li>
-                <li>
-                    <Link to="about">About</Link>
+                    <Link to="about">About us</Link>
                 </li>
                 <li>
                     <Link to="contacts">Contacts</Link>

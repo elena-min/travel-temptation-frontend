@@ -1,0 +1,20 @@
+.trip-container{
+    width: 80%;
+    margin: 10px;
+    padding: 20px;
+    border: #381431 solid 4px;
+    box-shadow: 5px 6px 8px #381431;
+    border-radius: 0px 0px 15px 15px;
+    text-align: center;
+}
+.trip-container img{
+    width: 100%;
+    height: auto;
+}
+
+.trip-container h2{
+    margin-top: 20px;
+}
+.trip-container p{
+    margin-top: 5px;
+}
