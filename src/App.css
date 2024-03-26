@@ -46,19 +46,6 @@ h1{
   color: #888;
 }
 
-.content-container {
-  padding: 20px; /* Adjust the padding value as needed */
-}
-
-.image-container {
-  position: relative;
-}
-
-.image-container img {
-  max-width: 100%;
-  height: auto;
-}
-
 .overlay {
   position: absolute;
   bottom: 0;

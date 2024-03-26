@@ -1,4 +1,16 @@
-.trips{
-    display: flex; /* Use flexbox to align items horizontally */
-    justify-content: center;
-}
+
+.image-container {
+    position: relative;
+  }
+  
+  .image-container img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .home-container{
+    padding: 20px;
+  }
+ .trip-listing-form{
+    padding: 20px;
+ }

@@ -18,3 +18,7 @@
 .trip-container p{
     margin-top: 5px;
 }
+ul{
+    /*display: flex;  Use flexbox to align items horizontally */
+    justify-content: center;
+}

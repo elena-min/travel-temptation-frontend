@@ -1,44 +1,43 @@
 import React from "react";
-import TripContainer from "../components/TripContainer";
 import './style/Home.css';
+import { useState, useEffect } from "react";
+import { getAllExcursions } from "../services/ExcursionService";
+import cover from '../images/cover3.jpg';
+import { Link } from "react-router-dom";
+import TripListContainer from "../components/TripListContainer";
+
 
 function Home() {
-    const trips = [
-        {
-          id: 1,
-          title: "Trip 1",
-          description: "Description of Trip 1",
-          image: "trip1.jpg"
-        },
-        {
-          id: 2,
-          title: "Trip 2",
-          description: "Description of Trip 2",
-          image: "trip2.jpg"
-        },
-        {
-            id: 3,
-            title: "Trip 3",
-            description: "Description of Trip 3",
-            image: "trip2.jpg"
-          },
-          {
-            id: 4,
-            title: "Trip 4",
-            description: "Description of Trip 4",
-            image: "trip2.jpg"
-          },
-      ];
 
+      const [excursions, setExcursions] = useState([]);
+
+      useEffect(() => {
+        //We fetch information and when it arrives we put it insideexcursions 
+        getAllExcursions()
+            .then(data => {
+              console.log(data); 
+            setExcursions(data)})
+    }, [])
+    //The empty array means it will do this operation once
+    
       return (
+        <>
+        <div className='image-container'>
+        <img src={cover} alt="Image 1" />
+          <div className="overlay">
+            <Link to="/trending" className="button">Trending</Link>
+            <Link to="/excursions" className="button">Explore</Link>
+            <Link to="/trips/europe" className="button">Europe</Link>
+          </div>
+        </div>
         <div className="home-container">
           <h1>Featured Trips</h1>
           <div className="trips">
-            {trips.map(trip => (
-              <TripContainer key={trip.id} trip={trip} />
-            ))}
+          <TripListContainer excursions={excursions} />
           </div>
         </div>
+        </>
+          
       );
 }
 

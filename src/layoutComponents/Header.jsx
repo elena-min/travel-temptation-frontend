@@ -13,6 +13,9 @@ function Header() {
                     <Link to="tips">Travel Tips</Link>
                 </li>
                 <li>
+                    <Link to="list-trip">List a trip!</Link>
+                </li>
+                <li>
                     <Link to="about">About us</Link>
                 </li>
                 <li>
