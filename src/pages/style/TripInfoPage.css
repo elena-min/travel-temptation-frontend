@@ -1,0 +1,78 @@
+.trip-info-container {
+    max-width: 1300px;
+    margin: 30px auto;
+    padding: 20px;
+}
+.trip-info-container h1{
+    text-align: left;
+    padding-bottom: 10px;
+}
+
+.trip-info-wrapper{
+    display: flex;
+
+}
+
+.trip-image {
+    flex: 0 0 45%;
+    margin-right: 20px;
+    border: 1px solid #ccc;
+    border-radius: 20px; 
+    overflow: hidden; /* Ensure the image stays within the border */
+}
+
+.trip-image img {
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+}
+
+
+.trip-info {
+    flex: 1; /* Take up remaining space */
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 20px; 
+    padding: 20px;
+    position: relative; 
+    display: flex;
+    flex-direction: column; 
+}
+  
+  .trip-info-container p {
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+  
+  .trip-info-container strong {
+    font-weight: bold;
+  }
+  
+  .trip-info-container a {
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  .trip-info-container a:hover {
+    text-decoration: underline;
+  }
+  
+  .book-button {
+    background-color: #381431;
+    color: #fff;
+    border: #381431 solid 4px;
+    border-radius: 8px;
+    padding: 15px 30px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: background-color 0.5s;
+    position: absolute; 
+    bottom: 10px; 
+    right: 50px;
+}
+
+.book-button:hover {
+    border: #381431 solid 4px;
+    background-color: #EFDAD1;
+    color: #381431
+}

@@ -1,5 +1,6 @@
 import React from "react";
 import './style/Trip.css';
+import { Link } from "react-router-dom";
 
 function TripContainer({trip}){
 
@@ -19,8 +20,10 @@ function TripContainer({trip}){
   
     return (
         <div className="trip-container">
-          <h2>{trip.name}</h2>
-          <h4>'{trip.travelAgency}'</h4>
+          <h2>
+            <Link to={`/trip/${trip.id}`}>{trip.name}</Link>
+            </h2>          
+            <h4>'{trip.travelAgency}'</h4>
           <p><i>{trip.destinations.join(', ')}</i></p>
           <p><b>{formatDate(trip.startDate)} - {formatDate(trip.endDate)}</b></p>
         </div>

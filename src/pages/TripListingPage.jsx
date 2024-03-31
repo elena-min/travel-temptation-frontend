@@ -5,7 +5,7 @@ import "./style/Home.css";
 function TripListingPage(){
     return(
         <div className="trip-listing-form">
-        <h1>Create a listing</h1>
+        <h1>Create a trip listing!</h1>
         <TripListingForm/>
         </div>
     )
