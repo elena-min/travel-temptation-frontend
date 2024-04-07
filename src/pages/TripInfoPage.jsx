@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
-import { getExcursion } from "../services/ExcursionService";
+import { deleteExcursion, getExcursion } from "../services/ExcursionService";
 import './style/TripInfoPage.css';
 import maldives from '../images/maldives.jpg';
 
@@ -36,7 +36,19 @@ function TripInfoPage() {
         return `${formattedDay}.${formattedMonth}.${year}`;
       }
 
+      const handleDelete = () =>{
+        deleteExcursion(excursionId)
+        .then( () =>{
+            window.location.href = "/";
+        })
+        .catch(error => {
+            console.error("Error deleting excursion.", error);
+        });
+      }
       
+      const handleUpdate = () =>{
+        window.location.href = `/excursions/${excursionId}/update`;
+      }
         return (
             <div className="trip-info-container">
                 {trip && (
@@ -53,6 +65,8 @@ function TripInfoPage() {
                     <p><strong>End Date:</strong> {formatDate(trip.endDate)}</p>
                     <p><strong>Price:</strong> {trip.price}</p>
                     <button className="book-button">Book Now</button>
+                    <button className='delete-button' onClick={handleDelete}>Delete Trip</button>
+                    <button className='update-button' onClick={handleUpdate}>Update Trip</button>
                    </div>
                 </div>
                 </>

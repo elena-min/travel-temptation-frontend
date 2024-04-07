@@ -6,6 +6,7 @@ import Navbar from './layoutComponents/Navbar';
 import TripListingPage from './pages/TripListingPage';
 import { Link } from 'react-router-dom';
 import TripInfoPage from './pages/TripInfoPage';
+import TripUpdatePage from './pages/TripUpdatePage';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
             <Route path="/trips/europe" element={<Home />} />
             <Route path="/list-trip" element={<TripListingPage />} />
             <Route path='/trip/:id' element={<TripInfoPage/>}/>
+            <Route path='/excursions/:id/update' element={<TripUpdatePage/>}/>
         </Routes>
         </div>
         </Navbar>

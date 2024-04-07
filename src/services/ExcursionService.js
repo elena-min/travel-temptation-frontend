@@ -14,8 +14,26 @@ function saveExcursion(excursion) {
     return axios.post('http://localhost:8080/excursions', excursion)
         .then(response => response.data)
 }
+
+function deleteExcursion(id){
+    return axios.delete(`http://localhost:8080/excursions/${id}`)
+    .then(response => response.data)
+}
+
+function updateExcursion(id, updatedExcursion){
+    return axios.put(`http://localhost:8080/excursions/${id}`, updatedExcursion)
+    .then(response => response.data)
+}
+
+function getExcursionByName(name) {
+    return axios.get(`http://localhost:8080/excursions/${name}`)
+        .then(response => response.data);
+}
 export {
     getAllExcursions,
     saveExcursion,
-    getExcursion
+    getExcursion,
+    deleteExcursion,
+    updateExcursion,
+    getExcursionByName
 }
