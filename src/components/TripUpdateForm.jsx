@@ -41,13 +41,12 @@ function TripUpdateForm(){
         return `${year}-${month}-${day}`;
       };
 
-  
-  const isFutureDate = (selectedDate) =>{
-    const today = new Date();
-    const selected = new Date(selectedDate);
-    return selected >= today;
-  };
+      const formatDateForSubmit = (dateString) => {
+        const [year, month, day] = dateString.split('-');
+        return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+    };
 
+  
   const isStartDateBeforeEndDate = (startDate, endDate) =>{
     const start = new Date(startDate);
     const end = new Date(endDate); 
@@ -56,11 +55,13 @@ function TripUpdateForm(){
   
   const onSubmit = async (data) => {
     data.destinations = data.destinations.split(',').map(destination => destination.trim());
+    data.startDate = formatDateForSubmit(data.startDate);
+    data.endDate = formatDateForSubmit(data.endDate);
 
     console.log(data);
     await updateExcursion(excursionId, data);
     console.log('Excursion saved successfully!');    
-    };
+};
 
 
     return (
@@ -82,17 +83,23 @@ function TripUpdateForm(){
             Start Date:
            {/*In 'validate' is the custom validation. 'futureDate' is a custom validation function which takes the input value.*/}
             <input 
-                type="date"  
-                {... register("startDate", 
-                {required: true, 
-                  validate: {
-              futureDate: value =>isFutureDate(value) || "Start date must be in the future",
-              startDateBeforeEndDate : value => {
-                const endDate = document.querySelector('input[name="endDate"]').value;
-                return isStartDateBeforeEndDate(value, endDate) || "Start date must be before the end date or the same!"
-              }
-            }
-            })} className="form-input"/>
+              type="date"  
+              {
+                ... register(
+                  "startDate", 
+                  {
+                    required: true, 
+                    validate: {
+                      startDateBeforeEndDate : value => {
+                        const endDate = document.querySelector('input[name="endDate"]').value;
+                        return isStartDateBeforeEndDate(value, endDate) || "Start date must be before the end date or the same!"
+                      }
+                    }
+                  }
+                )
+              } 
+              className="form-input"
+            />
             {errors.startDate && <span className="error-message">{errors.startDate.message}</span>}
           </label>
           <label className="form-label">
@@ -102,7 +109,6 @@ function TripUpdateForm(){
                 {... register("endDate", 
                 {required: true, 
                   validate: {
-              futureDate: value =>isFutureDate(value) || "End date must be in the future",
               startDateBeforeEndDate : value => {
                 const startDate = document.querySelector('input[name="startDate"]').value;
                 return isStartDateBeforeEndDate(startDate, value) || "End date must be after the start date or the same!"

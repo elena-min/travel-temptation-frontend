@@ -26,7 +26,7 @@ function updateExcursion(id, updatedExcursion){
 }
 
 function getExcursionByName(name) {
-    return axios.get(`http://localhost:8080/excursions/${name}`)
+    return axios.get(`http://localhost:8080/excursions/name/${name}`)
         .then(response => response.data);
 }
 export {
