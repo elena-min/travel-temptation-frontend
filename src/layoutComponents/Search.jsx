@@ -1,23 +1,23 @@
 import React, { useState } from 'react';
 import './style/Search.css';
-import {getExcursionByName } from "../services/ExcursionService";
+import {searchExcursionsByName } from "../services/ExcursionService";
 
-function Search() {
-    const [priceRange, setPriceRange] = useState();
-    const [tripName, setTripName] = useState('');
+function Search({ onSearch }) {
+  const [priceRange, setPriceRange] = useState();
+  const [tripName, setTripName] = useState('');
 
-    const handleSearch = () => {
-        getExcursionByName(tripName)
-        .then(excursion =>{
-            console.log('Excursion found!', excursion);
-
-        }
-        )
-       // .catch( error =>{
-         //   console.log('Error found!', error);
-        //})
-        ;
-      };
+  const handleSearch = () => {
+    searchExcursionsByName(tripName)
+        .then(excursions => {
+            console.log('Excursions found!', excursions);
+            // Pass search results back to parent component
+            onSearch(excursions);
+        })
+        .catch(error => {
+            console.log('Error found!', error);
+            // Handle error (e.g., display error message)
+        });
+};
 
 
   return (

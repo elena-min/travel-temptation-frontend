@@ -25,15 +25,16 @@ function updateExcursion(id, updatedExcursion){
     .then(response => response.data)
 }
 
-function getExcursionByName(name) {
-    return axios.get(`http://localhost:8080/excursions/name/${name}`)
-        .then(response => response.data);
+function searchExcursionsByName(name){
+    return axios.get(`http://localhost:8080/excursions/search?name=${name}`)
+    .then(response => response.data)
 }
+
 export {
     getAllExcursions,
     saveExcursion,
     getExcursion,
     deleteExcursion,
     updateExcursion,
-    getExcursionByName
+    searchExcursionsByName
 }

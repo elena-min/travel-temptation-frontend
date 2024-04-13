@@ -114,7 +114,6 @@ function TripListingForm(){
         </form>
       );
 
-
 }
 
 export default TripListingForm;

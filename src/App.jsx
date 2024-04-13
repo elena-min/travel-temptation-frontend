@@ -7,6 +7,8 @@ import TripListingPage from './pages/TripListingPage';
 import { Link } from 'react-router-dom';
 import TripInfoPage from './pages/TripInfoPage';
 import TripUpdatePage from './pages/TripUpdatePage';
+import Register from './pages/Register';
+import Login from './pages/Login';
 
 function App() {
   return (
@@ -18,6 +20,8 @@ function App() {
       <Routes>
             <Route index element= {<Home />} />
             <Route path="/home" element={<Home />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<Login />} />
             <Route path="/excursions" element={<Home />} />
             <Route path="/explore" element={<Home />} />
             <Route path="/about" element={<About />} />

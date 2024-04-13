@@ -5,23 +5,28 @@ import { getAllExcursions } from "../services/ExcursionService";
 import cover from '../images/cover3.jpg';
 import { Link } from "react-router-dom";
 import TripListContainer from "../components/TripListContainer";
+import Search from "../layoutComponents/Search";
 
 
 function Home() {
+   const [excursions, setExcursions] = useState([]);
 
-      const [excursions, setExcursions] = useState([]);
+   const handleSearch = (searchResults) => {
+        setExcursions(searchResults);
+    };
 
-      useEffect(() => {
-        //We fetch information and when it arrives we put it insideexcursions 
-        getAllExcursions()
-            .then(data => {
-              console.log(data); 
-            setExcursions(data)})
+    useEffect(() => {
+      //We fetch information and when it arrives we put it insideexcursions 
+      getAllExcursions()
+           .then(data => {
+           console.log(data); 
+           setExcursions(data)})
     }, [])
     //The empty array means it will do this operation once
     
       return (
         <>
+        <Search onSearch={handleSearch} />
         <div className='image-container'>
         <img src={cover} alt="Image 1" />
           <div className="overlay">
