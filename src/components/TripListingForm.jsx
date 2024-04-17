@@ -110,6 +110,12 @@ function TripListingForm(){
             <input type="number" {... register("price", {required: true, min: 0})} className="form-input"/>
             {errors.price && <span className="error-message">Price is required!</span>}
           </label>
+
+          <label className="form-label">
+            Number of avaliable spaces:
+            <input type="number" {... register("numberOfAvaliableSpaces", {required: true, min: 1})} className="form-input"/>
+            {errors.numberOfAvaliableSpaces && <span className="error-message">Number of avaliable spaces is required!</span>}
+          </label>
           <button type="submit" className="form-button">List Trip</button>
         </form>
       );

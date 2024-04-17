@@ -21,6 +21,9 @@ function Header() {
                 <li>
                     <Link to="contacts">Contacts</Link>
                 </li>
+                <li>
+                    <Link to="profile">Profile Page</Link>
+                </li>
             </ul>
         </nav>
         

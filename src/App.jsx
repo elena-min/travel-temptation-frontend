@@ -9,6 +9,10 @@ import TripInfoPage from './pages/TripInfoPage';
 import TripUpdatePage from './pages/TripUpdatePage';
 import Register from './pages/Register';
 import Login from './pages/Login';
+import BookingPage from './pages/BookingPage';
+import BookingDetailsPage from './pages/BookingDetailsPage';
+import ProfilePage from './pages/ProfilePage';
+import ProfilePageUpdate from './pages/ProfilePageUpdate';
 
 function App() {
   return (
@@ -31,6 +35,10 @@ function App() {
             <Route path="/list-trip" element={<TripListingPage />} />
             <Route path='/trip/:id' element={<TripInfoPage/>}/>
             <Route path='/excursions/:id/update' element={<TripUpdatePage/>}/>
+            <Route path='/excursions/:id/booking' element={<BookingPage/>}/>
+            <Route path='/excursions/:id/booking-details' element={<BookingDetailsPage/>}/>
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/profile/update" element={<ProfilePageUpdate />} />
         </Routes>
         </div>
         </Navbar>

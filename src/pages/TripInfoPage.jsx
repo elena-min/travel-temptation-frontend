@@ -8,7 +8,7 @@ import maldives from '../images/maldives.jpg';
 function TripInfoPage() {
 
     const { id } = useParams();
-    const excursionId = parseInt(id); // Convert id to integer
+    const excursionId = parseInt(id, 10); // Convert id to integer
     const [trip, setTrip] = useState(null);
 
     useEffect(() => {
@@ -46,9 +46,14 @@ function TripInfoPage() {
         });
       }
       
+      const handleBookNow = () =>{
+        window.location.href = `/excursions/${excursionId}/booking`;
+      }
+      
       const handleUpdate = () =>{
         window.location.href = `/excursions/${excursionId}/update`;
       }
+      
         return (
             <div className="trip-info-container">
                 {trip && (
@@ -64,7 +69,9 @@ function TripInfoPage() {
                     <p><strong>Start Date:</strong> {formatDate(trip.startDate)}</p>
                     <p><strong>End Date:</strong> {formatDate(trip.endDate)}</p>
                     <p><strong>Price:</strong> {trip.price}</p>
-                    <button className="book-button">Book Now</button>
+                    <p><strong>Avaliable spaces:</strong> {trip.numberOfAvaliableSpaces}</p>
+
+                    <button className="book-button" onClick={handleBookNow}>Book Now</button>
                     <button className='delete-button' onClick={handleDelete}>Delete Trip</button>
                     <button className='update-button' onClick={handleUpdate}>Update Trip</button>
                    </div>

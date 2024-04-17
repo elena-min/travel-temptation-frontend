@@ -25,6 +25,7 @@ function TripUpdateForm(){
                 setValue("endDate", formattedEndDate);
                 setValue("travelAgency", data.travelAgency);
                 setValue("price", data.price);
+                setValue("numberOfAvaliableSpaces", data.numberOfAvaliableSpaces)
 
             })
             .catch(error => {
@@ -124,8 +125,14 @@ function TripUpdateForm(){
           </label>
           <label className="form-label">
             Price (per person):
-            <input type="number" defaultValue={trip ? trip.price : ""}  {... register("price", {required: true, min: 0})} className="form-input"/>
+            <input type="number" defaultValue={trip ? trip.price : ""}  {... register("price", {required: true, min: 1})} className="form-input"/>
             {errors.price && <span className="error-message">Price is required!</span>}
+          </label>
+
+          <label className="form-label">
+            Number of avaliable spaces:
+            <input type="number" defaultValue={trip ? trip.price : ""}  {... register("numberOfAvaliableSpaces", {required: true, min: 0})} className="form-input"/>
+            {errors.numberOfAvaliableSpaces && <span className="error-message">Number of avaloabel spaces is required!</span>}
           </label>
           <button type="submit" className="form-button">List Trip</button>
         </form>
