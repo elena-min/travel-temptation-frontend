@@ -10,6 +10,7 @@ function TripUpdateForm(){
     const { id } = useParams();
     const excursionId = parseInt(id); // Convert id to integer
     const [trip, setTrip] = useState(null);
+    const [updateStatus, setUpdateStatus] = useState(null);
     const {register, handleSubmit, formState : {errors}, setValue} = useForm();
 
     useEffect(() => {
@@ -59,14 +60,27 @@ function TripUpdateForm(){
     data.startDate = formatDateForSubmit(data.startDate);
     data.endDate = formatDateForSubmit(data.endDate);
 
-    console.log(data);
-    await updateExcursion(excursionId, data);
-    console.log('Excursion saved successfully!');    
+    try{
+      console.log(data);
+      await updateExcursion(excursionId, data);
+      console.log('Excursion saved successfully!'); 
+    }
+    catch(error){
+      setUpdateStatus({success: false});
+      console.log('Error updating trip', {error});   
+  }
+       
 };
 
 
     return (
-      
+      <div style={{padding: 30}}>
+        {updateStatus && (
+            <div className={updateStatus.success ? "success-message" : "error-message"}>
+                    {updateStatus.success ? "Trip information updated successfully!" : "Error updating information. Please try again."}
+                </div>
+        )}
+        
         <form onSubmit={handleSubmit(onSubmit)} className="form-container">
               {/*When the form is submitted(handleSubmit takes care of that) it calls the function 'onSubmit'*/}
           <label className="form-label">
@@ -136,8 +150,9 @@ function TripUpdateForm(){
           </label>
           <button type="submit" className="form-button">List Trip</button>
         </form>
+        </div>
+        
       );
 
 }
-
 export default TripUpdateForm;

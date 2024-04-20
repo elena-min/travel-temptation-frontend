@@ -57,22 +57,25 @@
     text-decoration: underline;
   }
   
-  .book-button {
-    background-color: #381431;
-    color: #fff;
-    border: #381431 solid 4px;
-    border-radius: 8px;
-    padding: 15px 30px;
-    font-size: 20px;
-    cursor: pointer;
-    transition: background-color 0.5s;
-    position: absolute; 
-    bottom: 10px; 
-    right: 50px;
+
+.user-update-form{
+  padding: 20px;
 }
 
-.book-button:hover {
-    border: #381431 solid 4px;
-    background-color: #EFDAD1;
-    color: #381431
+
+.button-container button{
+  background-color: #381431;
+  color: #fff;
+  border: #381431 solid 4px;
+  border-radius: 8px;
+  margin:10px;
+  padding: 15px 30px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.5s;
+}
+.button-container button:hover{
+  border: #381431 solid 4px;
+  background-color: #EFDAD1;
+  color: #381431;
 }

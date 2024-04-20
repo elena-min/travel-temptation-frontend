@@ -10,6 +10,9 @@ function TripInfoPage() {
     const { id } = useParams();
     const excursionId = parseInt(id, 10); // Convert id to integer
     const [trip, setTrip] = useState(null);
+    const [showConfirmation, setShowConfirmation] = useState(false);
+    const [deleteStatus, setDeleteStatus] = useState(null);
+
 
     useEffect(() => {
         getExcursion(excursionId)
@@ -37,13 +40,18 @@ function TripInfoPage() {
       }
 
       const handleDelete = () =>{
-        deleteExcursion(excursionId)
-        .then( () =>{
-            window.location.href = "/";
-        })
-        .catch(error => {
-            console.error("Error deleting excursion.", error);
-        });
+        const confirmDelete = window.confirm("Are you sure you want to delete this trip?")
+        if(confirmDelete){
+          deleteExcursion(excursionId)
+          .then( () =>{
+              window.location.href = "/";
+          })
+          .catch(error => {
+            setDeleteStatus({success: true});
+              console.error("Error deleting excursion.", error);
+          });
+        }
+        
       }
       
       const handleBookNow = () =>{
@@ -56,6 +64,12 @@ function TripInfoPage() {
       
         return (
             <div className="trip-info-container">
+              {deleteStatus && (
+              <div className={updateStatus.success ? "success-message" : "error-message"}>
+                    {updateStatus.success ? "Trip deleted successfully!" : "Error deleting information. Please try again."}
+              </div>
+              )}
+
                 {trip && (
                 <>
                 <h1>{trip.name}</h1>
@@ -71,9 +85,12 @@ function TripInfoPage() {
                     <p><strong>Price:</strong> {trip.price}</p>
                     <p><strong>Avaliable spaces:</strong> {trip.numberOfAvaliableSpaces}</p>
 
-                    <button className="book-button" onClick={handleBookNow}>Book Now</button>
-                    <button className='delete-button' onClick={handleDelete}>Delete Trip</button>
-                    <button className='update-button' onClick={handleUpdate}>Update Trip</button>
+                    <div className='buttons'>
+                      <button className='delete-button' onClick={handleDelete}>Delete Trip</button>
+                      <button className='update-button' onClick={handleUpdate}>Update Trip</button>
+                      <button className='booking-button' onClick={handleBookNow}>Book Trip</button>
+
+                    </div>
                    </div>
                 </div>
                 </>

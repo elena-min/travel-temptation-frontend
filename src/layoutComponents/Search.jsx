@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import './style/Search.css';
-import {searchExcursionsByName } from "../services/ExcursionService";
+import {searchExcursionsByName, searchExcursionByNameAndPrice } from "../services/ExcursionService";
 
 function Search({ onSearch }) {
   const [priceRange, setPriceRange] = useState();
   const [tripName, setTripName] = useState('');
 
   const handleSearch = () => {
-    searchExcursionsByName(tripName)
+    searchExcursionByNameAndPrice(tripName, priceRange)
         .then(excursions => {
             console.log('Excursions found!', excursions);
             // Pass search results back to parent component

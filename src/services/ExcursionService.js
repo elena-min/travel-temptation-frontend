@@ -30,11 +30,28 @@ function searchExcursionsByName(name){
     .then(response => response.data)
 }
 
+function searchExcursionByNameAndPrice(name, priceRange) {
+    let url = `http://localhost:8080/excursions/search?name=${name}`;
+
+    // If priceRange is provided, append it to the URL
+    if (priceRange) {
+        url += `&priceRange=${priceRange}`;
+    }
+
+    return axios.get(url)
+        .then(response => response.data)
+        .catch(error => {
+            console.error('Error searching excursions:', error);
+            throw error; // Rethrow the error for the caller to handle
+        });
+}
+
 export {
     getAllExcursions,
     saveExcursion,
     getExcursion,
     deleteExcursion,
     updateExcursion,
-    searchExcursionsByName
+    searchExcursionsByName,
+    searchExcursionByNameAndPrice
 }

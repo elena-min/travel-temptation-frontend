@@ -9,6 +9,7 @@ function ProfileUpdateForm(){
 
     const userId = 3;
     const [user, setUser] = useState(null);
+    const [updateStatus, setUpdateStatus] = useState(null);
     const {register, handleSubmit, formState : {errors}, setValue} = useForm();
 
     useEffect(() => {
@@ -54,14 +55,28 @@ function ProfileUpdateForm(){
   
   const onSubmit = async (data) => {
     data.birthDate = formatDateForSubmit(data.birthDate);
-    console.log(data);
-    await updateUser(userId, data);
-    console.log('User saved successfully!');    
+    try{
+        console.log(data);
+        await updateUser(userId, data);
+        setUpdateStatus({success: true});
+        console.log('User saved successfully!');   
+
+    }
+    catch(error){
+        setUpdateStatus({success: false});
+        console.log('Error updating user', {error});   
+    }
+     
 };
 
 
     return (
-      
+      <div style={{padding: 30}}>
+        {updateStatus && (
+            <div className={updateStatus.success ? "success-message" : "error-message"}>
+                    {updateStatus.success ? "Profile information updated successfully!" : "Error updating information. Please try again."}
+                </div>
+        )}
         <form onSubmit={handleSubmit(onSubmit)} className="form-container">
               {/*When the form is submitted(handleSubmit takes care of that) it calls the function 'onSubmit'*/}
               <label className="form-label">
@@ -90,6 +105,8 @@ function ProfileUpdateForm(){
             </label>
           <button type="submit" className="form-button">Update</button>
         </form>
+      </div>
+       
       );
 
 }

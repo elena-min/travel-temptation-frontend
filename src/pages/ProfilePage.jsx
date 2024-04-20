@@ -38,8 +38,12 @@ function ProfilePage() {
                     <p><strong>Email:</strong> {user.email}</p>
                     <p><strong>Gender:</strong> {user.gender}</p>
                     <p><strong>Birth date:</strong> {user.birthDate}</p>
-                    <button className='delete-button' >Delete Profile</button>
-                    <button className='update-button' onClick={handleUpdate}>Update Profile</button>
+
+                    <div className='button-container'>
+                      <button className='delete-button' >Delete Profile</button>
+                      <button className='update-button' onClick={handleUpdate}>Update Profile</button>
+                    </div>
+                    
                    </div>
                 </div>
                 </>
