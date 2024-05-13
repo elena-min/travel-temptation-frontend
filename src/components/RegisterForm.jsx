@@ -1,13 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import './style/TripListing.css'
 import { useForm } from "react-hook-form";
+import AuthAPI from "../apis/AuthAPI";
 
 function RegisterForm() {
     const {register, handleSubmit, formState : {errors}} = useForm();
+    const [errorMessage, setErrorMessage] = useState('');
 
-    const onSubmit = async (data) => {
-        console.log(data);
-        console.log('User saved successfully!');    
+    const onSubmit = async(formData) =>{
+      const accessToken = await AuthAPI.registerUser(formData);
+      if(accessToken){
+        setErrorMessage('');
+        console.log("user logged in!");
+      }
+      else{
+        setErrorMessage('Logging in failed.');
+      }
     };
     
     const isFutureDate = (selectedDate) =>{
@@ -72,7 +80,7 @@ function RegisterForm() {
             <input type="text" {... register("password", {required: true, minLength: 6})} className="form-input"/>
             {errors.password && <span className="error-message">Password should be ar least of 6 characters long!</span>}
           </label>
-        
+          {errorMessage && <div className="error-message">{errorMessage}</div>}
           <button type="submit" className="form-button">Register</button>
         </form>
       );

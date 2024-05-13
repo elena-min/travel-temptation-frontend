@@ -22,7 +22,16 @@ function Header() {
                     <Link to="contacts">Contacts</Link>
                 </li>
                 <li>
+                    <Link to="login">My Trips</Link>
+                </li>
+                <li>
                     <Link to="profile">Profile Page</Link>
+                </li>
+                <li>
+                    <Link to="register">Register</Link>
+                </li>
+                <li>
+                    <Link to="login">Login</Link>
                 </li>
             </ul>
         </nav>

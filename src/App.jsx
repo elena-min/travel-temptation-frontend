@@ -39,6 +39,9 @@ function App() {
             <Route path='/excursions/:id/booking-details' element={<BookingDetailsPage/>}/>
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/profile/update" element={<ProfilePageUpdate />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<Login />} />
         </Routes>
         </div>
         </Navbar>
