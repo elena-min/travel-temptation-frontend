@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { deleteExcursion, getExcursion } from "../services/ExcursionService";
 import './style/TripInfoPage.css';
 import maldives from '../images/maldives.jpg';
+import TokenManager from '../apis/TokenManager';
 
 function TripInfoPage() {
 
@@ -12,6 +13,7 @@ function TripInfoPage() {
     const [trip, setTrip] = useState(null);
     const [showConfirmation, setShowConfirmation] = useState(false);
     const [deleteStatus, setDeleteStatus] = useState(null);
+    const userRole = TokenManager.getUserRoles();
 
 
     useEffect(() => {
@@ -86,10 +88,17 @@ function TripInfoPage() {
                     <p><strong>Avaliable spaces:</strong> {trip.numberOfAvaliableSpaces}</p>
 
                     <div className='buttons'>
-                      <button className='delete-button' onClick={handleDelete}>Delete Trip</button>
-                      <button className='update-button' onClick={handleUpdate}>Update Trip</button>
-                      <button className='booking-button' onClick={handleBookNow}>Book Trip</button>
-
+                      {userRole.includes("TRAVELAGENCY") && (
+                        <>
+                        <button className='delete-button' onClick={handleDelete}>Delete Trip</button>
+                         <button className='update-button' onClick={handleUpdate}>Update Trip</button>
+                        </>
+                      )}
+                      {userRole.includes("USER") && (
+                        <>
+                          <button className='booking-button' onClick={handleBookNow}>Book Trip</button>
+                        </>
+                      )}
                     </div>
                    </div>
                 </div>

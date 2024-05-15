@@ -38,8 +38,8 @@ function BookingPage() {
       }
       
       const handleBookNow = () =>{
-        window.location.href = `/excursions/${excursionId}/booking-details`;
-      }
+        window.location.href = `/excursions/${excursionId}/booking-details?numTravelers=${numTravelers}`;
+    }
 
     return (
     <div className="trip-info-container">
@@ -75,3 +75,4 @@ function BookingPage() {
 }
 
 export default BookingPage;
+

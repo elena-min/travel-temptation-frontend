@@ -1,13 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import './style/TripListing.css'
 import { useForm } from "react-hook-form";
+import AuthAPI from "../apis/AuthAPI";
 
 function RegisterForm() {
     const {register, handleSubmit, formState : {errors}} = useForm();
+    const [errorMessage, setErrorMessage] = useState('');
 
-    const onSubmit = async (data) => {
-        console.log(data);
-        console.log('User saved successfully!');    
+    const onSubmit = async(formData) =>{
+      formData.gender = formData.gender.toUpperCase(); 
+
+      const accessToken = await AuthAPI.registerUser(formData);
+      if(accessToken){
+        setErrorMessage('');
+        console.log("user logged in!");
+        console.log(accessToken);
+        window.location.href = `/`;
+
+      }
+      else{
+        setErrorMessage('Logging in failed.');
+      }
     };
     
     const isFutureDate = (selectedDate) =>{
@@ -35,22 +48,22 @@ function RegisterForm() {
             Birth date:
             <input 
                 type="date"
-                {... register("birthdate", 
+                {... register("birthDate", 
                 {required: true, 
                   validate: {
                     futureDate: value =>isFutureDate(value) || "Birth date must not be in the future!"
                   }
                 }
                 )} className="form-input"/>
-            {errors.birthdate && <span className="error-message">{errors.birthdate.message}</span>}
+            {errors.birthDate && <span className="error-message">{errors.birthDate.message}</span>}
         </label>
 
         <label className="form-label">
                 Gender:
                 <select {...register("gender", {required: true})} className="form-input">
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                    <option value="other">Other</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
                 </select>
                 {errors.gender && <span className="error-message">Gender is required!</span>}
         </label>
@@ -72,7 +85,7 @@ function RegisterForm() {
             <input type="text" {... register("password", {required: true, minLength: 6})} className="form-input"/>
             {errors.password && <span className="error-message">Password should be ar least of 6 characters long!</span>}
           </label>
-        
+          {errorMessage && <div className="error-message">{errorMessage}</div>}
           <button type="submit" className="form-button">Register</button>
         </form>
       );

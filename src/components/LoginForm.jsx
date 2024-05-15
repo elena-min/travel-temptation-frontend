@@ -1,16 +1,24 @@
-import React from "react";
-import { saveExcursion } from "../services/ExcursionService";
+import React, { useState } from "react";
 import './style/TripListing.css'
 import { useForm } from "react-hook-form";
+import AuthAPI from "../apis/AuthAPI";
 
 function LoginForm() {
-      
-    const {register, handleSubmit, formState : {errors}} = useForm();
+  const [errorMessage, setErrorMessage] = useState('');
+  const {register, handleSubmit, formState : {errors}} = useForm();
 
-    const onSubmit = async (data) => {
-        console.log(data);
-        console.log('User saved successfully!');    
-    };
+  const onSubmit = async(formData) =>{
+    const {username, password} = formData;
+    const accessToken = await AuthAPI.login(username, password)
+    if(accessToken){
+      setErrorMessage('');
+      console.log("user logged in!");
+      console.log(accessToken);
+     // window.location.href = `/home`;
+    }else{
+      setErrorMessage('Logging in failed.');
+    }
+  };
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="form-container">          
          <label className="form-label">
@@ -24,8 +32,9 @@ function LoginForm() {
             <input type="text" {... register("password", {required: true, minLength: 6})} className="form-input"/>
             {errors.password && <span className="error-message">Password should be ar least of 6 characters long!</span>}
           </label>
-        
-          <button type="submit" className="form-button">Register</button>
+          {errorMessage && <div className="error-message">{errorMessage}</div>}
+
+          <button type="submit" className="form-button">Login</button>
         </form>
       );
 }
