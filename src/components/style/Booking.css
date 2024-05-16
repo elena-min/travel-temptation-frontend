@@ -1,0 +1,13 @@
+.booking-list-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between; /* Distribute items evenly along the main axis */
+    list-style: none;
+    padding: 0;
+  }
+  
+  .booking-container {
+    width: calc(33.33% - 10px); /* Adjust width based on 3 items per row */
+    margin-bottom: 20px; /* Add margin between rows */
+  }
+  

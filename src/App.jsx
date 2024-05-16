@@ -13,6 +13,8 @@ import BookingPage from './pages/BookingPage';
 import BookingDetailsPage from './pages/BookingDetailsPage';
 import ProfilePage from './pages/ProfilePage';
 import ProfilePageUpdate from './pages/ProfilePageUpdate';
+import MyTripsPage from './pages/MyBookings.Page';
+import MyBookingsPage from './pages/MyBookings.Page';
 
 function App() {
   return (
@@ -39,6 +41,7 @@ function App() {
             <Route path='/excursions/:id/booking-details/' element={<BookingDetailsPage/>}/>
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/profile/update" element={<ProfilePageUpdate />} />
+            <Route path="/mybookings" element={<MyBookingsPage />} />
         </Routes>
         </div>
         </Navbar>

@@ -1,6 +1,14 @@
 import { jwtDecode } from "jwt-decode";
+import axios from "axios";
 
 const TokenManager = {
+    updateAxiosToken:(token) => {
+        if (token) {
+          axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        } else {
+          delete axios.defaults.headers.common['Authorization'];
+        }
+      },
     getAccessToken: () => sessionStorage.getItem("accessToken"),
     getClaims: () => {
         if (!sessionStorage.getItem("claims")) {

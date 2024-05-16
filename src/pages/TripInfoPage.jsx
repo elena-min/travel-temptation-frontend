@@ -84,8 +84,9 @@ function TripInfoPage() {
                     <p><strong>Destinations:</strong> {trip.destinations.join(', ')}</p>
                     <p><strong>Start Date:</strong> {formatDate(trip.startDate)}</p>
                     <p><strong>End Date:</strong> {formatDate(trip.endDate)}</p>
-                    <p><strong>Price:</strong> {trip.price}</p>
-                    <p><strong>Avaliable spaces:</strong> {trip.numberOfAvaliableSpaces}</p>
+                    <p><strong>Price:</strong> {trip.price} &euro;/p.p.</p>
+                    <p><strong>Total spaces:</strong> {trip.numberOfAvaliableSpaces}</p>
+                    <p><strong>Avaliable spaces left:</strong> {trip.numberOfSpacesLeft} !!!</p>
 
                     <div className='buttons'>
                       {userRole.includes("TRAVELAGENCY") && (
@@ -96,7 +97,12 @@ function TripInfoPage() {
                       )}
                       {userRole.includes("USER") && (
                         <>
+                        {trip.numberOfSpacesLeft >0 ?(
                           <button className='booking-button' onClick={handleBookNow}>Book Trip</button>
+
+                        ) : (
+                          <h3>Fully Booked!</h3>
+                        )}
                         </>
                       )}
                     </div>

@@ -43,7 +43,7 @@ function Header() {
                     <Link to="list-trip">List a trip!</Link>
                     </li>
                     <li>
-                    <Link to="mytrips">My trips!</Link>
+                    <Link to="mybookings">My bookings!</Link>
                     </li>
                     <li>
                     <Link to="profile">Profile Page</Link>
