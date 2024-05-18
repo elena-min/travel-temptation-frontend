@@ -51,7 +51,7 @@ function BookingPage() {
                 <img src={maldives} alt="Maldvives" />
             </div>
             <div className='trip-info'>
-                <p><strong>Travel Agency:</strong> {trip.travelAgency}</p>
+            <p><strong>Travel Agency:</strong> {trip.travelAgency.firstName} {trip.travelAgency.lastName}</p>
                 <p><strong>Destinations:</strong> {trip.destinations.join(', ')}</p>
                 <p><strong>Start Date:</strong> {formatDate(trip.startDate)}</p>
                 <p><strong>End Date:</strong> {formatDate(trip.endDate)}</p>

@@ -80,7 +80,7 @@ function TripInfoPage() {
                     <img src={maldives} alt="Maldvives" />
                    </div>
                    <div className='trip-info'>
-                    <p><strong>Travel Agency:</strong> {trip.travelAgency}</p>
+                    <p><strong>Travel Agency:</strong> {trip.travelAgency.firstName} {trip.travelAgency.lastName}</p>
                     <p><strong>Destinations:</strong> {trip.destinations.join(', ')}</p>
                     <p><strong>Start Date:</strong> {formatDate(trip.startDate)}</p>
                     <p><strong>End Date:</strong> {formatDate(trip.endDate)}</p>
@@ -91,8 +91,8 @@ function TripInfoPage() {
                     <div className='buttons'>
                       {userRole.includes("TRAVELAGENCY") && (
                         <>
-                        <button className='delete-button' onClick={handleDelete}>Delete Trip</button>
-                         <button className='update-button' onClick={handleUpdate}>Update Trip</button>
+                        <button className='delete-button' onClick={handleDelete}>Delete Listing</button>
+                         <button className='update-button' onClick={handleUpdate}>Update Listing</button>
                         </>
                       )}
                       {userRole.includes("USER") && (

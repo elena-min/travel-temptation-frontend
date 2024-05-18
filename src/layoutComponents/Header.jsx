@@ -5,6 +5,19 @@ import TokenManager from "../apis/TokenManager";
 
 function Header() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [userRoles, setUserRoles] = useState([]);
+
+    useEffect(() => {
+        const token = TokenManager.getAccessToken();
+        if(token){
+            setIsAuthenticated(true);
+            const roles = TokenManager.getUserRoles();
+            setUserRoles(roles);
+        }else{
+            setIsAuthenticated(false);
+            setUserRoles([]);
+        }
+    }, []);
 
     useEffect(() =>{
         const token = TokenManager.getAccessToken();
@@ -39,12 +52,24 @@ function Header() {
 
                 { isAuthenticated ? (
                 <>
+                {userRoles.includes("TRAVELAGENCY") && (
+                    <>
                     <li>
                     <Link to="list-trip">List a trip!</Link>
                     </li>
                     <li>
+                    <Link to="mylistings">My listings</Link>
+                    </li>
+                    </>
+                    
+                )}
+                {userRoles.includes("USER") && (
+                    <li>
                     <Link to="mybookings">My bookings!</Link>
                     </li>
+                    
+                )}
+                    
                     <li>
                     <Link to="profile">Profile Page</Link>
                     </li>

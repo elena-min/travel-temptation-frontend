@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import './style/Trip.css';
 import { Link } from "react-router-dom";
-import { deleteBooking } from "../services/BookingService";
+import { deleteExcursion } from "../services/ExcursionService";
 
-function BookingContainer({booking}){
+function ListingContainer({listing}){
   const [deleteStatus, setDeleteStatus] = useState({ success: false, error: null });
-  console.log(booking);
-  console.log(booking.excursion);
+  console.log(listing);
+  console.log(listing.excursion);
 
     function formatDate(dateString) {
         const date = new Date(dateString);
@@ -21,9 +21,9 @@ function BookingContainer({booking}){
       }
     
       const handleCancelTrip = () =>{
-        const confirmDelete = window.confirm("Are you sure you want to cancel this trip?")
+        const confirmDelete = window.confirm("Are you sure you want to delete this listin?")
         if(confirmDelete){
-          deleteBooking(booking.id)
+            deleteExcursion(listing.id)
           .then( () =>{
             setDeleteStatus({ success: true });
               //window.location.href = "/";
@@ -39,17 +39,17 @@ function BookingContainer({booking}){
       return (
         <div className="trip-container">
           <h2>
-            <Link to={`/trip/${booking.excursion.id}`}>{booking.excursion.name}</Link>
+            <Link to={`/trip/${listing.id}`}>{listing.name}</Link>
             </h2>          
-            <h4>'{booking.excursion.travelAgency.firstName} {booking.excursion.travelAgency.lastName}'</h4>
-          <p><i>{booking.excursion.destinations.join(', ')}</i></p>
-          <p><b>{formatDate(booking.excursion.startDate)} - {formatDate(booking.excursion.endDate)}</b></p>
-          <p><i>Number of traveleres: </i>{booking.numberOfTravelers}</p>
-          <p><i>Booking status: </i>{booking.status}</p>
+            <h4>'{listing.travelAgency.firstName} {listing.travelAgency.lastName}'</h4>
+          <p><i>{listing.destinations.join(', ')}</i></p>
+          <p><b>{formatDate(listing.startDate)} - {formatDate(listing.endDate)}</b></p>
+          <p><b>Price:</b> {listing.price} &euro;/p.p.</p>
+
           {deleteStatus.error && <p className="error">{deleteStatus.error}</p>}
           {deleteStatus.success ?
-            <p className="success">Booking deleted successfully!</p> :
-            <button className='cancel-button' onClick={handleCancelTrip}>Cancel Trip</button>
+            <p className="success">Listing deleted successfully!</p> :
+            <button className='cancel-button' onClick={handleCancelTrip}>Remove Listing</button>
 
           }
 
@@ -57,4 +57,4 @@ function BookingContainer({booking}){
       );
 
 }
-export default BookingContainer;
+export default ListingContainer;

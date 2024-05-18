@@ -16,6 +16,8 @@ function BookingForm(){
     }
     data.destinations = data.destinations.split(',').map(destination => destination.trim());
     console.log(data);
+    const token = TokenManager.updateAxiosToken(TokenManager.getAccessToken());
+    console.log(TokenManager.getUserRoles());
     await saveExcursion(data);
     console.log('Excursion booked successfully!');
 };

@@ -19,7 +19,7 @@ function RegisterForm() {
 
       }
       else{
-        setErrorMessage('Logging in failed.');
+        setErrorMessage('Registering in failed.');
       }
     };
     

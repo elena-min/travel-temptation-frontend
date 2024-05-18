@@ -14,7 +14,7 @@ function LoginForm() {
       setErrorMessage('');
       console.log("user logged in!");
       console.log(accessToken);
-     // window.location.href = `/home`;
+      //window.location.href = `/home`;
     }else{
       setErrorMessage('Logging in failed.');
     }
@@ -33,7 +33,6 @@ function LoginForm() {
             {errors.password && <span className="error-message">Password should be ar least of 6 characters long!</span>}
           </label>
           {errorMessage && <div className="error-message">{errorMessage}</div>}
-
           <button type="submit" className="form-button">Login</button>
         </form>
       );

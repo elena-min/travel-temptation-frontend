@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
-import { useEffect } from 'react';
 import { getUser } from '../services/UserService';
 import { getExcursion } from "../services/ExcursionService";
 import {savePaymentDetails} from "../services/PaymentDetailsService";
@@ -48,6 +47,7 @@ function BookingDetailsPage() {
             .then(data => {
                 console.log(data); 
                 setTrip(data);
+                console.log(data.price);
             })
             .catch(error => {
                 console.error("Error fetching excursion:", error);
@@ -92,13 +92,17 @@ function BookingDetailsPage() {
         <div className="container mt-5 mb-5 p-4 border custom-container" style={{width: "60%"}}>
             {bookingStatus && (
                 <div className={`alert ${bookingStatus.success ? 'alert-success' : 'alert-danger'}`} role="alert">
-                    {bookingStatus.success ? "Trip information updated successfully!" : "Error updating information. Please try again."}
+                    {bookingStatus.success ? "Excursion booked successfully!" : "Error updating information. Please try again."}
                 </div>
             )}
+
             <h2 className="text-center" style={{padding: "10px"}}>Booking Details</h2>
             <h4>Enter Payment Details:</h4>
-            <p>Number of travelers: {numTravelers}</p>
+            <p><strong>Number of travelers: </strong> {numTravelers}</p>
+            <p><strong>Price:</strong> {trip.price} &euro;/p.p.</p>
+            <p><strong>Total price:</strong> {trip.price * numTravelers} &euro;</p>
 
+            
             {user && (
                 <form onSubmit={handleSubmit}>
                     <div className="mb-3">
@@ -106,7 +110,7 @@ function BookingDetailsPage() {
                         <input type="text" className="form-control" value={cardNumber} onChange={(e) => setCardNumber(e.target.value)} />
                     </div>
                     <div className="mb-3">
-                        <label className="form-label">CVV:</label>
+                        <label className="form-label">CVV (the three-digit number at the back of your credit card):</label>
                         <input type="text" className="form-control" style={{width: "30%"}} value={cvv} onChange={(e) => setCvv(e.target.value)} />
                     </div>
                     <div className="mb-3">

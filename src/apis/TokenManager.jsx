@@ -32,6 +32,10 @@ const TokenManager = {
         const claims  = TokenManager.getClaims();
         return claims &&claims.role === 'USER';
     },
+    isAuthenticated: () =>{
+        const token = TokenManager.getAccessToken();
+        return !!token;
+    },
     getUserRoles: () => {
         const claims = TokenManager.getClaims();
         return claims && claims.roles ? claims.roles : [];
