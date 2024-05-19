@@ -25,11 +25,17 @@ function updateBooking(id, updatedBooking){
     .then(response => response.data)
 }
 
+function getBookingsByUser(userId){
+    return axios.get(`http://localhost:8080/bookings/user/${userId}`)
+        .then(response => response.data);   
+}
+
 
 export {
     getBookings,
     getBooking,
     saveBooking,
     deleteBooking,
-    updateBooking
+    updateBooking,
+    getBookingsByUser
 }

@@ -4,6 +4,10 @@ function getAllExcursions(){
     return axios.get('http://localhost:8090/excursions')
         .then(response => response.data);
 }
+function getExcursionsByTravelAgency(travelAgencyID){
+    return axios.get(`http://localhost:8080/excursions/travelAgency/${travelAgencyID}`)
+        .then(response => response.data);
+}
 
 function getExcursion(id) {
     return axios.get(`http://localhost:8090/excursions/${id}`)
@@ -48,6 +52,7 @@ function searchExcursionByNameAndPrice(name, priceRange) {
 
 export {
     getAllExcursions,
+    getExcursionsByTravelAgency,
     saveExcursion,
     getExcursion,
     deleteExcursion,

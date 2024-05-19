@@ -18,9 +18,9 @@ function Home() {
     useEffect(() => {
       //We fetch information and when it arrives we put it insideexcursions 
       getAllExcursions()
-           .then(data => {
+          .then(data => {
            console.log(data); 
-           setExcursions(data)})
+          setExcursions(data)})
     }, [])
     //The empty array means it will do this operation once
     

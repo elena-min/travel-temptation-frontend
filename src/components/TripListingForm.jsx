@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState, useEffect } from 'react';
 import { saveExcursion } from "../services/ExcursionService";
 import './style/TripListing.css'
 import { useForm } from "react-hook-form";
+import TokenManager from '../apis/TokenManager';
+import { getUser } from '../services/UserService';
 
 
 function TripListingForm(){
@@ -9,7 +11,29 @@ function TripListingForm(){
   //Register is a function provided by React Hooks to register input elements in the form
   //It manages the state and validation fo the input field
   const {register, handleSubmit, formState : {errors}} = useForm();
-  
+  const [user, setUser] = useState(null);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+
+
+  useEffect(() => {
+    const userId = TokenManager.getUserIdFromToken();
+    if (!userId) {
+        console.error("User ID not found in token");
+        return;
+    }
+    console.log(userId);
+    getUser(userId)
+        .then(data => {
+            console.log(data); 
+            setUser(data);
+        })
+        .catch(error => {
+            console.error("Error fetching user:", error);
+        });
+}, []);
+
+
   const isFutureDate = (selectedDate) =>{
     const today = new Date();
     const selected = new Date(selectedDate);
@@ -22,39 +46,42 @@ function TripListingForm(){
     return start <= end;
   };
   
-  //'setExcursionData' holds the function that updates the data 'excursionData'
- 
-
-      //Called everytime the inout value changes
-      //const handleChange = (e) => {
-        //Grabs thee name and value of the changed field. Target is the cause of the event. We get its name and value 
-        //const { name, value } = e.target;
-      
-        // Chexks if the value's name is deeswtinations and convert destinations string to an array
-      //  const newValue = name === 'destinations' ? value.split(',').map(item => item.trim()) : value;
-      
-        //Updates the state(excursionData) using the setExcursionData
-        //Keeps everythign the same except the updated value
-       // setExcursionData(prevState => ({
-        //  ...prevState,
-         // [name]: newValue
-        //}));
-      //};
-      
       //Async means can contain asynchronous operations, meaning it can wait for things to finish before proceeding.
       const onSubmit = async (data) => {
         data.destinations = data.destinations.split(',').map(destination => destination.trim());
 
-        console.log(data);
-          await saveExcursion(data);
-          console.log('Excursion saved successfully!');
+        const tripData = {
+          name: data.name,
+          destinations: data.destinations,
+          startDate: data.startDate,
+          endDate: data.endDate,
+          travelAgency: user,
+          price: data.price,
+          numberOfAvaliableSpaces: data.numberOfAvaliableSpaces
+        }
+        try{
+          console.log(tripData);
+          const token = TokenManager.updateAxiosToken(TokenManager.getAccessToken());
+          console.log(token);
+          await saveExcursion(tripData);
+          setSuccessMessage("Excursion listed successfully!");
+          reset();
+        }catch(error){
+          setErrorMessage("An error occured while listing the excursion. Please try again later or contact us!");
+          console.log("Error listing excursions: ", error);
+
+        }
+        
         
       };
 
 
     return (
-      
-        <form onSubmit={handleSubmit(onSubmit)} className="form-container">
+      <>
+      {successMessage && <div className="success-message">{successMessage}</div>}
+      {errorMessage && <div className="error-message">{errorMessage}</div>}
+
+      <form onSubmit={handleSubmit(onSubmit)} className="form-container">
               {/*When the form is submitted(handleSubmit takes care of that) it calls the function 'onSubmit'*/}
           <label className="form-label">
             Trip Name:
@@ -101,11 +128,6 @@ function TripListingForm(){
             {errors.endDate && <span className="error-message">{errors.endDate.message}</span>}
           </label>
           <label className="form-label">
-            Travel Agency:
-            <input type="text" {... register("travelAgency", {required: true})} className="form-input"/>
-            {errors.travelAgency && <span className="error-message">Travel Agency is required!</span>}
-          </label>
-          <label className="form-label">
             Price (per person):
             <input type="number" {... register("price", {required: true, min: 0})} className="form-input"/>
             {errors.price && <span className="error-message">Price is required!</span>}
@@ -118,6 +140,7 @@ function TripListingForm(){
           </label>
           <button type="submit" className="form-button">List Trip</button>
         </form>
+      </>    
       );
 
 }

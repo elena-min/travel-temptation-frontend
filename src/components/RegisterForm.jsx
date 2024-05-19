@@ -8,13 +8,18 @@ function RegisterForm() {
     const [errorMessage, setErrorMessage] = useState('');
 
     const onSubmit = async(formData) =>{
+      formData.gender = formData.gender.toUpperCase(); 
+
       const accessToken = await AuthAPI.registerUser(formData);
       if(accessToken){
         setErrorMessage('');
         console.log("user logged in!");
+        console.log(accessToken);
+        window.location.href = `/`;
+
       }
       else{
-        setErrorMessage('Logging in failed.');
+        setErrorMessage('Registering in failed.');
       }
     };
     
@@ -43,22 +48,22 @@ function RegisterForm() {
             Birth date:
             <input 
                 type="date"
-                {... register("birthdate", 
+                {... register("birthDate", 
                 {required: true, 
                   validate: {
                     futureDate: value =>isFutureDate(value) || "Birth date must not be in the future!"
                   }
                 }
                 )} className="form-input"/>
-            {errors.birthdate && <span className="error-message">{errors.birthdate.message}</span>}
+            {errors.birthDate && <span className="error-message">{errors.birthDate.message}</span>}
         </label>
 
         <label className="form-label">
                 Gender:
                 <select {...register("gender", {required: true})} className="form-input">
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                    <option value="other">Other</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
                 </select>
                 {errors.gender && <span className="error-message">Gender is required!</span>}
         </label>

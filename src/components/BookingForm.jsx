@@ -1,15 +1,23 @@
 import React from "react";
-import { saveExcursion } from "../services/ExcursionService";
+import { saveBooking } from "../services/BookingService";
 import './style/TripListing.css'
 import { useForm } from "react-hook-form";
+import TokenManager from "../apis/TokenManager";
 
 
 function BookingForm(){
   const {register, handleSubmit, formState : {errors}} = useForm();
   
   const onSubmit = async (data) => { 
+    if(!TokenManager.isUserAuthenticated()){
+        alert('You need to be logged in to book a trip!');
+        window.location.href = `/login`;
+        return;
+    }
     data.destinations = data.destinations.split(',').map(destination => destination.trim());
     console.log(data);
+    const token = TokenManager.updateAxiosToken(TokenManager.getAccessToken());
+    console.log(TokenManager.getUserRoles());
     await saveExcursion(data);
     console.log('Excursion booked successfully!');
 };

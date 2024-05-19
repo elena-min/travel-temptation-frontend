@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { deleteExcursion, getExcursion } from "../services/ExcursionService";
 import './style/TripInfoPage.css';
 import maldives from '../images/maldives.jpg';
+import TokenManager from '../apis/TokenManager';
 
 function TripInfoPage() {
 
@@ -12,6 +13,7 @@ function TripInfoPage() {
     const [trip, setTrip] = useState(null);
     const [showConfirmation, setShowConfirmation] = useState(false);
     const [deleteStatus, setDeleteStatus] = useState(null);
+    const userRole = TokenManager.getUserRoles();
 
 
     useEffect(() => {
@@ -78,18 +80,31 @@ function TripInfoPage() {
                     <img src={maldives} alt="Maldvives" />
                    </div>
                    <div className='trip-info'>
-                    <p><strong>Travel Agency:</strong> {trip.travelAgency}</p>
+                    <p><strong>Travel Agency:</strong> {trip.travelAgency.firstName} {trip.travelAgency.lastName}</p>
                     <p><strong>Destinations:</strong> {trip.destinations.join(', ')}</p>
                     <p><strong>Start Date:</strong> {formatDate(trip.startDate)}</p>
                     <p><strong>End Date:</strong> {formatDate(trip.endDate)}</p>
-                    <p><strong>Price:</strong> {trip.price}</p>
-                    <p><strong>Avaliable spaces:</strong> {trip.numberOfAvaliableSpaces}</p>
+                    <p><strong>Price:</strong> {trip.price} &euro;/p.p.</p>
+                    <p><strong>Total spaces:</strong> {trip.numberOfAvaliableSpaces}</p>
+                    <p><strong>Avaliable spaces left:</strong> {trip.numberOfSpacesLeft} !!!</p>
 
                     <div className='buttons'>
-                      <button className='delete-button' onClick={handleDelete}>Delete Trip</button>
-                      <button className='update-button' onClick={handleUpdate}>Update Trip</button>
-                      <button className='booking-button' onClick={handleBookNow}>Book Trip</button>
+                      {userRole.includes("TRAVELAGENCY") && (
+                        <>
+                        <button className='delete-button' onClick={handleDelete}>Delete Listing</button>
+                         <button className='update-button' onClick={handleUpdate}>Update Listing</button>
+                        </>
+                      )}
+                      {userRole.includes("USER") && (
+                        <>
+                        {trip.numberOfSpacesLeft >0 ?(
+                          <button className='booking-button' onClick={handleBookNow}>Book Trip</button>
 
+                        ) : (
+                          <h3>Fully Booked!</h3>
+                        )}
+                        </>
+                      )}
                     </div>
                    </div>
                 </div>
