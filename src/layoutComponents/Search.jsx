@@ -9,12 +9,18 @@ function Search({ onSearch }) {
   const handleSearch = () => {
     searchExcursionByNameAndPrice(tripName, priceRange)
         .then(excursions => {
+          console.log(tripName);
+          console.log(priceRange);
             console.log('Excursions found!', excursions);
             // Pass search results back to parent component
             onSearch(excursions);
+            
         })
         .catch(error => {
+          console.log(tripName);
+          console.log(priceRange);
             console.log('Error found!', error);
+            
             // Handle error (e.g., display error message)
         });
 };
@@ -31,7 +37,7 @@ function Search({ onSearch }) {
       <div className='filter-box'>
       <p>Price:</p>
       <select value={priceRange} onChange={(e) => setPriceRange(e.target.value)}>
-        <option value="<250>">&lt; 250 €</option>
+        <option value="<250">&lt; 250 €</option>
         <option value="250-500">250 - 500 €</option>
         <option value="500-750">500 - 750 €</option>
         <option value="750-1000">750 - 1000 €</option>
