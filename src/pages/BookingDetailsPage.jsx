@@ -11,7 +11,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 function BookingDetailsPage() {
     const { id } = useParams();
     const excursionId = parseInt(id, 10);
-    const [trip, setTrip] = useState(null);
+    const [trip, setTrip] = useState({ price: 0 });
     const [user, setUser] = useState(null);
 
     const location = useLocation();
@@ -24,6 +24,7 @@ function BookingDetailsPage() {
     const [cardHolderName, setCardHolderName] = useState('');
 
     const [bookingStatus, setBookingStatus] = useState(null);
+    const [formErrors, setFormErrors] = useState({}); 
 
     useEffect(() => {
         const userId = TokenManager.getUserIdFromToken();
@@ -56,6 +57,27 @@ function BookingDetailsPage() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setFormErrors({});
+
+        const errors = {};
+        if (!cardNumber || cardNumber.length !== 16) {
+            errors.cardNumber = "Card number must be 16 characters long";
+        }
+        if (!cvv || cvv.length !== 3) {
+            errors.cvv = "CVV must be 3 characters long";
+        }
+        if (!cardHolderName) {
+            errors.cardHolderName = "Card holder name is required";
+        }
+        if (!expirationDate) {
+            errors.expirationDate = "Expiration date is required";
+        }
+
+    if (Object.keys(errors).length > 0) {
+        setFormErrors(errors);
+        return;
+    }
+
         console.log('Payment details: ', {cardNumber, cvv, cardHolderName, expirationDate});
         const paymentDetails = {
             user,
@@ -81,7 +103,10 @@ function BookingDetailsPage() {
             console.log('Booking saved:', savedBooking);
 
             setBookingStatus({ success: true });
-
+            setCardNumber('');
+            setCvv('');
+            setExpirationDate('');
+            setCardHolderName('');
         } catch (error) {
             setBookingStatus({ success: false });
             console.log(error);
@@ -108,18 +133,22 @@ function BookingDetailsPage() {
                     <div className="mb-3">
                         <label className="form-label">Card Number:</label>
                         <input type="text" className="form-control" value={cardNumber} onChange={(e) => setCardNumber(e.target.value)} />
+                        {formErrors.cardNumber && <div className="text-danger">{formErrors.cardNumber}</div>}
                     </div>
                     <div className="mb-3">
                         <label className="form-label">CVV (the three-digit number at the back of your credit card):</label>
                         <input type="text" className="form-control" style={{width: "30%"}} value={cvv} onChange={(e) => setCvv(e.target.value)} />
+                        {formErrors.cvv && <div className="text-danger">{formErrors.cvv}</div>}
                     </div>
                     <div className="mb-3">
                         <label className="form-label">Card Holder Name:</label>
                         <input type="text" className="form-control" value={cardHolderName} onChange={(e) => setCardHolderName(e.target.value)} />
+                        {formErrors.cardHolderName && <div className="text-danger">{formErrors.cardHolderName}</div>}
                     </div>
                     <div className="mb-3">
                         <label className="form-label">Expiration date:</label>
                         <input type="date" className="form-control" value={expirationDate} onChange={(e) => setExpirationDate(e.target.value)} />
+                        {formErrors.expirationDate && <div className="text-danger">{formErrors.expirationDate}</div>}
                     </div>
                     <button type="submit" className="form-button">Submit</button>
                 </form>

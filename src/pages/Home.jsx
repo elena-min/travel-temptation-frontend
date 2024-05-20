@@ -6,6 +6,7 @@ import cover from '../images/cover3.jpg';
 import { Link } from "react-router-dom";
 import TripListContainer from "../components/TripListContainer";
 import Search from "../layoutComponents/Search";
+import TokenManager from "../apis/TokenManager";
 
 
 function Home() {
@@ -20,6 +21,7 @@ function Home() {
       getAllExcursions()
           .then(data => {
            console.log(data); 
+           console.log(TokenManager.getAccessToken())
           setExcursions(data)})
     }, [])
     //The empty array means it will do this operation once

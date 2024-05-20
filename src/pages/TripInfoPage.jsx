@@ -63,7 +63,9 @@ function TripInfoPage() {
       const handleUpdate = () =>{
         window.location.href = `/excursions/${excursionId}/update`;
       }
-      
+      const handleCheckBookings = () => {
+        window.location.href = `/excursions/${excursionId}/bookings`;
+      }
         return (
             <div className="trip-info-container">
               {deleteStatus && (
@@ -93,6 +95,7 @@ function TripInfoPage() {
                         <>
                         <button className='delete-button' onClick={handleDelete}>Delete Listing</button>
                          <button className='update-button' onClick={handleUpdate}>Update Listing</button>
+                         <button className='bookings-button' onClick={handleCheckBookings}>Check Bookings</button>
                         </>
                       )}
                       {userRole.includes("USER") && (

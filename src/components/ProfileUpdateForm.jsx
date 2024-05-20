@@ -3,31 +3,32 @@ import { updateUser, getUser } from "../services/UserService";
 import './style/TripListing.css'
 import { useParams } from 'react-router-dom';
 import { useForm } from "react-hook-form";
+import TokenManager from '../apis/TokenManager';
 
 
 function ProfileUpdateForm(){
 
-    const userId = 3;
     const [user, setUser] = useState(null);
     const [updateStatus, setUpdateStatus] = useState(null);
-    const {register, handleSubmit, formState : {errors}, setValue} = useForm();
+    const { register, handleSubmit, formState: { errors }, setValue } = useForm();
 
     useEffect(() => {
-        getUser(userId)
-            .then(data => {
-                console.log(data); 
-                setUser(data);
-                const formattedBirthDate = formatDateForInput(data.birthDate);
-                setValue("firstName", data.firstName);
-                setValue("lastName", data.lastName);
-                setValue("birthDate", formattedBirthDate);
-                setValue("gender", data.gender);
-
-            })
-            .catch(error => {
-                console.error("Error fetching user:", error);
-            });
-    }, [userId]);
+        const userIdFromToken = TokenManager.getUserIdFromToken(); // Get user ID from token
+        if (userIdFromToken) {
+            getUser(userIdFromToken)
+                .then(data => {
+                    setUser(data);
+                    const formattedBirthDate = formatDateForInput(data.birthDate);
+                    setValue("firstName", data.firstName);
+                    setValue("lastName", data.lastName);
+                    setValue("birthDate", formattedBirthDate);
+                    setValue("gender", data.gender);
+                })
+                .catch(error => {
+                    console.error("Error fetching user:", error);
+                });
+        }
+    }, [setValue]);
 
     const formatDateForInput = (dateString) => {
         if (!dateString) return ""; // Return empty string if date string is not provided
@@ -57,7 +58,7 @@ function ProfileUpdateForm(){
     data.birthDate = formatDateForSubmit(data.birthDate);
     try{
         console.log(data);
-        await updateUser(userId, data);
+        await updateUser(user.id, data);
         setUpdateStatus({success: true});
         console.log('User saved successfully!');   
 
@@ -92,9 +93,9 @@ function ProfileUpdateForm(){
             <label className="form-label">
                 Gender:
                 <select {...register("gender", { required: true })} className="form-input">
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                    <option value="Other">Other</option>
+                    <option value="MALE">Male</option>
+                    <option value="FEMALE">Female</option>
+                    <option value="OTHER">Other</option>
                 </select>
                 {errors.gender && <span className="error-message">Gender is required!</span>}
             </label>

@@ -6,7 +6,7 @@ function TripUpdatePage(){
 
     return(
         <div className="trip-listing-form">
-        <h1>Create a trip listing!</h1>
+        <h1>Update a trip listing!</h1>
         <TripUpdateForm/>
         </div>
     )

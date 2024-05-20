@@ -4,21 +4,23 @@ import { useEffect } from 'react';
 import { getUser } from "../services/UserService";
 import maldives from '../images/maldives.jpg';
 import './style/ProfilePage.css';
+import TokenManager from '../apis/TokenManager';
 
 function ProfilePage() {
 
-    const { id } = useParams();
-    const userId = parseInt(3, 10); // Convert id to integer
-    const [user, setUser] = useState(null);
+  const { id } = useParams();
+  const userIdFromToken = TokenManager.getUserIdFromToken(); // Get user ID from token
+  const [user, setUser] = useState(null);
 
-    useEffect(() => {
-        getUser(userId)
-            .then(data => {
-                console.log(data); 
-                setUser(data);
-            })
-            ;
-    }, [userId]);
+  useEffect(() => {
+      // Use user ID from token if available, otherwise use the ID from URL params
+      const userId = userIdFromToken || parseInt(id, 10);
+
+      getUser(userId)
+          .then(data => {
+              setUser(data);
+          });
+  }, [id, userIdFromToken]);
 
 
     const handleUpdate = () =>{

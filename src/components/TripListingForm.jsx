@@ -65,7 +65,6 @@ function TripListingForm(){
           console.log(token);
           await saveExcursion(tripData);
           setSuccessMessage("Excursion listed successfully!");
-          reset();
         }catch(error){
           setErrorMessage("An error occured while listing the excursion. Please try again later or contact us!");
           console.log("Error listing excursions: ", error);

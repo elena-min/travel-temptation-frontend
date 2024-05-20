@@ -24,7 +24,6 @@ function TripUpdateForm(){
                 setValue("destinations", data.destinations.join(", "));
                 setValue("startDate", formattedStartDate);
                 setValue("endDate", formattedEndDate);
-                setValue("travelAgency", data.travelAgency);
                 setValue("price", data.price);
                 setValue("numberOfAvaliableSpaces", data.numberOfAvaliableSpaces)
 
@@ -64,6 +63,7 @@ function TripUpdateForm(){
       console.log(data);
       await updateExcursion(excursionId, data);
       console.log('Excursion saved successfully!'); 
+      setUpdateStatus({success: true});
     }
     catch(error){
       setUpdateStatus({success: false});
@@ -132,11 +132,7 @@ function TripUpdateForm(){
             })} className="form-input"/>
             {errors.endDate && <span className="error-message">{errors.endDate.message}</span>}
           </label>
-          <label className="form-label">
-            Travel Agency:
-            <input type="text" {... register("travelAgency", {required: true})} className="form-input"/>
-            {errors.travelAgency && <span className="error-message">Travel Agency is required!</span>}
-          </label>
+          
           <label className="form-label">
             Price (per person):
             <input type="number" defaultValue={trip ? trip.price : ""}  {... register("price", {required: true, min: 1})} className="form-input"/>
@@ -148,7 +144,7 @@ function TripUpdateForm(){
             <input type="number" defaultValue={trip ? trip.price : ""}  {... register("numberOfAvaliableSpaces", {required: true, min: 0})} className="form-input"/>
             {errors.numberOfAvaliableSpaces && <span className="error-message">Number of avaloabel spaces is required!</span>}
           </label>
-          <button type="submit" className="form-button">List Trip</button>
+          <button type="submit" className="form-button">Update Trip</button>
         </form>
         </div>
         
