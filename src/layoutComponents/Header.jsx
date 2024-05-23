@@ -36,18 +36,16 @@ function Header() {
     }
     return (
         <div className="Header">
-        <h2>Travel Temptation</h2>
-        <nav>
-            <Link to="/">Home</Link>
+            <Link to="/">
+                <h2>Travel Temptation</h2>
+            </Link>
+            <nav className="headernav">
             <ul>       
                 <li>
-                    <Link to="tips">Travel Tips</Link>
+                    <Link to="traveltips">Travel Tips</Link>
                 </li>
                 <li>
                     <Link to="about">About us</Link>
-                </li>
-                <li>
-                    <Link to="contacts">Contacts</Link>
                 </li>
 
                 { isAuthenticated ? (

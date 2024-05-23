@@ -18,6 +18,8 @@ import MyListingsPage from './pages/MyListingsPage';
 import ProtectedRoute from './apis/ProtectedRoute';
 import UnauthorizedPage from './pages/UnauthorizedPage';
 import TripBookingsPage from './pages/TripBookingsPage';
+import TravelTipsPage from './pages/TravelTipsPage';
+import ContactPage from './pages/ContactPage';
 
 function App() {
   return (
@@ -32,11 +34,11 @@ function App() {
             <Route path="/unauthorized" element={<UnauthorizedPage />} />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/unauthorized" element={<About />} />
             <Route path="/excursions" element={<Home />} />
             <Route path="/explore" element={<Home />} />
             <Route path="/about" element={<About />} />
-            <Route path="/contacts" element={<Home />} />
+            <Route path="/contacts" element={<ContactPage />} />
+            <Route path="/traveltips" element={<TravelTipsPage />} />
             <Route path="/trending" element={<Home />} />
             <Route path="/trips/europe" element={<Home />} />
             <Route path='/trip/:id' element={<TripInfoPage/>}/>
