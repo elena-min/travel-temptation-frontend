@@ -1,5 +1,4 @@
 import React from "react"
-import BookingContainer from "./BookingContainer";
 import './style/Booking.css'
 import ListingContainer from "./ListingContainer";
 

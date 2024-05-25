@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { saveReview } from "../services/ReviewService";
-import './style/TripListing.css'
+import './style/Review.css'
 import { useForm } from "react-hook-form";
+import { useParams } from 'react-router-dom';
 import TokenManager from '../apis/TokenManager';
 import { getUser } from '../services/UserService';
 
@@ -45,12 +46,12 @@ useEffect(() => {
         });
 }, [travelAgencyId]);
 
-      const onSubmit = async (data) => {
+      const handleFormSubmit = async (data) => {
 
         const reviewData = {
           travelAgency: travelAgency,
           userWriter: user,
-          reviewDate: data.startDate,
+          reviewDate: new Date(),
           numberOfStars: data.numberOfStars,
           title: data.title,
           description: data.description
@@ -58,9 +59,9 @@ useEffect(() => {
         try{
           console.log(reviewData);
           const token = TokenManager.updateAxiosToken(TokenManager.getAccessToken());
-          console.log(token);
           await saveReview(reviewData);
           setSuccessMessage("Review created successfully!");
+          setErrorMessage('');
         }catch(error){
           setErrorMessage("An error occured while creating the review. Please try again later or contact us!");
           console.log("Error creating review: ", error);
@@ -72,24 +73,31 @@ useEffect(() => {
 
 
       return (
+        <div className="review-form-container">
+           <h2>Write a Review</h2>
+            {successMessage && <p className="success-message">{successMessage}</p>}
+            {errorMessage && <p className="error-message">{errorMessage}</p>}
         <form onSubmit={handleSubmit(handleFormSubmit)}>
           <div>
-            <label htmlFor="numberOfStars">Number of Stars:</label>
-            <input type="number" name="numberOfStars" ref={register({ required: true, min: 1, max: 5 })} />
-            {errors.numberOfStars && <span>This field is required and should be between 1 and 5.</span>}
+              <label htmlFor="numberOfStars">Number of Stars:</label>
+              <input type="number" name="numberOfStars" {...register('numberOfStars', { required: true, min: 1, max: 5 })} />
+              {errors.numberOfStars && <span>This field is required and should be between 1 and 5.</span>}
           </div>
           <div>
-            <label htmlFor="title">Title:</label>
-            <input type="text" name="title" ref={register({ required: true })} />
-            {errors.title && <span>This field is required.</span>}
+              <label htmlFor="title">Title:</label>
+              <input type="text" name="title" {...register('title', { required: true })} />
+              {errors.title && <span>This field is required.</span>}
           </div>
           <div>
-            <label htmlFor="description">Description:</label>
-            <textarea name="description" ref={register({ required: true })} />
-            {errors.description && <span>This field is required.</span>}
+              <label htmlFor="description">Description:</label>
+              <textarea name="description" {...register('description', { required: true })} />
+              {errors.description && <span>This field is required.</span>}
           </div>
+
           <button type="submit">Submit Review</button>
         </form>
+        </div>
+        
       );
 
 }
