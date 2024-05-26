@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import './style/Trip.css';
 import { Link } from "react-router-dom";
-import { deleteReview } from "../services/ReviewService";
+import { deleteExcursion } from "../services/ExcursionService";
 
-function ReviewContainer({review}){
+function ListingSmallContainer({listing}){
   const [deleteStatus, setDeleteStatus] = useState({ success: false, error: null });
-  console.log(review);
-  console.log(review.travelAgency);
+  console.log(listing);
+  console.log(listing.excursion);
 
     function formatDate(dateString) {
         const date = new Date(dateString);
@@ -20,10 +20,10 @@ function ReviewContainer({review}){
         return `${formattedDay}.${formattedMonth}.${year}`;
       }
     
-      const handleDeleteReview = () =>{
-        const confirmDelete = window.confirm("Are you sure you want to delete this review?")
+      const handleCancelTrip = () =>{
+        const confirmDelete = window.confirm("Are you sure you want to delete this listin?")
         if(confirmDelete){
-            deleteReview(review.id)
+            deleteExcursion(listing.id)
           .then( () =>{
             setDeleteStatus({ success: true });
               //window.location.href = "/";
@@ -39,21 +39,13 @@ function ReviewContainer({review}){
       return (
         <div className="trip-container">
           <h2>
-            <Link to={`/travel-agency/${review.travelAgency.id}`}>{review.travelAgency.firstName} {review.travelAgency.lastName}</Link>
-          </h2>          
-          <p><i>{review.topic}</i></p>
-          <p>{review.numberOfStars} /5</p>
-          <p>{review.description}</p>
-          <p>{formatDate(review.reviewDate)}</p>
-          {deleteStatus.error && <p className="error">{deleteStatus.error}</p>}
-          {deleteStatus.success ?
-            <p className="success">Review deleted successfully!</p> :
-            <button className='cancel-button' onClick={handleDeleteReview}>Remove Review</button>
-
-          }
-
+            <Link to={`/trip/${listing.id}`}>{listing.name}</Link>
+            </h2>          
+          <p><i>{listing.destinations.join(', ')}</i></p>
+          <p><b>{formatDate(listing.startDate)} - {formatDate(listing.endDate)}</b></p>
+          <p><b>Price:</b> {listing.price} &euro;/p.p.</p>
         </div>
       );
 
 }
-export default ReviewContainer;
+export default ListingSmallContainer;

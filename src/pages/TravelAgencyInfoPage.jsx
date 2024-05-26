@@ -5,8 +5,10 @@ import { getUser } from '../services/UserService';
 import './style/TripInfoPage.css';
 import maldives from '../images/maldives.jpg';
 import TokenManager from '../apis/TokenManager';
-import ReviewsListContainer from '../components/ReviewsListContainer';
-import { getReviewsByUser } from '../services/ReviewService';
+import { getReviewsByTravelAgency } from '../services/ReviewService';
+import { getExcursionsByTravelAgency } from '../services/ExcursionService';
+import ReviewsListSmallContainer from '../components/ReviewsListSmallContainer';
+import ListingsListSmallContainer from '../components/ListingsListSmallContainer';
 
 function TravelAgencyInfoPage() {
 
@@ -19,39 +21,40 @@ function TravelAgencyInfoPage() {
     const [showListings, setShowListings] = useState(false);
 
     const [reviews, setReviews] = useState([]);
+    const [listings, setListings] = useState([]);
 
     useEffect(() => {
-     console.log(TokenManager.getAccessToken());
-     if(TokenManager.getAccessToken()){
-       TokenManager.updateAxiosToken(TokenManager.getAccessToken());
-       const userID = TokenManager.getUserIdFromToken();
-     
-       getReviewsByUser(userID)
+      getUser(travelAgencyId)
+          .then(data => {
+              console.log(data); 
+              setTravelAgency(data);
+          })
+          .catch(error => {
+              console.error("Error fetching travel agency:", error);
+          });
+  }, [travelAgencyId]);
+
+    useEffect(() => {
+      console.log(travelAgencyId);
+      getReviewsByTravelAgency(travelAgencyId)
        .then((reviews) => {
          setReviews(reviews);
          console.log(reviews);
        })
        .catch((error) =>{
          console.error('Error fetching reviews:', error);
-       })
-     }
-     else{
-       //window.location.href = `/login`;
-     } }, []);
+       }) }, []);
 
-
-    useEffect(() => {
-        getUser(travelAgencyId)
-            .then(data => {
-                console.log(data); 
-                setTravelAgency(data);
-            })
-            .catch(error => {
-                console.error("Error fetching travel agency:", error);
-            });
-    }, [travelAgencyId]);
-
-
+       useEffect(() => {
+          getExcursionsByTravelAgency(travelAgencyId)
+          .then((listings) => {
+            setListings(listings);
+            console.log(listings);
+          })
+          .catch((error) =>{
+            console.error('Error fetching listings:', error);
+          })
+       }, []);
 
     function formatDate(dateString) {
         const date = new Date(dateString);
@@ -97,16 +100,17 @@ function TravelAgencyInfoPage() {
                     <p><strong>Email:</strong> {travelAgency.email}</p>
 
                     <div className='buttons'>
+                      <button className='reviews-button' onClick={handleShowReviews}>Check Reviews</button>
+                          <button className='listings-button' onClick={handleShowListings}>Check Listings</button>
                       {userRole.includes("TRAVELAGENCY") && (
                         <>
                          <button className='bookings-button' onClick={handleCheckBookings}>Check Bookings</button>
+                         
                         </>
                       )}
                       {userRole.includes("USER") && (
                         <>
                           <button className='review-button' onClick={handleReviewNow}>Write a review</button>
-                          <button className='reviews-button' onClick={handleShowReviews}>Check Reviews</button>
-                          <button className='listings-button' onClick={handleShowListings}>Check Listings</button>
                         </>
                       )}
                     </div>
@@ -116,16 +120,14 @@ function TravelAgencyInfoPage() {
                  {showReviews && (
                     <div className="reviews-section">
                     <h3>Reviews</h3>
-                    <ReviewsListContainer reviews={reviews} />
+                    <ReviewsListSmallContainer reviews={reviews} />
                     </div>
                 )}
 
                 {showListings && (
                     <div className="listings-section">
-                    {/* Render listings here */}
                     <h3>Listings</h3>
-                    {/* Assuming you have a component to display listings */}
-                    {/* <ListingsComponent travelAgencyId={travelAgencyId} /> */}
+                    <ListingsListSmallContainer listings={listings} />
                     </div>
                 )}
                 </>

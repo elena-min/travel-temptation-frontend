@@ -4,7 +4,6 @@ import Home from './pages/Home';
 import About from './pages/About';
 import Navbar from './layoutComponents/Navbar';
 import TripListingPage from './pages/TripListingPage';
-import { Link } from 'react-router-dom';
 import TripInfoPage from './pages/TripInfoPage';
 import TripUpdatePage from './pages/TripUpdatePage';
 import Register from './pages/Register';
@@ -23,6 +22,7 @@ import ContactPage from './pages/ContactPage';
 import ReviewPage from './pages/ReviewPage';
 import TravelAgencyInfoPage from './pages/TravelAgencyInfoPage';
 import MyReviewsPage from './pages/MyReviewsPage';
+import TrendingPage from './pages/TrendingPage';
 
 function App() {
   return (
@@ -42,7 +42,7 @@ function App() {
             <Route path="/about" element={<About />} />
             <Route path="/contacts" element={<ContactPage />} />
             <Route path="/traveltips" element={<TravelTipsPage />} />
-            <Route path="/trending" element={<Home />} />
+            <Route path="/trending" element={<TrendingPage />} />
             <Route path="/trips/europe" element={<Home />} />
             <Route path='/trip/:id' element={<TripInfoPage/>}/>
             <Route path='/travel-agency/:id' element={<TravelAgencyInfoPage/>}/>

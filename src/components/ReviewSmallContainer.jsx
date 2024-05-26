@@ -3,8 +3,7 @@ import './style/Trip.css';
 import { Link } from "react-router-dom";
 import { deleteReview } from "../services/ReviewService";
 
-function ReviewContainer({review}){
-  const [deleteStatus, setDeleteStatus] = useState({ success: false, error: null });
+function ReviewSmallContainer({review}){
   console.log(review);
   console.log(review.travelAgency);
 
@@ -37,23 +36,13 @@ function ReviewContainer({review}){
       }
       
       return (
-        <div className="trip-container">
-          <h2>
-            <Link to={`/travel-agency/${review.travelAgency.id}`}>{review.travelAgency.firstName} {review.travelAgency.lastName}</Link>
-          </h2>          
+        <div className="trip-container">          
           <p><i>{review.topic}</i></p>
           <p>{review.numberOfStars} /5</p>
           <p>{review.description}</p>
           <p>{formatDate(review.reviewDate)}</p>
-          {deleteStatus.error && <p className="error">{deleteStatus.error}</p>}
-          {deleteStatus.success ?
-            <p className="success">Review deleted successfully!</p> :
-            <button className='cancel-button' onClick={handleDeleteReview}>Remove Review</button>
-
-          }
-
         </div>
       );
 
 }
-export default ReviewContainer;
+export default ReviewSmallContainer;
