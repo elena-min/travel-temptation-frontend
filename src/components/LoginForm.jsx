@@ -14,7 +14,7 @@ function LoginForm() {
       setErrorMessage('');
       console.log("user logged in!");
       console.log(accessToken);
-      //window.location.href = `/home`;
+      window.location.href = `/home`;
     }else{
       setErrorMessage('Logging in failed.');
     }
@@ -29,7 +29,7 @@ function LoginForm() {
 
           <label className="form-label">
             Password:
-            <input type="text" {... register("password", {required: true, minLength: 6})} className="form-input"/>
+            <input type="password" {... register("password", {required: true, minLength: 6})} className="form-input"/>
             {errors.password && <span className="error-message">Password should be ar least of 6 characters long!</span>}
           </label>
           {errorMessage && <div className="error-message">{errorMessage}</div>}

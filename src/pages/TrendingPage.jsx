@@ -12,16 +12,12 @@ import { getTrendingExcursions } from "../services/TrendingService";
 function TrendingPage() {
    const [excursions, setExcursions] = useState([]);
 
-   const handleSearch = (searchResults) => {
-        setExcursions(searchResults);
-    };
 
     useEffect(() => {
       //We fetch information and when it arrives we put it insideexcursions 
-      getTrendingExcursions()
+      getTrendingExcursions(16)
           .then(data => {
            console.log(data); 
-           console.log(TokenManager.getAccessToken())
           setExcursions(data)})
     }, [])
     //The empty array means it will do this operation once
