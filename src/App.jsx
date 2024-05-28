@@ -23,6 +23,7 @@ import ReviewPage from './pages/ReviewPage';
 import TravelAgencyInfoPage from './pages/TravelAgencyInfoPage';
 import MyReviewsPage from './pages/MyReviewsPage';
 import TrendingPage from './pages/TrendingPage';
+import BookingInfoPage from './pages/BookingInfoPage';
 
 function App() {
   return (
@@ -58,6 +59,8 @@ function App() {
             <Route path="/mylistings" element={<ProtectedRoute element={MyListingsPage}  requiredRoles={['TRAVELAGENCY']} />}  />
             <Route path="/myreviews" element={<ProtectedRoute element={MyReviewsPage } requiredRoles={['USER']} />} />
             <Route path="/write-review/:id" element={<ProtectedRoute element={ReviewPage }  requiredRoles={['USER']} />} />
+            <Route path='/booking/:id' element={<ProtectedRoute element={BookingInfoPage }  requiredRoles={['TRAVELAGENCY']} />} />
+
 
         </Routes>
         </div>

@@ -9,14 +9,18 @@ function LoginForm() {
 
   const onSubmit = async(formData) =>{
     const {username, password} = formData;
-    const accessToken = await AuthAPI.login(username, password)
-    if(accessToken){
-      setErrorMessage('');
-      console.log("user logged in!");
-      console.log(accessToken);
-      window.location.href = `/home`;
-    }else{
-      setErrorMessage('Logging in failed.');
+    try {
+      const accessToken = await AuthAPI.login(username, password);
+      if (accessToken) {
+        console.log("User logged in!");
+        console.log(accessToken);
+        window.location.href = `/home`;
+      } else {
+        setErrorMessage('Invalid username or password.');
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      setErrorMessage('An error occurred during login. Please try again.');
     }
   };
     return (
