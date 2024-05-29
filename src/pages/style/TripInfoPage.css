@@ -47,15 +47,7 @@
   .trip-info-container strong {
     font-weight: bold;
   }
-  
-  .trip-info-container a {
-    color: #007bff;
-    text-decoration: none;
-  }
-  
-  .trip-info-container a:hover {
-    text-decoration: underline;
-  }
+
 
   .buttons {
     position: absolute;
@@ -66,8 +58,6 @@
     justify-content: center;
     white-space: nowrap; 
 }
-
-/* Add other styles for buttons as needed */
 
   .buttons button {
     background-color: #381431;

@@ -23,7 +23,7 @@ function TripContainer({trip}){
           <h2>
             <Link to={`/trip/${trip.id}`}>{trip.name}</Link>
             </h2>          
-            <h4>'{trip.travelAgency.firstName} {trip.travelAgency.lastName}'</h4>
+            <h4><Link to={`/travel-agency/${trip.travelAgency.id}`}>'{trip.travelAgency.firstName} {trip.travelAgency.lastName}'</Link></h4>
           <p><i>{trip.destinations.join(', ')}</i></p>
           <p><b>{formatDate(trip.startDate)} - {formatDate(trip.endDate)}</b></p>
         </div>

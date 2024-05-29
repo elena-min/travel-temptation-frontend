@@ -52,37 +52,41 @@ function Header() {
                 <>
                 {userRoles.includes("TRAVELAGENCY") && (
                     <>
-                    <li>
-                    <Link to="list-trip">List a trip!</Link>
-                    </li>
-                    <li>
-                    <Link to="mylistings">My listings</Link>
-                    </li>
+                        <li>
+                            <Link to="list-trip">List a trip!</Link>
+                        </li>
+                        <li>
+                            <Link to="mylistings">My listings</Link>
+                        </li>       
                     </>
                     
                 )}
                 {userRoles.includes("USER") && (
-                    <li>
-                    <Link to="mybookings">My bookings!</Link>
-                    </li>
+                    <>
+                        <li>
+                            <Link to="mybookings">My bookings!</Link>
+                        </li>
+                        <li>
+                            <Link to="myreviews">My reviews!</Link>
+                        </li>
+                    </>
                     
                 )}
-                    
                     <li>
-                    <Link to="profile">Profile Page</Link>
+                        <Link to="profile">Profile Page</Link>
                     </li>
                     <li>
-                    <Link onClick={handleLogout}>Logout</Link>
+                        <Link onClick={handleLogout}>Logout</Link>
                     </li>
                 </>
                 ) : (
                     <>
-                    <li>
-                    <Link to="login">Login</Link>
-                    </li>
-                    <li>
-                    <Link to="register">Register</Link>
-                    </li>
+                        <li>
+                          <Link to="login">Login</Link>
+                        </li>
+                        <li>
+                          <Link to="register">Register</Link>
+                        </li>
                     </>
                 )}
             </ul>

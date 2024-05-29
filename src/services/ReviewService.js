@@ -24,12 +24,16 @@ function getReviewsByUser(userId){
     return axios.get(`http://localhost:8080/reviews/user/${userId}`)
         .then(response => response.data);   
 }
-
+function getReviewsByTravelAgency(travelAgenycId){
+    return axios.get(`http://localhost:8080/reviews/travelagency/${travelAgenycId}`)
+        .then(response => response.data);   
+}
 
 export {
     getReviews,
     getReview,
     saveReview,
     deleteReview,
-    getReviewsByUser
+    getReviewsByUser,
+    getReviewsByTravelAgency
 }

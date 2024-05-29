@@ -29,6 +29,10 @@ function getBookingsByUser(userId){
     return axios.get(`http://localhost:8080/bookings/user/${userId}`)
         .then(response => response.data);   
 }
+function getBookingsByExcursion(excursionId){
+    return axios.get(`http://localhost:8080/bookings/excursion/${excursionId}`)
+        .then(response => response.data);   
+}
 
 
 export {
@@ -37,5 +41,6 @@ export {
     saveBooking,
     deleteBooking,
     updateBooking,
-    getBookingsByUser
+    getBookingsByUser,
+    getBookingsByExcursion
 }

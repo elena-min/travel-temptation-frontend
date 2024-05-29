@@ -9,14 +9,18 @@ function LoginForm() {
 
   const onSubmit = async(formData) =>{
     const {username, password} = formData;
-    const accessToken = await AuthAPI.login(username, password)
-    if(accessToken){
-      setErrorMessage('');
-      console.log("user logged in!");
-      console.log(accessToken);
-      //window.location.href = `/home`;
-    }else{
-      setErrorMessage('Logging in failed.');
+    try {
+      const accessToken = await AuthAPI.login(username, password);
+      if (accessToken) {
+        console.log("User logged in!");
+        console.log(accessToken);
+        window.location.href = `/home`;
+      } else {
+        setErrorMessage('Invalid username or password.');
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      setErrorMessage('An error occurred during login. Please try again.');
     }
   };
     return (
@@ -29,7 +33,7 @@ function LoginForm() {
 
           <label className="form-label">
             Password:
-            <input type="text" {... register("password", {required: true, minLength: 6})} className="form-input"/>
+            <input type="password" {... register("password", {required: true, minLength: 6})} className="form-input"/>
             {errors.password && <span className="error-message">Password should be ar least of 6 characters long!</span>}
           </label>
           {errorMessage && <div className="error-message">{errorMessage}</div>}

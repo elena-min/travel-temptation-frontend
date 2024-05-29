@@ -4,7 +4,6 @@ import Home from './pages/Home';
 import About from './pages/About';
 import Navbar from './layoutComponents/Navbar';
 import TripListingPage from './pages/TripListingPage';
-import { Link } from 'react-router-dom';
 import TripInfoPage from './pages/TripInfoPage';
 import TripUpdatePage from './pages/TripUpdatePage';
 import Register from './pages/Register';
@@ -21,6 +20,10 @@ import TripBookingsPage from './pages/TripBookingsPage';
 import TravelTipsPage from './pages/TravelTipsPage';
 import ContactPage from './pages/ContactPage';
 import ReviewPage from './pages/ReviewPage';
+import TravelAgencyInfoPage from './pages/TravelAgencyInfoPage';
+import MyReviewsPage from './pages/MyReviewsPage';
+import TrendingPage from './pages/TrendingPage';
+import BookingInfoPage from './pages/BookingInfoPage';
 
 function App() {
   return (
@@ -40,9 +43,10 @@ function App() {
             <Route path="/about" element={<About />} />
             <Route path="/contacts" element={<ContactPage />} />
             <Route path="/traveltips" element={<TravelTipsPage />} />
-            <Route path="/trending" element={<Home />} />
+            <Route path="/trending" element={<TrendingPage />} />
             <Route path="/trips/europe" element={<Home />} />
             <Route path='/trip/:id' element={<TripInfoPage/>}/>
+            <Route path='/travel-agency/:id' element={<TravelAgencyInfoPage/>}/>
 
             <Route path="/list-trip" element={<ProtectedRoute element={TripListingPage }  requiredRoles={['TRAVELAGENCY']} />} />
             <Route path="/excursions/:id/update" element={<ProtectedRoute element={TripUpdatePage } requiredRoles={['TRAVELAGENCY']} />} />
@@ -53,7 +57,10 @@ function App() {
             <Route path="/profile/update" element={<ProtectedRoute element={ProfilePageUpdate } requiredRoles={['USER', 'TRAVELAGENCY']}/>} />
             <Route path="/mybookings" element={<ProtectedRoute element={MyBookingsPage } requiredRoles={['USER']} />} />
             <Route path="/mylistings" element={<ProtectedRoute element={MyListingsPage}  requiredRoles={['TRAVELAGENCY']} />}  />
-            <Route path="/write-review:id" element={<ProtectedRoute element={ReviewPage }  requiredRoles={['USER']} />} />
+            <Route path="/myreviews" element={<ProtectedRoute element={MyReviewsPage } requiredRoles={['USER']} />} />
+            <Route path="/write-review/:id" element={<ProtectedRoute element={ReviewPage }  requiredRoles={['USER']} />} />
+            <Route path='/booking/:id' element={<ProtectedRoute element={BookingInfoPage }  requiredRoles={['TRAVELAGENCY']} />} />
+
 
         </Routes>
         </div>

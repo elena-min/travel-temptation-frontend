@@ -1,18 +1,18 @@
 import React from "react"
 import './style/Booking.css'
-import ListingContainer from "./ListingContainer";
+import ListingSmallContainer from "./ListingSmallContainer";
 
-function ListingsListContainer(props) {
+function ListingsListSmallContainer(props) {
 
   return (
     <ul className="booking-list-container">
       {props.listings.map((listing) => (
         <li key={listing.id} className="booking-container">
-          <ListingContainer listing={listing} />
+          <ListingSmallContainer listing={listing} />
         </li>
       ))}
     </ul>
   )
 }
 
-export default ListingsListContainer;
+export default ListingsListSmallContainer;

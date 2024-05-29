@@ -56,8 +56,8 @@ function BookingPage() {
                 <p><strong>Start Date:</strong> {formatDate(trip.startDate)}</p>
                 <p><strong>End Date:</strong> {formatDate(trip.endDate)}</p>
                 <p><strong>Price:</strong> {trip.price}</p>
-                <p><strong>Avaliable spaces:</strong> {trip.numberOfAvaliableSpaces}</p>
-
+                <p><strong>Total spaces:</strong> {trip.numberOfAvaliableSpaces}</p>
+                    <p><strong>Avaliable spaces left:</strong> {trip.numberOfSpacesLeft} !!!</p>
                 <label htmlFor="numTravelers"><strong>Number of Travelers:</strong></label>
                 <select id="numTravelers" value={numTravelers} onChange={(e) => setNumTravelers(parseInt(e.target.value))}>
                     {[...Array(10).keys()].map((num) => (

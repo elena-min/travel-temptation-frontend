@@ -37,6 +37,7 @@ function BookingDetailsPage() {
             .then(data => {
                 console.log(data); 
                 setUser(data);
+                TokenManager.updateAxiosToken(TokenManager.getAccessToken());
             })
             .catch(error => {
                 console.error("Error fetching user:", error);

@@ -5,6 +5,8 @@ import { deleteExcursion, getExcursion } from "../services/ExcursionService";
 import './style/TripInfoPage.css';
 import maldives from '../images/maldives.jpg';
 import TokenManager from '../apis/TokenManager';
+import { getBookingsByExcursion } from '../services/BookingService';
+import BookingListSmallContainer from '../components/BookingListSmallContainer';
 
 function TripInfoPage() {
 
@@ -15,9 +17,12 @@ function TripInfoPage() {
     const [deleteStatus, setDeleteStatus] = useState(null);
     const userRole = TokenManager.getUserRoles();
 
+    const [showBookings, setShowBookings] = useState(false);
+    const [bookings, setBookings] = useState([]);
+    TokenManager.updateAxiosToken(TokenManager.getAccessToken());
 
     useEffect(() => {
-        getExcursion(excursionId)
+      getExcursion(excursionId)
             .then(data => {
                 console.log(data); 
                 setTrip(data);
@@ -27,6 +32,16 @@ function TripInfoPage() {
             });
     }, [excursionId]);
 
+    useEffect(() => {      
+      getBookingsByExcursion(excursionId)
+        .then((bookings) => {
+          setBookings(bookings);
+          console.log(bookings);
+        })
+        .catch((error) =>{
+          console.error('Error fetching bookings:', error);
+        })
+      }, []);
 
     function formatDate(dateString) {
         const date = new Date(dateString);
@@ -55,6 +70,10 @@ function TripInfoPage() {
         }
         
       }
+
+      const handleCheckBookings = () => {
+        setShowBookings(true);
+      };
       
       const handleBookNow = () =>{
         window.location.href = `/excursions/${excursionId}/booking`;
@@ -63,9 +82,7 @@ function TripInfoPage() {
       const handleUpdate = () =>{
         window.location.href = `/excursions/${excursionId}/update`;
       }
-      const handleCheckBookings = () => {
-        window.location.href = `/excursions/${excursionId}/bookings`;
-      }
+
         return (
             <div className="trip-info-container">
               {deleteStatus && (
@@ -111,6 +128,12 @@ function TripInfoPage() {
                     </div>
                    </div>
                 </div>
+                {showBookings && (
+                    <div className="bookings-section">
+                    <h3>Bookings</h3>
+                    <BookingListSmallContainer bookings={bookings} />
+                    </div>
+                )}
                 </>
                 
             )}
