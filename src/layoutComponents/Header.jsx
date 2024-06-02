@@ -57,7 +57,7 @@ function Header() {
                         </li>
                         <li>
                             <Link to="mylistings">My listings</Link>
-                        </li>       
+                        </li>           
                     </>
                     
                 )}

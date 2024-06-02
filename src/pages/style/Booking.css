@@ -40,6 +40,20 @@
     cursor: pointer;
     transition: font-size 0.3s ease; 
   }
+
+  .booking-info-wrapper {
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+  }
+
+  .trip-info-wrapper{
+    display: flex;
+  }
+  
+  .trip-info {
+    margin-bottom: 20px; /* Add some spacing between each info block */
+  }
+  
   
   .form-button:hover {
     background-color: #EFDAD1;

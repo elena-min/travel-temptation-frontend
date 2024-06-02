@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { useEffect } from 'react';
 import { deleteExcursion, getExcursion } from "../services/ExcursionService";
 import './style/TripInfoPage.css';
 import maldives from '../images/maldives.jpg';
 import TokenManager from '../apis/TokenManager';
 import { getBookingsByExcursion } from '../services/BookingService';
 import BookingListSmallContainer from '../components/BookingListSmallContainer';
+import ExcursionSales from '../components/statistics/ExcursionSales';
+import BookingStatisticsGraphContainer from '../components/statistics/BookingStatisticsGraphContainer';
 
 function TripInfoPage() {
 
@@ -20,6 +21,9 @@ function TripInfoPage() {
     const [showBookings, setShowBookings] = useState(false);
     const [bookings, setBookings] = useState([]);
     TokenManager.updateAxiosToken(TokenManager.getAccessToken());
+
+    const [showSales, setshowSales] = useState(false);
+
 
     useEffect(() => {
       getExcursion(excursionId)
@@ -74,6 +78,9 @@ function TripInfoPage() {
       const handleCheckBookings = () => {
         setShowBookings(true);
       };
+      const handleCheckSales = () => {
+        setshowSales(true);
+      };
       
       const handleBookNow = () =>{
         window.location.href = `/excursions/${excursionId}/booking`;
@@ -110,10 +117,15 @@ function TripInfoPage() {
                     <div className='buttons'>
                       {userRole.includes("TRAVELAGENCY") && (
                         <>
-                        <button className='delete-button' onClick={handleDelete}>Delete Listing</button>
-                         <button className='update-button' onClick={handleUpdate}>Update Listing</button>
-                         <button className='bookings-button' onClick={handleCheckBookings}>Check Bookings</button>
-                        </>
+                        <div className="button-row">
+                            <button className='delete-button' onClick={handleDelete}>Delete Listing</button>
+                            <button className='update-button' onClick={handleUpdate}>Update Listing</button>
+                        </div>
+                        <div className="button-row">
+                            <button className='bookings-button' onClick={handleCheckBookings}>Check Bookings</button>
+                            <button className='sales-button' onClick={handleCheckSales}>Check Sales</button>
+                        </div>
+                    </>
                       )}
                       {userRole.includes("USER") && (
                         <>
@@ -133,6 +145,13 @@ function TripInfoPage() {
                     <h3>Bookings</h3>
                     <BookingListSmallContainer bookings={bookings} />
                     </div>
+                )}
+
+                {showSales && (
+                      <div className="statistics-section">
+                        <ExcursionSales excursionId={excursionId} />
+                        <BookingStatisticsGraphContainer excursionId={excursionId}/>
+                      </div>
                 )}
                 </>
                 

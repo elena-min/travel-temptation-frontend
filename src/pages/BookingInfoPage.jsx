@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
-import { getExcursion } from "../services/ExcursionService";
 import TokenManager from '../apis/TokenManager';
 import { getBooking, updateBooking } from '../services/BookingService';
+import './style/Booking.css';
 
 function BookingInfoPage() {
 
@@ -73,7 +73,7 @@ function BookingInfoPage() {
         {booking && (
         <>
         <h1>Booking information</h1>
-        <div className="trip-info-wrapper">
+        <div className="booking-info-wrapper">
             <div className='trip-info'>
             <h4>Excursion Details:</h4>
                 <p><strong>Trip name:</strong> {booking.excursion.name}</p>

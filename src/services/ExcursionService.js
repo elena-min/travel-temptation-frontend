@@ -29,26 +29,37 @@ function updateExcursion(id, updatedExcursion){
     .then(response => response.data)
 }
 
-function searchExcursionsByName(name){
-    return axios.get(`http://localhost:8080/excursions/search?name=${name}`)
-    .then(response => response.data)
-}
 
-function searchExcursionByNameAndPrice(name, priceRange) {
-    let url = `http://localhost:8080/excursions/search?name=${name}`;
+function searchExcursionsByNameAndTravelAgencyAndPrice(searchTerm, minPrice, maxPrice) {
+    let url = `http://localhost:8080/excursions/searchNameAndPrice`;
 
-    // If priceRange is provided, append it to the URL
-    if (priceRange) {
-        url += `&priceRange=${priceRange}`;
+    // Check if any parameter exists, then append it to the URL
+    if (searchTerm || minPrice || maxPrice) {
+        url += '?';
+    }
+
+    if (searchTerm) {
+        url += `searchTerm=${searchTerm}`;
+    }
+
+    if (minPrice) {
+        // If there's already a query parameter, add "&" before adding the next parameter
+        url += `${searchTerm ? '&' : ''}minPrice=${minPrice}`;
+    }
+
+    if (maxPrice) {
+        // If there's already a query parameter, add "&" before adding the next parameter
+        url += `${searchTerm || minPrice ? '&' : ''}maxPrice=${maxPrice}`;
     }
 
     return axios.get(url)
         .then(response => response.data)
         .catch(error => {
-            console.error('Error searching excursions:', error);
-            throw error; // Rethrow the error for the caller to handle
+            console.error('Error fetching excursions:', error);
+            throw error;
         });
 }
+
 
 export {
     getAllExcursions,
@@ -57,6 +68,5 @@ export {
     getExcursion,
     deleteExcursion,
     updateExcursion,
-    searchExcursionsByName,
-    searchExcursionByNameAndPrice
+    searchExcursionsByNameAndTravelAgencyAndPrice
 }

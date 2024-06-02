@@ -1,0 +1,118 @@
+
+.excursion-sales-container,
+.graph-container {
+    flex: 1 1 calc(50% - 40px); /* Adjust the width and spacing */
+    background-color: #f9f9f9;
+    padding: 30px; /* Increase padding for better spacing */
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    margin: 20px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+    min-height: 500px; /* Increase the minimum height */
+}
+
+.excursion-sales-container h3,
+.graph-header h2 {
+    margin-bottom: 20px;
+    color: #333;
+    text-align: center;
+}
+
+.excursion-sales-container p,
+.excursion-sales-container label,
+.graph-container label {
+    color: #666;
+}
+
+.excursion-sales-container label,
+.graph-container label {
+    display: block;
+    margin: 10px 0 5px;
+    font-weight: bold;
+}
+
+.excursion-sales-container input[type="date"],
+.graph-container input[type="date"] {
+    display: block;
+    padding: 10px; /* Increase padding for better spacing */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.excursion-sales-container button {
+    background-color: #007bff;
+    color: white;
+    padding: 12px 25px; /* Increase padding for better spacing */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.excursion-sales-container button:hover {
+    background-color: #0056b3;
+}
+
+.excursion-sales-container p.total-sales {
+    margin-top: 20px;
+    font-size: 18px;
+    color: #333;
+}
+
+.graph-header {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.date-picker-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.date-picker-container label {
+    margin-right: 10px;
+}
+
+.date-picker-container input {
+    padding: 10px; /* Increase padding for better spacing */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.date-picker-container div {
+    display: flex;
+    align-items: center;
+}
+
+.booking-statistics-graph {
+    margin-top: 20px;
+    height: calc(100% - 40px); /* Adjust height to fit the container */
+}
+
+
+.excursion-sales-container button {
+    background-color: #381431;
+    color: #fff;
+    border: #381431 solid 4px;
+    border-radius: 8px;
+    margin:10px;
+    padding: 5px 12px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: background-color 0.5s;
+    
+
+}
+.excursion-sales-container button:hover {
+    border: #381431 solid 4px;
+    background-color: #EFDAD1;
+    color: #381431
+}
