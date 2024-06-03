@@ -17,10 +17,15 @@ function TripInfoPage() {
     const [showConfirmation, setShowConfirmation] = useState(false);
     const [deleteStatus, setDeleteStatus] = useState(null);
     const userRole = TokenManager.getUserRoles();
+    const userId = TokenManager.getUserIdFromToken();    
+    const isLoggedIn = TokenManager.isAuthenticated();
+    if (isLoggedIn) {
+      TokenManager.updateAxiosToken(TokenManager.getAccessToken());
+    }
+
 
     const [showBookings, setShowBookings] = useState(false);
     const [bookings, setBookings] = useState([]);
-    TokenManager.updateAxiosToken(TokenManager.getAccessToken());
 
     const [showSales, setshowSales] = useState(false);
 
@@ -50,10 +55,9 @@ function TripInfoPage() {
     function formatDate(dateString) {
         const date = new Date(dateString);
         const day = date.getDate();
-        const month = date.getMonth() + 1; // Month is zero-indexed, so add 1
+        const month = date.getMonth() + 1;
         const year = date.getFullYear();
       
-        // Ensure that single-digit days and months are padded with a leading zero
         const formattedDay = day < 10 ? `0${day}` : day;
         const formattedMonth = month < 10 ? `0${month}` : month;
       
@@ -115,7 +119,7 @@ function TripInfoPage() {
                     <p><strong>Avaliable spaces left:</strong> {trip.numberOfSpacesLeft} !!!</p>
 
                     <div className='buttons'>
-                      {userRole.includes("TRAVELAGENCY") && (
+                      {isLoggedIn && userRole.includes("TRAVELAGENCY") && userId === trip.travelAgency.id &&(
                         <>
                         <div className="button-row">
                             <button className='delete-button' onClick={handleDelete}>Delete Listing</button>

@@ -16,7 +16,6 @@ import MyBookingsPage from './pages/MyBookings.Page';
 import MyListingsPage from './pages/MyListingsPage';
 import ProtectedRoute from './apis/ProtectedRoute';
 import UnauthorizedPage from './pages/UnauthorizedPage';
-import TripBookingsPage from './pages/TripBookingsPage';
 import TravelTipsPage from './pages/TravelTipsPage';
 import ContactPage from './pages/ContactPage';
 import ReviewPage from './pages/ReviewPage';
@@ -24,6 +23,7 @@ import TravelAgencyInfoPage from './pages/TravelAgencyInfoPage';
 import MyReviewsPage from './pages/MyReviewsPage';
 import TrendingPage from './pages/TrendingPage';
 import BookingInfoPage from './pages/BookingInfoPage';
+import ChatPage from './pages/ChatPage';
 
 function App() {
   return (
@@ -51,7 +51,6 @@ function App() {
             <Route path="/list-trip" element={<ProtectedRoute element={TripListingPage }  requiredRoles={['TRAVELAGENCY']} />} />
             <Route path="/excursions/:id/update" element={<ProtectedRoute element={TripUpdatePage } requiredRoles={['TRAVELAGENCY']} />} />
             <Route path="/excursions/:id/booking" element={<ProtectedRoute element={BookingPage } requiredRoles={['USER']} />} />
-            <Route path="/excursions/:id/bookings" element={<ProtectedRoute element={TripBookingsPage } requiredRoles={['TRAVELAGENCY']} />} />
             <Route path="/excursions/:id/booking-details" element={<ProtectedRoute element={BookingDetailsPage} requiredRoles={['USER']} />} />
             <Route path="/profile" element={<ProtectedRoute element={ProfilePage } requiredRoles={['USER', 'TRAVELAGENCY']}/>} />
             <Route path="/profile/update" element={<ProtectedRoute element={ProfilePageUpdate } requiredRoles={['USER', 'TRAVELAGENCY']}/>} />
@@ -60,6 +59,7 @@ function App() {
             <Route path="/myreviews" element={<ProtectedRoute element={MyReviewsPage } requiredRoles={['USER']} />} />
             <Route path="/write-review/:id" element={<ProtectedRoute element={ReviewPage }  requiredRoles={['USER']} />} />
             <Route path='/booking/:id' element={<ProtectedRoute element={BookingInfoPage }  requiredRoles={['TRAVELAGENCY']} />} />
+            <Route path='/chat/:id' element={<ProtectedRoute element={ChatPage }  requiredRoles={['USER', 'TRAVELAGENCY']} />} />
 
 
         </Routes>

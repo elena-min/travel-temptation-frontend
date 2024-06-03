@@ -20,6 +20,12 @@ function TravelAgencyInfoPage() {
     const [showReviews, setShowReviews] = useState(false);
     const [showListings, setShowListings] = useState(false);
 
+    const userId = TokenManager.getUserIdFromToken();    
+    const isLoggedIn = TokenManager.isAuthenticated();
+    if (isLoggedIn) {
+      TokenManager.updateAxiosToken(TokenManager.getAccessToken());
+    }
+
     const [reviews, setReviews] = useState([]);
     const [listings, setListings] = useState([]);
 
@@ -83,10 +89,10 @@ function TravelAgencyInfoPage() {
       const handleReviewNow = () =>{
         window.location.href = `/write-review/${travelAgencyId}`;
       }
-      
-      const handleCheckBookings = () => {
-        window.location.href = `/excursions/${excursionId}/bookings`;
+      const handleStartChat = () =>{
+        window.location.href = `/chat/${travelAgencyId}`; 
       }
+      
         return (
             <div className="trip-info-container">
                 {travelAgency && (
@@ -102,15 +108,12 @@ function TravelAgencyInfoPage() {
                     <div className='buttons'>
                       <button className='reviews-button' onClick={handleShowReviews}>Check Reviews</button>
                           <button className='listings-button' onClick={handleShowListings}>Check Listings</button>
-                      {userRole.includes("TRAVELAGENCY") && (
-                        <>
-                         <button className='bookings-button' onClick={handleCheckBookings}>Check Bookings</button>
-                         
-                        </>
-                      )}
+                       
                       {userRole.includes("USER") && (
                         <>
                           <button className='review-button' onClick={handleReviewNow}>Write a review</button>
+                          <button className='chat-button' onClick={handleStartChat}>Send a Message</button>
+
                         </>
                       )}
                     </div>

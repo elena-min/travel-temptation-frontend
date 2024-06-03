@@ -5,7 +5,7 @@ import ReviewFormContainer from "../components/ReviewFormContainer";
 function ReviewPage(){
     return(
         <div className="trip-listing-form">
-        <h1>Create a trip listing!</h1>
+        <h1>Write a review!</h1>
         <ReviewFormContainer/>
         </div>
     )
