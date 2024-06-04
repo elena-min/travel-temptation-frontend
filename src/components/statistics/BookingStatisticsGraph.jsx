@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Bar } from 'react-chartjs-2';
+import {Chart,registerables } from 'chart.js'; 
 import { getBookingDataByDateRangePerExcursion } from '../../services/StatisticsService';
 import "../style/Statistics.css";
 
 function BookingStatisticsGraph({ excursionId, startDate, endDate }) {
     const [bookingData, setBookingData] = useState([]);
+    Chart.register(...registerables);
 
     useEffect(() => {
+        console.log(excursionId)
         getBookingDataByDateRangePerExcursion(excursionId, startDate, endDate)
             .then(data => {
                 setBookingData(data);

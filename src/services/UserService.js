@@ -10,6 +10,10 @@ function getUser(id) {
         .then(response => response.data);
 }
 
+function getUserByUsername(username) {
+    return axios.get(`http://localhost:8080/users/username/${username}`)
+        .then(response => response.data);
+}
 function saveUser(user) {
     return axios.post('http://localhost:8080/users', user)
         .then(response => response.data)
@@ -29,6 +33,7 @@ function updateUser(id, updatedUser){
 export {
     getUsers,
     getUser,
+    getUserByUsername,
     saveUser,
     deleteUser,
     updateUser

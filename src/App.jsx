@@ -24,6 +24,7 @@ import MyReviewsPage from './pages/MyReviewsPage';
 import TrendingPage from './pages/TrendingPage';
 import BookingInfoPage from './pages/BookingInfoPage';
 import ChatPage from './pages/ChatPage';
+import TravelAgencyChatHistoryPage from './pages/TravelAgencyChatHistoryPage';
 
 function App() {
   return (
@@ -60,6 +61,7 @@ function App() {
             <Route path="/write-review/:id" element={<ProtectedRoute element={ReviewPage }  requiredRoles={['USER']} />} />
             <Route path='/booking/:id' element={<ProtectedRoute element={BookingInfoPage }  requiredRoles={['TRAVELAGENCY']} />} />
             <Route path='/chat/:id' element={<ProtectedRoute element={ChatPage }  requiredRoles={['USER', 'TRAVELAGENCY']} />} />
+            <Route path='/chat-history' element={<ProtectedRoute element={TravelAgencyChatHistoryPage }  requiredRoles={['TRAVELAGENCY']} />} />
 
 
         </Routes>

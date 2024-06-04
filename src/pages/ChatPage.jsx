@@ -4,6 +4,7 @@ import { getUser } from '../services/UserService';
 import TokenManager from '../apis/TokenManager';
 import { Client } from '@stomp/stompjs';
 import './style/Chat.css'; 
+import { getMessages } from '../services/NotificationService';
 
 function ChatPage() {
     const { id } = useParams();
@@ -15,7 +16,7 @@ function ChatPage() {
     const [client, setClient] = useState(null);
     const [messages, setMessages] = useState([]);
     const [message, setMessage] = useState('');
-    const [isConnected, setIsConnected] = useState(false); // State variable to track WebSocket connection status
+    const [isConnected, setIsConnected] = useState(false);
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -66,7 +67,8 @@ function ChatPage() {
                 stompClient.subscribe(`/user/${username}/queue/messages`, (msg) => {
                     const newMessage = JSON.parse(msg.body);
                     console.log('Received message:', newMessage);
-                    setMessages(prevMessages => [...prevMessages, newMessage]);
+                    updateMessages(newMessage);
+                    //setMessages(prevMessages => [...prevMessages, newMessage]);
                 });
             },
             onStompError: (frame) => {
@@ -85,7 +87,28 @@ function ChatPage() {
             }
         };
     }, [username]);
+
+    useEffect(() => {
+        const fetchOldMessages = async () => {
+          if (!userId || !travelAgencyId) return; 
+      
+          try {
+            console.log(userId);
+            console.log(travelAgencyId);
+            const messagesfromdatabase = await getMessages(user.id, travelAgencyId);
+            setMessages(messagesfromdatabase);
+            console.log(messagesfromdatabase);
+          } catch (error) {
+            console.error("Error fetching old messages:", error);
+          }
+        };
+      
+        fetchOldMessages();
+      }, [userId, travelAgencyId]);
     
+      const updateMessages = (newMessage) => {
+        setMessages(prevMessages => [...prevMessages, newMessage]);
+      };
 
     const sendMessage = () => {
         if (client !== null) {
@@ -97,56 +120,32 @@ function ChatPage() {
             };
             console.log('Sending message:', chatMessage);
             client.publish({
-                destination: "/app/chat.sendMessage",
+                destination: "/app/chat.send",
                 body: JSON.stringify(chatMessage)
             });
+            updateMessages(chatMessage);
             setMessage("");
-            setMessages(prevMessages => [...prevMessages, chatMessage]);
+            //setMessages(prevMessages => [...prevMessages, chatMessage]);
         } else {
             console.error('WebSocket connection not established');
         }
     };
 
-    useEffect(() => {
-        if (isConnected) {
-            testMessageReception();
-        }
-    }, [isConnected]);
-
-    const testMessageReception = () => {
-        if (client !== null) {
-            const simulatedMessage = {
-                from: 1,
-                to: 2,
-                message: "This is a test message",
-                timestamp: new Date().toISOString()
-            };
-            console.log('Simulating message reception...');
-            client.onConnect = () => {
-                console.log('Subscribing to messages...');
-                client.subscribe('/user/queue/messages', (msg) => {
-                    const newMessage = JSON.parse(msg.body);
-                    console.log('Received message:', newMessage);
-                    setMessages(prevMessages => [...prevMessages, newMessage]);
-                });
-            };
-            client.activate();
-        } else {
-            console.error('WebSocket connection not established');
-        }
-    };
     
     
     return (
         <div className="chat-container">
-            <div className="chat-messages">
-                {messages.map((msg, index) => (
-                    <div key={index} className={`message ${msg.from === userId ? 'sent' : 'received'}`}>
-                        {msg.message}
-                    </div>
-                ))}
-            </div>
-            <div className="chat-input">
+<div className="chat-messages">
+      {messages.length > 0 ? (
+        messages.map((msg, index) => (
+          <div key={index} className={`message ${msg.from === userId ? 'sent' : 'received'}`}>
+            <span className="username">{msg.from}: </span>{msg.message}
+          </div>
+        ))
+      ) : (
+        <p>Loading messages...</p>
+      )}
+    </div>            <div className="chat-input">
                 <input 
                     type="text" 
                     value={message} 

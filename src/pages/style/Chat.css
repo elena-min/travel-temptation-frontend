@@ -2,7 +2,7 @@
     margin: auto;
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    height: 90vh;
     width: 60%;
     border: 2px solid #ccc;
     border-radius: 8px;}
@@ -17,9 +17,10 @@
     margin-bottom: 10px;
     padding: 10px 15px;
     border-radius: 10px;
-    max-width: 70%;
+    max-width: 100%;
     word-wrap: break-word;
-}
+  }
+  
 
 .sent {
     text-align: right;
@@ -57,3 +58,5 @@
     cursor: pointer;
     outline: none;
 }
+
+  
