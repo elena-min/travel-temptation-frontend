@@ -3,6 +3,8 @@ import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import { getExcursion } from "../services/ExcursionService";
 import maldives from '../images/maldives.jpg';
+import './style/Booking.css';
+
 
 function BookingPage() {
 

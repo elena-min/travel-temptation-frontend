@@ -57,7 +57,10 @@ function Header() {
                         </li>
                         <li>
                             <Link to="mylistings">My listings</Link>
-                        </li>           
+                        </li>    
+                        <li>
+                            <Link to="chat-history">My chats</Link>
+                        </li>        
                     </>
                     
                 )}

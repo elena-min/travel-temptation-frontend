@@ -34,6 +34,15 @@ function getBookingsByExcursion(excursionId){
         .then(response => response.data);   
 }
 
+function getPastBookingsByUser(userId){
+    return axios.get(`http://localhost:8080/bookings/past/${userId}`)
+        .then(response => response.data);   
+}
+function getFutureBookingsByUser(userId){
+    return axios.get(`http://localhost:8080/bookings/future/${userId}`)
+        .then(response => response.data);   
+}
+
 
 export {
     getBookings,
@@ -42,5 +51,7 @@ export {
     deleteBooking,
     updateBooking,
     getBookingsByUser,
-    getBookingsByExcursion
+    getBookingsByExcursion,
+    getPastBookingsByUser,
+    getFutureBookingsByUser
 }

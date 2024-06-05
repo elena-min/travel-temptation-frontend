@@ -2,39 +2,60 @@ import React from "react";
 import './style/Home.css';
 import { useState, useEffect } from "react";
 import TokenManager from "../apis/TokenManager";
-import { getBookingsByUser } from "../services/BookingService";
+import { getBookingsByUser, getFutureBookingsByUser, getPastBookingsByUser } from "../services/BookingService";
 import BookingListContainer from "../components/BookingListContainer";
 
 
 function MyBookingsPage() {
    const [bookings, setBookings] = useState([]);
+   const [pastBookings, setPastBookings] = useState([]);
+   const [futureBookings, setFutureBookings] = useState([]);
 
    useEffect(() => {
-    console.log(TokenManager.getAccessToken());
-    if(TokenManager.getAccessToken()){
-      TokenManager.updateAxiosToken(TokenManager.getAccessToken());
-      const userID = TokenManager.getUserIdFromToken();
-    
-      getBookingsByUser(userID)
-      .then((bookings) => {
-        setBookings(bookings);
-        console.log(bookings);
-      })
-      .catch((error) =>{
-        console.error('Error fetching bookings:', error);
-      })
-    }
-    else{
-      //window.location.href = `/login`;
-    } }, []);
+    const fetchBookings = async () => {
+       try {
+          const userID = TokenManager.getUserIdFromToken();
+          console.log(userID);
+          console.log(TokenManager.getAccessToken());
+          const past = await getPastBookingsByUser(userID);
+          const future = await getFutureBookingsByUser(userID);
+          setPastBookings(past);
+          setFutureBookings(future);
+          console.log(past);
+          console.log(future);
 
+
+       } catch (error) {
+          console.error('Error fetching bookings:', error);
+       }
+    };
+
+    if (TokenManager.getAccessToken()) {
+       TokenManager.updateAxiosToken(TokenManager.getAccessToken());
+       fetchBookings();
+    } else {
+       window.location.href = `/login`;
+    }
+ }, []);
+
+    const [showOldBookings, setShowOldBookings] = useState(true);
+
+   const handleButtonClick = () => {
+      setShowOldBookings(!showOldBookings);
+   };
    
       return (
         <>
         <div className="home-container">
           <h1>My Bookings</h1>
+          <button onClick={handleButtonClick}>
+               {showOldBookings ? "Future Bookings" : "Past Bookings"}
+            </button>
           <div className="trips">
-          <BookingListContainer bookings={bookings} />
+          {showOldBookings ? 
+               <BookingListContainer bookings={futureBookings} message="No upcoming trips." /> :
+               <BookingListContainer bookings={pastBookings} message="No past trips." />
+            }
           </div>
         </div>
         </>

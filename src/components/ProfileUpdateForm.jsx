@@ -11,13 +11,17 @@ function ProfileUpdateForm(){
     const [user, setUser] = useState(null);
     const [updateStatus, setUpdateStatus] = useState(null);
     const { register, handleSubmit, formState: { errors }, setValue } = useForm();
+    TokenManager.updateAxiosToken(TokenManager.getAccessToken());
 
     useEffect(() => {
-        const userIdFromToken = TokenManager.getUserIdFromToken(); // Get user ID from token
+        const userIdFromToken = TokenManager.getUserIdFromToken(); 
         if (userIdFromToken) {
             getUser(userIdFromToken)
                 .then(data => {
                     setUser(data);
+                    console.log(data);
+                    console.log(TokenManager.getAccessToken());
+
                     const formattedBirthDate = formatDateForInput(data.birthDate);
                     setValue("firstName", data.firstName);
                     setValue("lastName", data.lastName);
@@ -58,6 +62,7 @@ function ProfileUpdateForm(){
     data.birthDate = formatDateForSubmit(data.birthDate);
     try{
         console.log(data);
+        console.log(user.id);
         await updateUser(user.id, data);
         setUpdateStatus({success: true});
         console.log('User saved successfully!');   

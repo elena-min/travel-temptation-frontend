@@ -87,7 +87,11 @@ function TripInfoPage() {
       };
       
       const handleBookNow = () =>{
-        window.location.href = `/excursions/${excursionId}/booking`;
+          if (tripStartDate > currentDate) {
+            window.location.href = `/excursions/${excursionId}/booking`;
+          } else {
+            alert("This trip has already passed or is today. You cannot book it now.");
+          }
       }
       
       const handleUpdate = () =>{
@@ -131,15 +135,14 @@ function TripInfoPage() {
                         </div>
                     </>
                       )}
-                      {userRole.includes("USER") && (
-                        <>
-                        {trip.numberOfSpacesLeft >0 ?(
-                          <button className='booking-button' onClick={handleBookNow}>Book Trip</button>
-
-                        ) : (
-                          <h3>Fully Booked!</h3>
-                        )}
-                        </>
+                      {userRole.includes("USER") && trip.numberOfSpacesLeft > 0 && (
+                          <>
+                          {trip.startDate > new Date() ? (
+                              <button className='booking-button' onClick={handleBookNow}>Book Trip</button>
+                          ) : (
+                              <h5>Booking period for this trip has passed.</h5>
+                          )}
+                          </>
                       )}
                     </div>
                    </div>

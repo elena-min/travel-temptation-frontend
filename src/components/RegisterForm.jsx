@@ -6,14 +6,18 @@ import AuthAPI from "../apis/AuthAPI";
 function RegisterForm() {
     const {register, handleSubmit, formState : {errors}} = useForm();
     const [errorMessage, setErrorMessage] = useState('');
+    const [registerAsTravelAgency, setRegisterAsTravelAgency] = useState(false);
 
     const onSubmit = async(formData) =>{
       formData.gender = formData.gender.toUpperCase(); 
+      const registerFunction = registerAsTravelAgency ? AuthAPI.registerTravelAgency : AuthAPI.registerUser;
 
-      const accessToken = await AuthAPI.registerUser(formData);
+      const accessToken = await registerFunction(formData);
+      
+     // const accessToken = await AuthAPI.registerUser(formData);
       if(accessToken){
         setErrorMessage('');
-        console.log("user logged in!");
+        console.log("user registered!");
         console.log(accessToken);
         window.location.href = `/`;
 
@@ -85,6 +89,16 @@ function RegisterForm() {
             <input type="text" {... register("password", {required: true, minLength: 6})} className="form-input"/>
             {errors.password && <span className="error-message">Password should be ar least of 6 characters long!</span>}
           </label>
+
+          <label className="form-label">
+            Register as travel agency:
+            <input 
+                type="checkbox"
+                checked={registerAsTravelAgency}
+                onChange={(e) => setRegisterAsTravelAgency(e.target.checked)}
+                className="form-input"
+            />
+        </label>
           {errorMessage && <div className="error-message">{errorMessage}</div>}
           <button type="submit" className="form-button">Register</button>
         </form>

@@ -61,3 +61,20 @@
     font-size: 1.1em; 
 
   }
+
+  .book-button{
+    background-color: #381431;
+    color: #fff;
+    border: #381431 solid 4px;
+    border-radius: 8px;
+    margin:10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.5s;
+  }
+  .book-button:hover{
+    border: #381431 solid 4px;
+    background-color: #EFDAD1;
+    color: #381431;
+  }

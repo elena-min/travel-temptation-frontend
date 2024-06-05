@@ -5,13 +5,19 @@ import './style/Booking.css'
 function BookingListContainer(props) {
 
   return (
-    <ul className="booking-list-container">
-      {props.bookings.map((booking) => (
-        <li key={booking.id} className="booking-container">
-          <BookingContainer booking={booking} />
-        </li>
-      ))}
-    </ul>
+    <div className="booking-list-container">
+      {props.bookings.length === 0 ? (
+        <p>{props.message}</p>
+      ) : (
+        <ul>
+          {props.bookings.map((booking) => (
+            <li key={booking.id} className="booking-container">
+              <BookingContainer booking={booking} />
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
   )
 }
 
