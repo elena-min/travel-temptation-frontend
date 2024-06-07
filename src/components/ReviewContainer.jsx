@@ -48,7 +48,7 @@ function ReviewContainer({review}){
           {deleteStatus.error && <p className="error">{deleteStatus.error}</p>}
           {deleteStatus.success ?
             <p className="success">Review deleted successfully!</p> :
-            <button className='cancel-button' onClick={handleDeleteReview}>Remove Review</button>
+            <button className='cancel-review-button' onClick={handleDeleteReview}>Remove Review</button>
 
           }
 

@@ -40,12 +40,10 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/excursions" element={<Home />} />
-            <Route path="/explore" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/contacts" element={<ContactPage />} />
             <Route path="/traveltips" element={<TravelTipsPage />} />
             <Route path="/trending" element={<TrendingPage />} />
-            <Route path="/trips/europe" element={<Home />} />
             <Route path='/trip/:id' element={<TripInfoPage/>}/>
             <Route path='/travel-agency/:id' element={<TravelAgencyInfoPage/>}/>
 

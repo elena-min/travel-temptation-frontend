@@ -1,5 +1,6 @@
 import React from "react";
 import './style/Home.css';
+import "../components/style/Review.css";
 import { useState, useEffect } from "react";
 import TokenManager from "../apis/TokenManager";
 import ReviewsListContainer from "../components/ReviewsListContainer";

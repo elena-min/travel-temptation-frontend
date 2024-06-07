@@ -1,5 +1,6 @@
 import React from "react";
 import './style/Home.css';
+import './style/Pagination.css';
 import { useState, useEffect } from "react";
 import { getAllExcursions } from "../services/ExcursionService";
 import cover from '../images/cover3.jpg';
@@ -9,11 +10,16 @@ import Search from "../layoutComponents/Search";
 import TokenManager from "../apis/TokenManager";
 
 
+
 function Home() {
-   const [excursions, setExcursions] = useState([]);
+  const [allExcursions, setAllExcursions] = useState([]);
+  const [displayedExcursions, setDisplayedExcursions] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(12);
 
    const handleSearch = (searchResults) => {
-        setExcursions(searchResults);
+    setAllExcursions(searchResults);
+        setCurrentPage(1); 
     };
 
     useEffect(() => {
@@ -22,9 +28,29 @@ function Home() {
           .then(data => {
            console.log(data); 
            console.log(TokenManager.getAccessToken())
-          setExcursions(data)})
+           setAllExcursions(data)})
     }, [])
     //The empty array means it will do this operation once
+
+    useEffect(() => {
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = startIndex + itemsPerPage;
+      setDisplayedExcursions(allExcursions.slice(startIndex, endIndex));
+    }, [allExcursions, currentPage, itemsPerPage]);
+
+    const totalPages = Math.ceil(allExcursions.length / itemsPerPage);
+
+    const handleNextPage = () => {
+      if (currentPage < totalPages) {
+        setCurrentPage(currentPage + 1);
+      }
+    };
+  
+    const handlePreviousPage = () => {
+      if (currentPage > 1) {
+        setCurrentPage(currentPage - 1);
+      }
+    };
     
       return (
         <>
@@ -33,14 +59,18 @@ function Home() {
         <img src={cover} alt="Image 1" />
           <div className="overlay">
             <Link to="/trending" className="button">Trending</Link>
-            <Link to="/excursions" className="button">Explore</Link>
-            <Link to="/trips/europe" className="button">Europe</Link>
+            <Link to="/traveltips" className="button">Travel Tips</Link>
           </div>
         </div>
         <div className="home-container">
           <h1>Featured Trips</h1>
           <div className="trips">
-          <TripListContainer excursions={excursions} />
+            <TripListContainer excursions={displayedExcursions} />
+          </div>
+          <div className="pagination">
+            <button onClick={handlePreviousPage} disabled={currentPage === 1}>Previous</button>
+            <span>Page {currentPage} of {totalPages}</span>
+            <button onClick={handleNextPage} disabled={currentPage === totalPages}>Next</button>
           </div>
         </div>
         </>

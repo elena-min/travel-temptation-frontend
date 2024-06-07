@@ -35,3 +35,21 @@ ul{
     color: #381431; 
 }
 
+
+.cancel-review-button {
+    width: 50%;
+    padding: 10px;
+    background-color: #381431;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: font-size 0.3s ease; 
+  }
+  
+  .cancel-review-button:hover {
+    background-color: #EFDAD1;
+    color: #381431;
+    font-size: 1.1em; 
+
+  }

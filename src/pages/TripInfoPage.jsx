@@ -42,7 +42,8 @@ function TripInfoPage() {
     }, [excursionId]);
 
     useEffect(() => {      
-      getBookingsByExcursion(excursionId)
+      if(isLoggedIn && userRole.includes("TRAVELAGENCY")){
+        getBookingsByExcursion(excursionId)
         .then((bookings) => {
           setBookings(bookings);
           console.log(bookings);
@@ -50,6 +51,7 @@ function TripInfoPage() {
         .catch((error) =>{
           console.error('Error fetching bookings:', error);
         })
+      }
       }, []);
 
     function formatDate(dateString) {
@@ -87,18 +89,21 @@ function TripInfoPage() {
       };
       
       const handleBookNow = () =>{
-          if (tripStartDate > currentDate) {
+          //if (tripStartDate > currentDate) {
             window.location.href = `/excursions/${excursionId}/booking`;
-          } else {
-            alert("This trip has already passed or is today. You cannot book it now.");
-          }
+          //} else {
+          //  alert("This trip has already passed or is today. You cannot book it now.");
+         // }
       }
       
       const handleUpdate = () =>{
         window.location.href = `/excursions/${excursionId}/update`;
       }
 
-        return (
+  
+    
+      const tripStartDate = trip ? new Date(trip.startDate) : null;
+      return (
             <div className="trip-info-container">
               {deleteStatus && (
               <div className={updateStatus.success ? "success-message" : "error-message"}>
@@ -137,7 +142,7 @@ function TripInfoPage() {
                       )}
                       {userRole.includes("USER") && trip.numberOfSpacesLeft > 0 && (
                           <>
-                          {trip.startDate > new Date() ? (
+                          {tripStartDate > new Date() ? (
                               <button className='booking-button' onClick={handleBookNow}>Book Trip</button>
                           ) : (
                               <h5>Booking period for this trip has passed.</h5>
