@@ -20,7 +20,19 @@ function LoginForm() {
       }
     } catch (error) {
       console.error("Login error:", error);
-      setErrorMessage('An error occurred during login. Please try again.');
+      if (error.response) {
+        if (error.response.status === 400) {
+          setErrorMessage(error.response.data.error);
+        } else if (error.response.status === 403 || error.response.status === 401) {
+          setErrorMessage("Invalid username or password.");
+        } else if (error.response.status === 404) {
+          setErrorMessage("User not found.");
+        } else {
+          setErrorMessage("An unexpected error occurred. Please try again later.");
+        }
+      } else {
+        setErrorMessage("Network error. Please check your internet connection.");
+      }
     }
   };
     return (

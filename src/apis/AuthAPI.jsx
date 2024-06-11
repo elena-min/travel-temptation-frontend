@@ -31,7 +31,7 @@ const AuthAPI ={
                 throw new Error("Registration failed. Please try again later.");
             }
         }),
-   
          
 }
+
 export default AuthAPI;

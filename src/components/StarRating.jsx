@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { FaStar } from "react-icons/fa";
 
-const StarRating = ({ onChange }) => {
-  const [rating, setRating] = useState(0);
+const StarRating = ({ value, onChange }) => {
+  const [rating, setRating] = useState(value || 0); // Initialize rating with the provided value or 0
 
   const handleStarClick = (value) => {
     setRating(value);

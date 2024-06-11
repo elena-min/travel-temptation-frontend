@@ -1,4 +1,7 @@
 import './App.css';
+import React, { useEffect } from 'react';
+import axios from 'axios';
+import TokenManager from './apis/TokenManager';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home';
 import About from './pages/About';
@@ -27,6 +30,30 @@ import ChatPage from './pages/ChatPage';
 import TravelAgencyChatHistoryPage from './pages/TravelAgencyChatHistoryPage';
 
 function App() {
+
+  useEffect(() => {
+    const interceptor = axios.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        if (error.response && error.response.status === 401) {
+          window.location.href = '/login';
+        }
+        return Promise.reject(error);
+      }
+    );
+  
+    // Cleanup function
+    return () => {
+      axios.interceptors.response.eject(interceptor);
+    };
+  }, []);
+  
+  // Ensure that the interceptor is updated with the latest access token
+  useEffect(() => {
+    const token = TokenManager.getAccessToken();
+    TokenManager.updateAxiosToken(token);
+  }, []);
+  
   return (
     <div className='App'>
       <BrowserRouter>
@@ -57,7 +84,7 @@ function App() {
             <Route path="/mylistings" element={<ProtectedRoute element={MyListingsPage}  requiredRoles={['TRAVELAGENCY']} />}  />
             <Route path="/myreviews" element={<ProtectedRoute element={MyReviewsPage } requiredRoles={['USER']} />} />
             <Route path="/write-review/:id" element={<ProtectedRoute element={ReviewPage }  requiredRoles={['USER']} />} />
-            <Route path='/booking/:id' element={<ProtectedRoute element={BookingInfoPage }  requiredRoles={['TRAVELAGENCY']} />} />
+            <Route path='/booking/:id' element={<ProtectedRoute element={BookingInfoPage }  requiredRoles={['TRAVELAGENCY', 'USER']} />} />
             <Route path='/chat/:id' element={<ProtectedRoute element={ChatPage }  requiredRoles={['USER', 'TRAVELAGENCY']} />} />
             <Route path='/chat-history' element={<ProtectedRoute element={TravelAgencyChatHistoryPage }  requiredRoles={['TRAVELAGENCY']} />} />
 

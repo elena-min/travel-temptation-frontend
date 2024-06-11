@@ -20,6 +20,7 @@ function ExcursionSales({ excursionId }) {
         try {
             const sales = await getTotalSalesLastQuarterPerExcursion(excursionId, startDate, endDate, status);
             setTotalSales(sales);
+            console.log(sales);
         } catch (error) {
             console.error('Error fetching total sales:', error);
         }
@@ -37,6 +38,7 @@ function ExcursionSales({ excursionId }) {
         <div className="excursion-sales-container">
             <h3>Total Sales during certain period:</h3>
             <p>Default set for the last 3 months.</p>
+            <p>(Bookings with a 'CONFIRMED' status.)</p>
             <label>Start Date:</label>
             <input type="date" value={startDate.toISOString().split('T')[0]} onChange={handleStartDateChange} />
             <label>End Date:</label>

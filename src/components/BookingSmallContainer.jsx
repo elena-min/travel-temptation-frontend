@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import './style/Trip.css';
 import { Link } from "react-router-dom";
-import { deleteBooking } from "../services/BookingService";
 
 function BookingSmallContainer({booking}){
   console.log(booking);

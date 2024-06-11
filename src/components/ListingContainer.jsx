@@ -26,16 +26,31 @@ function ListingContainer({listing}){
             deleteExcursion(listing.id)
           .then( () =>{
             setDeleteStatus({ success: true });
-              //window.location.href = "/";
-          });
-         // .catch(error => {
-         //   setDeleteStatus({success: false, error: error.message});
-         //     console.error("Error canceling excursion.", error);
-         // });
+          })
+          .catch(error => {
+            if (error.response) {
+                if (error.response.status === 403) {
+                    setDeleteStatus({ success: false, error: "You are not authorized to delete this listing." });
+                } else if (error.response.status === 404) {
+                    setDeleteStatus({ success: false, error: "Listing not found." });
+                } else if (error.response.status === 400) {
+                    setDeleteStatus({ success: false, error: error.response.data.error });
+                } else {
+                    setDeleteStatus({ success: false, error: "An unexpected error occurred. Please try again later." });
+                }
+            } else if (error.request) {
+                console.error("Request made but no response received:", error.request);
+                setDeleteStatus({ success: false, error: "No response received from the server. Please try again later." });
+            } else {
+                console.error("Error setting up request:", error.message);
+                setDeleteStatus({ success: false, error: "An unexpected error occurred. Please try again later." });
+            }
+        });
         }
         
-      }
-      
+      };
+
+
       return (
         <div className="trip-container">
           <h2>

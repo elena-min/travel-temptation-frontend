@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import './style/Trip.css';
 import { Link } from "react-router-dom";
 import { deleteBooking } from "../services/BookingService";
+import TokenManager from "../apis/TokenManager";
 
 function BookingContainer({booking}){
   const [deleteStatus, setDeleteStatus] = useState({ success: false, error: null });
   console.log(booking);
   console.log(booking.excursion);
+  const userRole = TokenManager.getUserRoles();
 
     function formatDate(dateString) {
         const date = new Date(dateString);
@@ -26,15 +28,27 @@ function BookingContainer({booking}){
           deleteBooking(booking.id)
           .then( () =>{
             setDeleteStatus({ success: true });
-              //window.location.href = "/";
+          })
+          .catch(error => {
+            setDeleteStatus({success: false, error: error.message});
+              console.error("Error canceling excursion.", error);
           });
-         // .catch(error => {
-         //   setDeleteStatus({success: false, error: error.message});
-         //     console.error("Error canceling excursion.", error);
-         // });
         }
         
       }
+
+      const getStatusClass = (status) => {
+        switch (status) {
+          case 'PENDING':
+            return 'status-pending';
+          case 'CANCELLED':
+            return 'status-cancelled';
+          case 'CONFIRMED':
+            return 'status-confirmed';
+          default:
+            return '';
+        }
+      };
       
       return (
         <div className="trip-container">
@@ -45,7 +59,17 @@ function BookingContainer({booking}){
           <p><i>{booking.excursion.destinations.join(', ')}</i></p>
           <p><b>{formatDate(booking.excursion.startDate)} - {formatDate(booking.excursion.endDate)}</b></p>
           <p><i>Number of traveleres: </i>{booking.numberOfTravelers}</p>
-          <p><i>Booking status: </i>{booking.status}</p>
+          <p><i>Booking status: </i>
+            <span className={getStatusClass(booking.status)}>{booking.status}</span>
+          </p>
+            {userRole.includes("USER") && (
+                <>
+                  <button className='more-info-button'>
+                     <Link to={`/booking/${booking.id}`}>More info</Link>
+                  </button> 
+                </>
+            )}
+      
           {deleteStatus.error && <p className="error">{deleteStatus.error}</p>}
           {deleteStatus.success ?
             <p className="success">Booking deleted successfully!</p> :

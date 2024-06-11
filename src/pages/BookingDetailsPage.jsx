@@ -20,11 +20,13 @@ function BookingDetailsPage() {
 
     const [cardNumber, setCardNumber] = useState('');
     const [cvv, setCvv] = useState('');
-    const [expirationDate, setExpirationDate] = useState('');
+    const [expirationMonth, setExpirationMonth] = useState('');
+    const [expirationYear, setExpirationYear] = useState('');
     const [cardHolderName, setCardHolderName] = useState('');
 
     const [bookingStatus, setBookingStatus] = useState(null);
     const [formErrors, setFormErrors] = useState({}); 
+    const [errorMessage, setErrorMessage] = useState('');
 
     useEffect(() => {
         const userId = TokenManager.getUserIdFromToken();
@@ -41,7 +43,12 @@ function BookingDetailsPage() {
             })
             .catch(error => {
                 console.error("Error fetching user:", error);
-            });
+                if (error.response && error.response.status === 404) {
+                  setErrorMessage("User not found");
+                } else {
+                  setErrorMessage("An error occurred while fetching user data. Please try again later.");
+                }
+              });
     }, []);
 
     useEffect(() => {
@@ -51,10 +58,33 @@ function BookingDetailsPage() {
                 setTrip(data);
                 console.log(data.price);
             })
-            .catch(error => {
-                console.error("Error fetching excursion:", error);
+            .catch((error) =>{
+                console.error('Error fetching listings:', error);
+                if (error.response && error.response.status === 404) {
+                    setErrorMessage("Excursions not found for this travel agency.");
+                } else {
+                    setErrorMessage("An error occurred while fetching excursions. Please try again later.");
+                }
             });
     }, [excursionId]);
+
+    const currentYear = new Date().getFullYear();
+const years = Array.from(new Array(20), (val, index) => currentYear + index); // Next 20 years
+const months = [
+    { value: '01', name: 'January' },
+    { value: '02', name: 'February' },
+    { value: '03', name: 'March' },
+    { value: '04', name: 'April' },
+    { value: '05', name: 'May' },
+    { value: '06', name: 'June' },
+    { value: '07', name: 'July' },
+    { value: '08', name: 'August' },
+    { value: '09', name: 'September' },
+    { value: '10', name: 'October' },
+    { value: '11', name: 'November' },
+    { value: '12', name: 'December' }
+];
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -70,14 +100,25 @@ function BookingDetailsPage() {
         if (!cardHolderName) {
             errors.cardHolderName = "Card holder name is required";
         }
-        if (!expirationDate) {
+        if (!expirationMonth || !expirationYear) {
             errors.expirationDate = "Expiration date is required";
+        }else {
+            const currentYear = new Date().getFullYear();
+            const currentMonth = new Date().getMonth() + 1; // Months are 0-indexed
+            const expMonth = parseInt(expirationMonth, 10);
+            const expYear = parseInt(expirationYear, 10);
+    
+            if (expYear < currentYear || (expYear === currentYear && expMonth < currentMonth)) {
+                errors.expirationDate = "Expiration date cannot be in the past";
+            }
         }
 
     if (Object.keys(errors).length > 0) {
         setFormErrors(errors);
         return;
     }
+
+    const expirationDate = `${expirationYear}-${expirationMonth}`;
 
         console.log('Payment details: ', {cardNumber, cvv, cardHolderName, expirationDate});
         const paymentDetails = {
@@ -106,16 +147,34 @@ function BookingDetailsPage() {
             setBookingStatus({ success: true });
             setCardNumber('');
             setCvv('');
-            setExpirationDate('');
+            setExpirationMonth('');
+            setExpirationYear('');
             setCardHolderName('');
         } catch (error) {
             setBookingStatus({ success: false });
-            console.log(error);
+            console.log("Error saving payment details or booking:", error);
+    
+            if (error.response) {
+                if (error.response.status === 400) {
+                    setBookingStatus({ success: false, message: "Invalid payment details." });
+                } else if (error.response.status === 403) {
+                    setBookingStatus({ success: false, message: "Unauthorized access." });
+                } else if (error.response.status === 404) {
+                    setBookingStatus({ success: false, message: "Service not found." });
+                } else if (error.response.status === 500) {
+                    setBookingStatus({ success: false, message: "Internal server error." });
+                } else {
+                    setBookingStatus({ success: false, message: "An unexpected error occurred." });
+                }
+            } else {
+                setBookingStatus({ success: false, message: "Network error. Please try again later." });
+            }
         }
     }
 
     return (
         <div className="container mt-5 mb-5 p-4 border custom-container" style={{width: "60%"}}>
+            {errorMessage && <p className="error-message">{errorMessage}</p>}
             {bookingStatus && (
                 <div className={`alert ${bookingStatus.success ? 'alert-success' : 'alert-danger'}`} role="alert">
                     {bookingStatus.success ? "Excursion booked successfully!" : "Error updating information. Please try again."}
@@ -147,10 +206,24 @@ function BookingDetailsPage() {
                         {formErrors.cardHolderName && <div className="text-danger">{formErrors.cardHolderName}</div>}
                     </div>
                     <div className="mb-3">
-                        <label className="form-label">Expiration date:</label>
-                        <input type="date" className="form-control" value={expirationDate} onChange={(e) => setExpirationDate(e.target.value)} />
+                        <label className="form-label">Expiration Date:</label>
+                        <div className="d-flex">
+                            <select className="form-select me-2" value={expirationMonth} onChange={(e) => setExpirationMonth(e.target.value)}>
+                                <option value="">Month</option>
+                                {months.map((month) => (
+                                    <option key={month.value} value={month.value}>{month.name}</option>
+                                ))}
+                            </select>
+                            <select className="form-select" value={expirationYear} onChange={(e) => setExpirationYear(e.target.value)}>
+                                <option value="">Year</option>
+                                {years.map((year) => (
+                                    <option key={year} value={year}>{year}</option>
+                                ))}
+                            </select>
+                        </div>
                         {formErrors.expirationDate && <div className="text-danger">{formErrors.expirationDate}</div>}
                     </div>
+
                     <button type="submit" className="form-button">Submit</button>
                 </form>
             )}

@@ -11,16 +11,36 @@ function BookingForm(){
   const onSubmit = async (data) => { 
     if(!TokenManager.isUserAuthenticated()){
         alert('You need to be logged in to book a trip!');
+        TokenManager.clear();
         window.location.href = `/login`;
         return;
     }
     data.destinations = data.destinations.split(',').map(destination => destination.trim());
     console.log(data);
-    const token = TokenManager.updateAxiosToken(TokenManager.getAccessToken());
-    console.log(TokenManager.getUserRoles());
-    await saveExcursion(data);
-    console.log('Excursion booked successfully!');
-};
+    try {
+        TokenManager.updateAxiosToken(TokenManager.getAccessToken());
+        await saveBooking(data);
+        alert('Excursion booked successfully!');
+      } catch (error) {
+        if (error.response && error.response.data) {
+          if (error.response.status === 400) {
+            // Handle validation errors
+            setErrorMessage(Object.values(error.response.data).join("\n"));
+          } else if (error.response.status === 403) {
+            // Handle unauthorized access errors
+            setErrorMessage(error.response.data.authorization);
+          } else if (error.response.status === 404) {
+            // Handle not found errors
+            setErrorMessage(error.response.data.error);
+          } else {
+            // Handle other errors
+            setErrorMessage("An unexpected error occurred. Please try again later.");
+          }
+        } else {
+          setErrorMessage("An unexpected error occurred. Please try again later.");
+        }
+      }
+    };
 
    return (
     <form onSubmit={handleSubmit(onSubmit)} className="form-container">

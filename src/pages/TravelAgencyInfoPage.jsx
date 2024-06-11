@@ -19,6 +19,7 @@ function TravelAgencyInfoPage() {
     const userRole = TokenManager.getUserRoles();
     const [showReviews, setShowReviews] = useState(false);
     const [showListings, setShowListings] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
     const userId = TokenManager.getUserIdFromToken();    
     const isLoggedIn = TokenManager.isAuthenticated();
@@ -36,7 +37,12 @@ function TravelAgencyInfoPage() {
               setTravelAgency(data);
           })
           .catch(error => {
-              console.error("Error fetching travel agency:", error);
+            console.error("Error fetching user:", error);
+            if (error.response && error.response.status === 404) {
+              setErrorMessage("User not found");
+            } else {
+              setErrorMessage("An error occurred while fetching user data. Please try again later.");
+            }
           });
   }, [travelAgencyId]);
 
@@ -48,8 +54,14 @@ function TravelAgencyInfoPage() {
          console.log(reviews);
        })
        .catch((error) =>{
-         console.error('Error fetching reviews:', error);
-       }) }, []);
+        console.error('Error fetching reviews:', error);
+        if (error.response && error.response.status === 404) {
+            setErrorMessage("Reviews not found for this travel agency.");
+        } else {
+            setErrorMessage("An error occurred while fetching reviews. Please try again later.");
+        }
+      });
+    }, []);
 
        useEffect(() => {
           getExcursionsByTravelAgency(travelAgencyId)
@@ -59,7 +71,12 @@ function TravelAgencyInfoPage() {
           })
           .catch((error) =>{
             console.error('Error fetching listings:', error);
-          })
+            if (error.response && error.response.status === 404) {
+                setErrorMessage("Excursions not found for this travel agency.");
+            } else {
+                setErrorMessage("An error occurred while fetching excursions. Please try again later.");
+            }
+        });
        }, []);
 
     function formatDate(dateString) {
@@ -95,6 +112,7 @@ function TravelAgencyInfoPage() {
       
         return (
             <div className="trip-info-container">
+                {errorMessage && <p className="error-message">{errorMessage}</p>}
                 {travelAgency && (
                 <>
                 <div className="trip-info-wrapper">

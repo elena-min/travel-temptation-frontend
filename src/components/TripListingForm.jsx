@@ -27,11 +27,18 @@ function TripListingForm(){
         .then(data => {
             console.log(data); 
             setUser(data);
+            setErrorMessage('');
         })
         .catch(error => {
-            console.error("Error fetching user:", error);
+          console.error("Error fetching user:", error);
+          if (error.response && error.response.status === 404) {
+            setErrorMessage("User not found");
+          } else {
+            setErrorMessage("An error occurred while fetching user data. Please try again later.");
+          }
         });
-}, []);
+    }, []);
+  
 
 
   const isFutureDate = (selectedDate) =>{
@@ -53,22 +60,29 @@ function TripListingForm(){
         const tripData = {
           name: data.name,
           destinations: data.destinations,
+          description: data.description,
           startDate: data.startDate,
           endDate: data.endDate,
           travelAgency: user,
           price: data.price,
           numberOfAvaliableSpaces: data.numberOfAvaliableSpaces
         }
-        try{
+        try {
           console.log(tripData);
           const token = TokenManager.updateAxiosToken(TokenManager.getAccessToken());
           console.log(token);
           await saveExcursion(tripData);
           setSuccessMessage("Excursion listed successfully!");
-        }catch(error){
-          setErrorMessage("An error occured while listing the excursion. Please try again later or contact us!");
+          setErrorMessage('');
+        } catch (error) {
+          if (error.response && error.response.data) {
+            const serverErrors = error.response.data;
+            const errorMessages = Object.values(serverErrors).join(' ');
+            setErrorMessage(errorMessages);
+          } else {
+            setErrorMessage("An error occurred while listing the excursion. Please try again later or contact us!");
+          }
           console.log("Error listing excursions: ", error);
-
         }
         
         
@@ -92,6 +106,11 @@ function TripListingForm(){
             Destinations:
             <input type="text" {... register("destinations", {required: true})} className="form-input"/>
             {errors.destinations && <span className="error-message">Destinations are required!</span>}
+          </label>
+          <label className="form-label">
+            Trip Description:
+            <input type="text" {... register("description", {required: true})} className="form-input"/>
+            {errors.description && <span className="error-message">Trip description is required!</span>}
           </label>
           <label className="form-label">
             Start Date:

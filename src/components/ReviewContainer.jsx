@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import './style/Trip.css';
 import { Link } from "react-router-dom";
 import { deleteReview } from "../services/ReviewService";
+import StarRating from "./StarRating";
 
 function ReviewContainer({review}){
   const [deleteStatus, setDeleteStatus] = useState({ success: false, error: null });
@@ -20,29 +21,32 @@ function ReviewContainer({review}){
         return `${formattedDay}.${formattedMonth}.${year}`;
       }
     
-      const handleDeleteReview = () =>{
-        const confirmDelete = window.confirm("Are you sure you want to delete this review?")
-        if(confirmDelete){
-            deleteReview(review.id)
-          .then( () =>{
-            setDeleteStatus({ success: true });
-              //window.location.href = "/";
-          });
-         // .catch(error => {
-         //   setDeleteStatus({success: false, error: error.message});
-         //     console.error("Error canceling excursion.", error);
-         // });
-        }
-        
-      }
       
+      const handleDeleteReview = () => {
+        const confirmDelete = window.confirm("Are you sure you want to delete this review?");
+        if (confirmDelete) {
+          deleteReview(review.id)
+            .then(() => {
+              setDeleteStatus({ success: true, error: null });
+            })
+            .catch(error => {
+              setDeleteStatus({ success: false, error: error.message });
+              console.error("Error deleting review:", error);
+            });
+        }
+      }
+
+
+
       return (
         <div className="trip-container">
           <h2>
             <Link to={`/travel-agency/${review.travelAgency.id}`}>{review.travelAgency.firstName} {review.travelAgency.lastName}</Link>
           </h2>          
           <p><i>{review.topic}</i></p>
-          <p>{review.numberOfStars} /5</p>
+          <div>
+            <StarRating value={review.numberOfStars} />
+          </div>
           <p>{review.description}</p>
           <p>{formatDate(review.reviewDate)}</p>
           {deleteStatus.error && <p className="error">{deleteStatus.error}</p>}

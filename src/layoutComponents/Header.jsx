@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlane, faUser, faSignOutAlt, faBook, faComments, faList, faPenFancy } from '@fortawesome/free-solid-svg-icons';
 import './style/Header.css';
 import TokenManager from "../apis/TokenManager";
 
@@ -53,13 +55,19 @@ function Header() {
                 {userRoles.includes("TRAVELAGENCY") && (
                     <>
                         <li>
-                            <Link to="list-trip">List a trip!</Link>
+                            <Link to="list-trip">
+                                <FontAwesomeIcon icon={faList} /> List a trip!
+                            </Link>
                         </li>
                         <li>
-                            <Link to="mylistings">My listings</Link>
+                            <Link to="mylistings">
+                                <FontAwesomeIcon icon={faPlane} /> My listings
+                            </Link>              
                         </li>    
                         <li>
-                            <Link to="chat-history">My chats</Link>
+                            <Link to="chat-history">
+                                <FontAwesomeIcon icon={faComments} /> My chats
+                            </Link>                        
                         </li>        
                     </>
                     
@@ -67,19 +75,27 @@ function Header() {
                 {userRoles.includes("USER") && (
                     <>
                         <li>
-                            <Link to="mybookings">My bookings!</Link>
+                            <Link to="mybookings">
+                                <FontAwesomeIcon icon={faBook} /> My bookings!
+                            </Link>                        
                         </li>
                         <li>
-                            <Link to="myreviews">My reviews!</Link>
+                            <Link to="myreviews">
+                                <FontAwesomeIcon icon={faPenFancy} /> My reviews!
+                            </Link>
                         </li>
                     </>
                     
                 )}
                     <li>
-                        <Link to="profile">Profile Page</Link>
+                        <Link to="profile">
+                            <FontAwesomeIcon icon={faUser} /> Profile Page
+                        </Link>
                     </li>
                     <li>
-                        <Link onClick={handleLogout}>Logout</Link>
+                        <Link onClick={handleLogout}>
+                            <FontAwesomeIcon icon={faSignOutAlt} /> Logout
+                        </Link>
                     </li>
                 </>
                 ) : (

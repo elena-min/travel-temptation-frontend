@@ -17,6 +17,7 @@ function ChatPage() {
     const [messages, setMessages] = useState([]);
     const [message, setMessage] = useState('');
     const [isConnected, setIsConnected] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -88,21 +89,35 @@ function ChatPage() {
         };
     }, [username]);
 
-    useEffect(() => {
+      useEffect(() => {
         const fetchOldMessages = async () => {
           if (!userId || !travelAgencyId) return; 
-      
+    
           try {
             console.log(userId);
             console.log(travelAgencyId);
             const messagesfromdatabase = await getMessages(user.id, travelAgencyId);
             setMessages(messagesfromdatabase);
             console.log(messagesfromdatabase);
+            setErrorMessage(''); // Clear any previous error message
           } catch (error) {
             console.error("Error fetching old messages:", error);
+            if (error.response) {
+              if (error.response.status === 400) {
+                setErrorMessage("Invalid request data.");
+              } else if (error.response.status === 403) {
+                setErrorMessage("Unauthorized access.");
+              } else if (error.response.status === 404) {
+                setErrorMessage("Messages not found.");
+              } else {
+                setErrorMessage("An unexpected error occurred.");
+              }
+            } else {
+              setErrorMessage("An error occurred while fetching messages. Please try again later.");
+            }
           }
         };
-      
+    
         fetchOldMessages();
       }, [userId, travelAgencyId]);
     
@@ -135,17 +150,19 @@ function ChatPage() {
     
     return (
         <div className="chat-container">
-<div className="chat-messages">
-      {messages.length > 0 ? (
-        messages.map((msg, index) => (
-          <div key={index} className={`message ${msg.from === userId ? 'sent' : 'received'}`}>
-            <span className="username">{msg.from}: </span>{msg.message}
-          </div>
-        ))
-      ) : (
-        <p>Loading messages...</p>
-      )}
-    </div>            <div className="chat-input">
+        {errorMessage && <p className="error-message">{errorMessage}</p>}
+        <div className="chat-messages">
+            {messages.length > 0 ? (
+                messages.map((msg, index) => (
+                <div key={index} className={`message ${msg.from === userId ? 'sent' : 'received'}`}>
+                    <span className="username">{msg.from}: </span>{msg.message}
+                </div>
+                ))
+            ) : (
+                <p>Loading messages...</p>
+            )}
+            </div>           
+            <div className="chat-input">
                 <input 
                     type="text" 
                     value={message} 

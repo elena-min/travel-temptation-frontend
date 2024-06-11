@@ -11,7 +11,8 @@ function BookingPage() {
     const { id } = useParams();
     const excursionId = parseInt(id, 10); // Convert id to integer
     const [trip, setTrip] = useState(null);
-    const [numTravelers, setNumTravelers] = useState(1); // Default number of travelers is 1
+    const [numTravelers, setNumTravelers] = useState(1);
+    const [errorMessage, setErrorMessage] = useState('');
 
 
     useEffect(() => {
@@ -20,8 +21,13 @@ function BookingPage() {
                 console.log(data); 
                 setTrip(data);
             })
-            .catch(error => {
-                console.error("Error fetching excursion:", error);
+            .catch((error) =>{
+                console.error('Error fetching listings:', error);
+                if (error.response && error.response.status === 404) {
+                    setErrorMessage("Excursions not found for this travel agency.");
+                } else {
+                    setErrorMessage("An error occurred while fetching excursions. Please try again later.");
+                }
             });
     }, [excursionId]);
 
@@ -40,11 +46,17 @@ function BookingPage() {
       }
       
       const handleBookNow = () =>{
+        if (numTravelers > trip.numberOfSpacesLeft) {
+            setBookingError('The number of travelers exceeds the available spaces.');
+            return;
+        }
+        setBookingError('');
         window.location.href = `/excursions/${excursionId}/booking-details?numTravelers=${numTravelers}`;
     }
 
     return (
     <div className="trip-info-container">
+        {errorMessage && <p className="error-message">{errorMessage}</p>}
         {trip && (
         <>
         <h1>{trip.name}</h1>

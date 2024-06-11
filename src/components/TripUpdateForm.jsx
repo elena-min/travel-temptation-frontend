@@ -3,6 +3,7 @@ import { updateExcursion, getExcursion } from "../services/ExcursionService";
 import './style/TripListing.css'
 import { useParams } from 'react-router-dom';
 import { useForm } from "react-hook-form";
+import TokenManager from '../apis/TokenManager';
 
 
 function TripUpdateForm(){
@@ -12,33 +13,64 @@ function TripUpdateForm(){
     const [trip, setTrip] = useState(null);
     const [updateStatus, setUpdateStatus] = useState(null);
     const {register, handleSubmit, formState : {errors}, setValue} = useForm();
+    const [loading, setLoading] = useState(true);
+    const [errorMessage, setErrorMessage] = useState('');
 
+  
     useEffect(() => {
-        getExcursion(excursionId)
-            .then(data => {
-                console.log(data); 
-                setTrip(data);
-                const formattedStartDate = formatDateForInput(data.startDate);
-                const formattedEndDate = formatDateForInput(data.endDate);
-                setValue("name", data.name);
-                setValue("destinations", data.destinations.join(", "));
-                setValue("startDate", formattedStartDate);
-                setValue("endDate", formattedEndDate);
-                setValue("price", data.price);
-                setValue("numberOfAvaliableSpaces", data.numberOfAvaliableSpaces)
+      const fetchTrip = async () => {
+          try {
+              const userIdFromToken = TokenManager.getUserIdFromToken();
+              if (!userIdFromToken) {
+                  console.error("User ID not found in token");
+                  TokenManager.clear();
+                  window.location.href = '/login';
+                  return;
+              }
 
-            })
-            .catch(error => {
-                console.error("Error fetching excursion:", error);
-            });
-    }, [excursionId]);
+              const excursionData = await getExcursion(excursionId);
+              if (excursionData.travelAgency.id !== userIdFromToken) {
+                  console.error("Unauthorized access - Not the owner of the excursion");
+                  window.location.href = '/login'
+                  return;
+              }
+
+              setTrip(excursionData);
+              const formattedStartDate = formatDateForInput(excursionData.startDate);
+              const formattedEndDate = formatDateForInput(excursionData.endDate);
+              setValue("name", excursionData.name);
+              setValue("destinations", excursionData.destinations.join(", "));
+              setValue("description", excursionData.description);
+              setValue("startDate", formattedStartDate);
+              setValue("endDate", formattedEndDate);
+              setValue("price", excursionData.price);
+              setValue("numberOfAvaliableSpaces", excursionData.numberOfAvaliableSpaces);
+              setLoading(false);
+          } catch (error) {
+            if (error.response) {
+                if (error.response.status === 404) {
+                    setErrorMessage("Excursion not found");
+                } else {
+                    console.error("Server error:", error.response.data.error);
+                    setErrorMessage(error.response.data.error);
+                }
+            } else {
+                console.error("Error fetching excursion:", error.message);
+                setErrorMessage("Error fetching excursion");
+            }
+            setLoading(false);
+        }
+      };
+
+      fetchTrip();
+  }, [excursionId, setValue]);
 
     const formatDateForInput = (dateString) => {
-        if (!dateString) return ""; // Return empty string if date string is not provided
+        if (!dateString) return ""; 
         const date = new Date(dateString);
         const year = date.getFullYear();
-        const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Add leading zero if month is single digit
-        const day = date.getDate().toString().padStart(2, '0'); // Add leading zero if day is single digit
+        const month = (date.getMonth() + 1).toString().padStart(2, '0'); 
+        const day = date.getDate().toString().padStart(2, '0'); 
         return `${year}-${month}-${day}`;
       };
 
@@ -60,21 +92,43 @@ function TripUpdateForm(){
     data.endDate = formatDateForSubmit(data.endDate);
 
     try{
+      const spaces = data.numberOfAvaliableSpaces - trip.numberOfSpacesLeft;
+      if (data.numberOfAvaliableSpaces <= spaces) {
+        setError("numberOfAvaliableSpaces", {
+          type: "manual",
+          message: "Number of available spaces cannot be less than the number of spaces left!"
+      });
+        }
       console.log(data);
       await updateExcursion(excursionId, data);
       console.log('Excursion saved successfully!'); 
       setUpdateStatus({success: true});
-    }
-    catch(error){
-      setUpdateStatus({success: false});
-      console.log('Error updating trip', {error});   
+    }catch (error) {
+      if (error.response) {
+          if (error.response.status === 403) {
+              setErrorMessage("Unauthorized access"); // Set error message
+          } else if (error.response.status === 404) {
+              setErrorMessage("Excursion not found"); // Set error message
+          } else {
+              console.error("Server error:", error.response.data.error);
+              setErrorMessage(error.response.data.error); // Set error message
+          }
+      } else {
+          console.error("Error updating trip:", error.message);
+          setErrorMessage("Error updating trip"); // Set error message
+      }
+      setUpdateStatus({ success: false });
   }
        
 };
 
+if (loading) {
+  return <p>Loading...</p>;
+}
 
     return (
       <div style={{padding: 30}}>
+        {errorMessage && <p className="error-message">{errorMessage}</p>}
         {updateStatus && (
             <div className={updateStatus.success ? "success-message" : "error-message"}>
                     {updateStatus.success ? "Trip information updated successfully!" : "Error updating information. Please try again."}
@@ -93,6 +147,12 @@ function TripUpdateForm(){
             Destinations:
             <input type="text" {... register("destinations", {required: true})} className="form-input"/>
             {errors.destinations && <span className="error-message">Destinations are required!</span>}
+          </label>
+          <label className="form-label">
+            Trip Description:
+            {/*The register registers the field using React Hook Form with validation and it tracks the value*/}
+            <input type="text" {... register("description", {required: true})} className="form-input"/>
+            {errors.description && <span className="error-message">Trip description is required!</span>}
           </label>
           <label className="form-label">
             Start Date:

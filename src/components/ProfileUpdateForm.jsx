@@ -1,7 +1,6 @@
 import React, { useState, useEffect  } from 'react';
 import { updateUser, getUser } from "../services/UserService";
 import './style/TripListing.css'
-import { useParams } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 import TokenManager from '../apis/TokenManager';
 
@@ -11,6 +10,7 @@ function ProfileUpdateForm(){
     const [user, setUser] = useState(null);
     const [updateStatus, setUpdateStatus] = useState(null);
     const { register, handleSubmit, formState: { errors }, setValue } = useForm();
+    const [fetchError, setFetchError] = useState(null); 
     TokenManager.updateAxiosToken(TokenManager.getAccessToken());
 
     useEffect(() => {
@@ -30,7 +30,12 @@ function ProfileUpdateForm(){
                 })
                 .catch(error => {
                     console.error("Error fetching user:", error);
-                });
+                    if (error.response && error.response.status === 404) {
+                      setErrorMessage("User not found");
+                    } else {
+                      setErrorMessage("An error occurred while fetching user data. Please try again later.");
+                    }
+                  });
         }
     }, [setValue]);
 
@@ -58,31 +63,44 @@ function ProfileUpdateForm(){
     };
   
   
-  const onSubmit = async (data) => {
-    data.birthDate = formatDateForSubmit(data.birthDate);
-    try{
-        console.log(data);
-        console.log(user.id);
-        await updateUser(user.id, data);
-        setUpdateStatus({success: true});
-        console.log('User saved successfully!');   
-
-    }
-    catch(error){
-        setUpdateStatus({success: false});
-        console.log('Error updating user', {error});   
-    }
-     
-};
+    const onSubmit = async (data) => {
+        data.birthDate = formatDateForSubmit(data.birthDate);
+        try {
+            await updateUser(user.id, data);
+            setUpdateStatus({ success: true });
+            console.log('User updated successfully!');
+        } catch (error) {
+            if (error.response) {
+                console.error("Update user request failed with status code:", error.response.status);
+                if (error.response.status === 400) {
+                    setUpdateStatus({ success: false, error: error.response.data.error });
+                } else if (error.response.status === 403) {
+                    // Handle unauthorized access errors
+                    setUpdateStatus({ success: false, error: "You are not authorized to update this user." });
+                } else {
+                    setUpdateStatus({ success: false, error: "An unexpected error occurred. Please try again later." });
+                }
+            } else if (error.request) {
+                console.error("No response received from server:", error.request);
+                setUpdateStatus({ success: false, error: "No response received from the server. Please try again later." });
+            } else {
+                console.error("Error setting up request:", error.message);
+                setUpdateStatus({ success: false, error: "An unexpected error occurred. Please try again later." });
+            }
+        }
+    };
+    
 
 
     return (
       <div style={{padding: 30}}>
+        {fetchError && <div className="error-message">{fetchError}</div>} 
         {updateStatus && (
             <div className={updateStatus.success ? "success-message" : "error-message"}>
-                    {updateStatus.success ? "Profile information updated successfully!" : "Error updating information. Please try again."}
-                </div>
+                {updateStatus.success ? "Profile information updated successfully!" : "Error updating information. Please try again."}
+            </div>
         )}
+
         <form onSubmit={handleSubmit(onSubmit)} className="form-container">
               {/*When the form is submitted(handleSubmit takes care of that) it calls the function 'onSubmit'*/}
               <label className="form-label">

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
-import { getUser } from "../services/UserService";
+import { getUser, deleteUser } from "../services/UserService";
 import maldives from '../images/maldives.jpg';
 import './style/ProfilePage.css';
 import TokenManager from '../apis/TokenManager';
@@ -11,6 +11,7 @@ function ProfilePage() {
   const { id } = useParams();
   const userIdFromToken = TokenManager.getUserIdFromToken(); // Get user ID from token
   const [user, setUser] = useState(null);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
       // Use user ID from token if available, otherwise use the ID from URL params
@@ -19,6 +20,14 @@ function ProfilePage() {
       getUser(userId)
           .then(data => {
               setUser(data);
+          })
+          .catch(error => {
+            console.error("Error fetching user:", error);
+            if (error.response && error.response.status === 404) {
+              setErrorMessage("User not found");
+            } else {
+              setErrorMessage("An error occurred while fetching user data. Please try again later.");
+            }
           });
   }, [id, userIdFromToken]);
 
@@ -27,8 +36,37 @@ function ProfilePage() {
         window.location.href = `/profile/update`;
       }
 
+      const handleDelete = () =>{
+        const confirmDelete = window.confirm("Are you sure you want to delete your profile?")
+        if(confirmDelete){
+          deleteUser(userIdFromToken)
+          .then( () =>{
+            TokenManager.clear();
+              window.location.href = "/";
+          })
+          .catch(error => {
+            if (error.response) {
+                if (error.response.status === 404) {
+                    setDeleteStatus({ success: false, error: "User profile not found." });
+                } else if (error.response.status === 400) {
+                    setDeleteStatus({ success: false, error: error.response.data.error });
+                } else {
+                    setDeleteStatus({ success: false, error: "An unexpected error occurred. Please try again later." });
+                }
+            } else if (error.request) {
+                console.error("Request made but no response received:", error.request);
+                setDeleteStatus({ success: false, error: "No response received from the server. Please try again later." });
+            } else {
+                console.error("Error setting up request:", error.message);
+                setDeleteStatus({ success: false, error: "An unexpected error occurred. Please try again later." });
+            }
+        });
+        }
+        
+      }
   return (
     <div className="user-info-container">
+      {errorMessage && <p className="error-message">{errorMessage}</p>}
                 {user && (
                 <>
                 <h1>Hello {user.firstName} {user.lastName}!</h1>
@@ -42,7 +80,7 @@ function ProfilePage() {
                     <p><strong>Birth date:</strong> {user.birthDate}</p>
 
                     <div className='button-container'>
-                      <button className='delete-button' >Delete Profile</button>
+                      <button className='delete-button'  onClick={handleDelete} >Delete Profile</button>
                       <button className='update-button' onClick={handleUpdate}>Update Profile</button>
                     </div>
                     

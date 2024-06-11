@@ -16,6 +16,7 @@ function TripInfoPage() {
     const [trip, setTrip] = useState(null);
     const [showConfirmation, setShowConfirmation] = useState(false);
     const [deleteStatus, setDeleteStatus] = useState(null);
+    const [errorMessage, setErrorMessage] = useState('');
     const userRole = TokenManager.getUserRoles();
     const userId = TokenManager.getUserIdFromToken();    
     const isLoggedIn = TokenManager.isAuthenticated();
@@ -31,28 +32,58 @@ function TripInfoPage() {
 
 
     useEffect(() => {
-      getExcursion(excursionId)
-            .then(data => {
-                console.log(data); 
-                setTrip(data);
-            })
-            .catch(error => {
-                console.error("Error fetching excursion:", error);
-            });
-    }, [excursionId]);
+      const fetchExcursion = async () => {
+          try {
+              const excursionData = await getExcursion(excursionId);
+              setTrip(excursionData);
+          } catch (error) {
+              if (error.response) {
+                  if (error.response.status === 404) {
+                      setErrorMessage("Excursion not found");
+                  } else {
+                      console.error("Server error:", error.response.data.error);
+                      setErrorMessage(error.response.data.error);
+                  }
+              } else if (error.request) {
+                  console.error("Request made but no response received:", error.request);
+                  setErrorMessage("No response received from the server. Please try again later.");
+              } else {
+                  console.error("Error fetching excursion:", error.message);
+                  setErrorMessage("An unexpected error occurred. Please try again later.");
+              }
+          }
+      };
+  
+      fetchExcursion();
+  }, [excursionId]);  
 
-    useEffect(() => {      
-      if(isLoggedIn && userRole.includes("TRAVELAGENCY")){
-        getBookingsByExcursion(excursionId)
-        .then((bookings) => {
-          setBookings(bookings);
-          console.log(bookings);
-        })
-        .catch((error) =>{
-          console.error('Error fetching bookings:', error);
-        })
-      }
-      }, []);
+  
+  useEffect(() => {
+    const fetchBookings = async () => {
+        try {
+            const bookings = await getBookingsByExcursion(excursionId);
+            setBookings(bookings);
+        } catch (error) {
+            if (error.response) {
+                if (error.response.status === 404) {
+                    console.error("Bookings not found for this excursion");
+                    setErrorMessage("Bookings not found for this excursion");
+                } else {
+                    console.error("Server error:", error.response.data.error);
+                    setErrorMessage(error.response.data.error);
+                }
+            } else {
+                console.error("Error fetching bookings:", error.message);
+                setErrorMessage("An unexpected error occurred. Please try again later.");
+            }
+        }
+    };
+
+    if (isLoggedIn && userRole.includes("TRAVELAGENCY")) {
+        fetchBookings();
+    }
+}, [excursionId]);
+
 
     function formatDate(dateString) {
         const date = new Date(dateString);
@@ -74,9 +105,24 @@ function TripInfoPage() {
               window.location.href = "/";
           })
           .catch(error => {
-            setDeleteStatus({success: true});
-              console.error("Error deleting excursion.", error);
-          });
+            if (error.response) {
+                if (error.response.status === 403) {
+                    setDeleteStatus({ success: false, error: "You are not authorized to delete this listing." });
+                } else if (error.response.status === 404) {
+                    setDeleteStatus({ success: false, error: "Listing not found." });
+                } else if (error.response.status === 400) {
+                    setDeleteStatus({ success: false, error: error.response.data.error });
+                } else {
+                    setDeleteStatus({ success: false, error: "An unexpected error occurred. Please try again later." });
+                }
+            } else if (error.request) {
+                console.error("Request made but no response received:", error.request);
+                setDeleteStatus({ success: false, error: "No response received from the server. Please try again later." });
+            } else {
+                console.error("Error setting up request:", error.message);
+                setDeleteStatus({ success: false, error: "An unexpected error occurred. Please try again later." });
+            }
+        });
         }
         
       }
@@ -105,6 +151,7 @@ function TripInfoPage() {
       const tripStartDate = trip ? new Date(trip.startDate) : null;
       return (
             <div className="trip-info-container">
+              {errorMessage && <p className="error-message">{errorMessage}</p>}
               {deleteStatus && (
               <div className={updateStatus.success ? "success-message" : "error-message"}>
                     {updateStatus.success ? "Trip deleted successfully!" : "Error deleting information. Please try again."}
@@ -121,6 +168,7 @@ function TripInfoPage() {
                    <div className='trip-info'>
                     <p><strong>Travel Agency:</strong> {trip.travelAgency.firstName} {trip.travelAgency.lastName}</p>
                     <p><strong>Destinations:</strong> {trip.destinations.join(', ')}</p>
+                    <p><strong>Description:</strong> {trip.description}</p>
                     <p><strong>Start Date:</strong> {formatDate(trip.startDate)}</p>
                     <p><strong>End Date:</strong> {formatDate(trip.endDate)}</p>
                     <p><strong>Price:</strong> {trip.price} &euro;/p.p.</p>

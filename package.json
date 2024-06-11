@@ -11,6 +11,9 @@
     "cy:open": "cypress open"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.5.2",
+    "@fortawesome/free-solid-svg-icons": "^6.5.2",
+    "@fortawesome/react-fontawesome": "^0.2.2",
     "@stomp/stompjs": "^7.0.0",
     "axios": "^1.6.8",
     "bootstrap": "^5.3.3",

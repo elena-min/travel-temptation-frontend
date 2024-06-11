@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import './style/Trip.css';
-import { Link } from "react-router-dom";
-import { deleteReview } from "../services/ReviewService";
+import StarRating from "./StarRating";
 
 function ReviewSmallContainer({review}){
   console.log(review);
@@ -18,27 +17,13 @@ function ReviewSmallContainer({review}){
       
         return `${formattedDay}.${formattedMonth}.${year}`;
       }
-    
-      const handleDeleteReview = () =>{
-        const confirmDelete = window.confirm("Are you sure you want to delete this review?")
-        if(confirmDelete){
-            deleteReview(review.id)
-          .then( () =>{
-            setDeleteStatus({ success: true });
-              //window.location.href = "/";
-          });
-         // .catch(error => {
-         //   setDeleteStatus({success: false, error: error.message});
-         //     console.error("Error canceling excursion.", error);
-         // });
-        }
-        
-      }
       
       return (
         <div className="trip-container">          
           <p><i>{review.topic}</i></p>
-          <p>{review.numberOfStars} /5</p>
+          <div>
+            <StarRating value={review.numberOfStars} />
+          </div>
           <p>{review.description}</p>
           <p>{formatDate(review.reviewDate)}</p>
         </div>

@@ -9,27 +9,45 @@ import TripListContainer from "../components/TripListContainer";
 import Search from "../layoutComponents/Search";
 import TokenManager from "../apis/TokenManager";
 
-
-
 function Home() {
   const [allExcursions, setAllExcursions] = useState([]);
   const [displayedExcursions, setDisplayedExcursions] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(12);
+  const [errorMessage, setErrorMessage] = useState('');
 
    const handleSearch = (searchResults) => {
     setAllExcursions(searchResults);
         setCurrentPage(1); 
     };
-
     useEffect(() => {
-      //We fetch information and when it arrives we put it insideexcursions 
-      getAllExcursions()
-          .then(data => {
-           console.log(data); 
-           console.log(TokenManager.getAccessToken())
-           setAllExcursions(data)})
-    }, [])
+      const fetchExcursions = async () => {
+        try {
+          const data = await getAllExcursions();
+          console.log(data);
+          console.log(TokenManager.getAccessToken());
+          setAllExcursions(data);
+          setErrorMessage("");
+        } catch (error) {
+          console.error('Error fetching excursions:', error);
+          if (error.response) {
+            if (error.response.status === 400) {
+              setErrorMessage("Invalid request data.");
+            } else if (error.response.status === 403) {
+              setErrorMessage("Unauthorized access.");
+            } else if (error.response.status === 404) {
+              setErrorMessage("Excursions not found.");
+            } else {
+              setErrorMessage("An unexpected error occurred.");
+            }
+          } else {
+            setErrorMessage("An error occurred while fetching excursions. Please try again later.");
+          }
+        }
+      };
+  
+      fetchExcursions();
+    }, []);
     //The empty array means it will do this operation once
 
     useEffect(() => {
@@ -63,6 +81,7 @@ function Home() {
           </div>
         </div>
         <div className="home-container">
+        {errorMessage && <p className="error-message">{errorMessage}</p>}
           <h1>Featured Trips</h1>
           <div className="trips">
             <TripListContainer excursions={displayedExcursions} />

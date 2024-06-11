@@ -9,6 +9,7 @@ import { getReviewsByUser } from "../services/ReviewService";
 
 function MyReviewsPage() {
    const [reviews, setReviews] = useState([]);
+   const [errorMessage, setErrorMessage] = useState('');
 
    useEffect(() => {
     console.log(TokenManager.getAccessToken());
@@ -23,19 +24,30 @@ function MyReviewsPage() {
       })
       .catch((error) =>{
         console.error('Error fetching reviews:', error);
-      })
+        if (error.response && error.response.status === 404) {
+            setErrorMessage("Reviews not found by this user.");
+        } else {
+            setErrorMessage("An error occurred while fetching reviews. Please try again later.");
+        }
+      });
     }
     else{
-      //window.location.href = `/login`;
+      TokenManager.clear();
+      window.location.href = `/login`;
     } }, []);
 
    
       return (
         <>
         <div className="home-container">
+        {errorMessage && <p className="error-message">{errorMessage}</p>}
           <h1>My Reviews</h1>
           <div className="trips">
-          <ReviewsListContainer reviews={reviews} />
+            {reviews.length > 0 ? (
+                <ReviewsListContainer reviews={reviews} />
+              ) : (
+                <p>No reviews available right now.</p>
+              )}  
           </div>
         </div>
         </>

@@ -10,6 +10,7 @@ function MyBookingsPage() {
    const [bookings, setBookings] = useState([]);
    const [pastBookings, setPastBookings] = useState([]);
    const [futureBookings, setFutureBookings] = useState([]);
+   const [errorMessage, setErrorMessage] = useState('');
 
    useEffect(() => {
     const fetchBookings = async () => {
@@ -34,6 +35,7 @@ function MyBookingsPage() {
        TokenManager.updateAxiosToken(TokenManager.getAccessToken());
        fetchBookings();
     } else {
+      TokenManager.clear();
        window.location.href = `/login`;
     }
  }, []);
@@ -47,6 +49,7 @@ function MyBookingsPage() {
       return (
         <>
         <div className="home-container">
+        {errorMessage && <p className="error-message">{errorMessage}</p>}
           <h1>My Bookings</h1>
           <button onClick={handleButtonClick}>
                {showOldBookings ? "Future Bookings" : "Past Bookings"}

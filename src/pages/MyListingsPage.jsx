@@ -11,6 +11,7 @@ function MyListingsPage() {
    const [listings, setListings] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(12);
+    const [errorMessage, setErrorMessage] = useState('');
 
    useEffect(() => {
     console.log(TokenManager.getAccessToken());
@@ -25,9 +26,15 @@ function MyListingsPage() {
       })
       .catch((error) =>{
         console.error('Error fetching listings:', error);
-      })
+        if (error.response && error.response.status === 404) {
+            setErrorMessage("Excursions not found for this travel agency.");
+        } else {
+            setErrorMessage("An error occurred while fetching excursions. Please try again later.");
+        }
+    });
     }
     else{
+      TokenManager.clear();
       window.location.href = `/login`;
     } }, []);
 
@@ -49,15 +56,18 @@ function MyListingsPage() {
       setCurrentPage(currentPage - 1);
     }
   };
-
-
    
       return (
         <>
         <div className="home-container">
+        {errorMessage && <p className="error-message">{errorMessage}</p>}
           <h1>My Listings</h1>
           <div className="trips">
-            <ListingsListContainer listings={currentItems} />
+             {currentItems.length > 0 ? (
+                  <ListingsListContainer listings={currentItems} />
+                ) : (
+                  <p>No Listings available</p>
+                )}
           </div>
           <div className="pagination">
             <button onClick={handlePreviousPage} disabled={currentPage === 1}>Previous</button>

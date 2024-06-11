@@ -12,6 +12,7 @@ function ReviewFormContainer(){
     const { id } = useParams();
     const travelAgencyId = parseInt(id, 10);
     const [travelAgency, setTravelAgency] = useState(null);
+    const [numberOfStars, setNumberOfStars] = useState(1); 
 
   const {register, handleSubmit, formState : {errors}} = useForm();
   const [user, setUser] = useState(null);
@@ -23,28 +24,29 @@ function ReviewFormContainer(){
     const userId = TokenManager.getUserIdFromToken();
     if (!userId) {
         console.error("User ID not found in token");
+        setUserErrorMessage("User ID not found. Please log in again.");
         return;
     }
-    console.log(userId);
     getUser(userId)
-        .then(data => {
-            console.log(data); 
-            setUser(data);
-        })
+        .then(data => setUser(data))
         .catch(error => {
-            console.error("Error fetching user:", error);
+          console.error("Error fetching user:", error);
+          if (error.response && error.response.status === 404) {
+            setErrorMessage("User not found");
+          } else {
+            setErrorMessage("An error occurred while fetching user data. Please try again later.");
+          }
         });
 }, []);
 
+
 useEffect(() => {
-    getUser(travelAgencyId)
-        .then(data => {
-            console.log(data); 
-            setTravelAgency(data);
-        })
-        .catch(error => {
-            console.error("Error fetching travelAgency:", error);
-        });
+  getUser(travelAgencyId)
+      .then(data => setTravelAgency(data))
+      .catch(error => {
+          console.error("Error fetching travel agency:", error);
+          setAgencyErrorMessage("Failed to fetch travel agency information. Please try again later.");
+      });
 }, [travelAgencyId]);
 
       const handleFormSubmit = async (data) => {
@@ -53,23 +55,32 @@ useEffect(() => {
           travelAgency: travelAgency,
           userWriter: user,
           reviewDate: new Date(),
-          numberOfStars: data.numberOfStars,
+          numberOfStars: numberOfStars,
           title: data.title,
           description: data.description
         }
-        try{
-          console.log(reviewData);
+        try {
           const token = TokenManager.updateAxiosToken(TokenManager.getAccessToken());
           await saveReview(reviewData);
           setSuccessMessage("Review created successfully!");
           setErrorMessage('');
-        }catch(error){
-          setErrorMessage("An error occured while creating the review. Please try again later or contact us!");
-          console.log("Error creating review: ", error);
-
+        } catch (error) {
+            if (error.response && error.response.data) {
+                const serverErrors = error.response.data;
+                const errorMessages = Object.values(serverErrors).join(' ');
+                setErrorMessage(errorMessages);
+            } else {
+                setErrorMessage("An error occurred while creating the review. Please try again later or contact us!");
+            }
+            console.error("Error creating review:", error);
         }
         
         
+      };
+
+      const handleStarClick = (value) => {
+        console.log(value);
+        setNumberOfStars(value); // Update the number of stars when a star is clicked
       };
 
 
@@ -81,7 +92,7 @@ useEffect(() => {
         <form onSubmit={handleSubmit(handleFormSubmit)}>
         <div>
           <label>Number of Stars:</label>
-          <StarRating onChange={(value) => setValue('numberOfStars', value)} />
+          <StarRating value={numberOfStars} onChange={handleStarClick} />
           {errors.numberOfStars && <span>This field is required and should be between 1 and 5.</span>}
         </div>
           <div>

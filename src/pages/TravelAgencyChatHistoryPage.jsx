@@ -9,6 +9,7 @@ function TravelAgencyChatHistoryPage() {
 
     const [chats, setChats] = useState([]);
     const [chosenChatUser, setChosenChatUser] = useState(null);
+    const [errorMessage, setErrorMessage] = useState('');
     const userId = TokenManager.getUserIdFromToken(); 
     const isLoggedIn = TokenManager.isAuthenticated();
     if (isLoggedIn) {
@@ -23,18 +24,34 @@ function TravelAgencyChatHistoryPage() {
         getUser(userIdd)
             .then(data => {
                 setUser(data);
+            })
+            .catch(error => {
+              console.error("Error fetching user:", error);
+              if (error.response && error.response.status === 404) {
+                setErrorMessage("User not found");
+              } else {
+                setErrorMessage("An error occurred while fetching user data. Please try again later.");
+              }
             });
     }, [userId])
 
     useEffect(() => {
-        const fetchChats = async () => {
-          const fetchedChats = await getChatsForUser(userId);
-          setChats(fetchedChats);
-        };
-    
-        fetchChats();
-        console.log(chats);
-      }, [userId]);
+      const fetchChats = async () => {
+          try {
+              const fetchedChats = await getChatsForUser(userId);
+              setChats(fetchedChats);
+          } catch (error) {
+              console.error('Error fetching chats:', error);
+              if (error.response && error.response.status === 403) {
+                  setErrorMessage("Unauthorized access. Please login with appropriate credentials.");
+              } else {
+                  setErrorMessage("An error occurred while fetching chats. Please try again later.");
+              }
+          }
+      };
+      fetchChats();
+  }, [userId]);
+  
     
 
     function formatDate(dateString) {
@@ -50,16 +67,22 @@ function TravelAgencyChatHistoryPage() {
         return `${formattedDay}.${formattedMonth}.${year}`;
       }
 
-        const fetchTravelAgency = async (username) => {
-            try {
-                const travelAgencyData = await getUserByUsername(username);
-                setChosenChatUser(travelAgencyData);
-            } catch (error) {
-                console.error("Error fetching travel agency:", error);
+      const fetchTravelAgency = async (username) => {
+        try {
+            const travelAgencyData = await getUserByUsername(username);
+            setChosenChatUser(travelAgencyData);
+        } catch (error) {
+            console.error("Error fetching travel agency:", error);
+            if (error.response && error.response.status === 404) {
+                setErrorMessage("User not found");
+            } else {
+                setErrorMessage("An error occurred while fetching travel agency data. Please try again later.");
             }
-        };
+        }
+    };
+    
 
-        function handleClick(chat) {
+    function handleClick(chat) {
             const otherUsername = chat.from === user.username ? chat.to : chat.from;
             console.log(otherUsername);
             if (!chosenChatUser) {
@@ -73,6 +96,7 @@ function TravelAgencyChatHistoryPage() {
       return (
         <div>
       <h2>Chat History</h2>
+      {errorMessage && <p className="error-message">{errorMessage}</p>}
       {chats.length > 0 ? (
         <ul>
           {chats.map((chat) => (

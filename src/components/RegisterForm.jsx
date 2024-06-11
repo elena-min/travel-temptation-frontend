@@ -11,20 +11,34 @@ function RegisterForm() {
     const onSubmit = async(formData) =>{
       formData.gender = formData.gender.toUpperCase(); 
       const registerFunction = registerAsTravelAgency ? AuthAPI.registerTravelAgency : AuthAPI.registerUser;
-
-      const accessToken = await registerFunction(formData);
       
-     // const accessToken = await AuthAPI.registerUser(formData);
-      if(accessToken){
-        setErrorMessage('');
-        console.log("user registered!");
-        console.log(accessToken);
-        window.location.href = `/`;
-
-      }
-      else{
-        setErrorMessage('Registering in failed.');
-      }
+        try {
+          const accessToken = await registerFunction(formData);
+          if (accessToken) {
+              console.log('User registered!');
+              console.log(accessToken);
+              window.location.href = '/';
+          } else {
+              setErrorMessage('Registering failed.');
+          }
+        } catch (error) {
+            if (error.response) {
+                if (error.response.status === 400) {
+                    // Handle validation errors
+                    const { data } = error.response;
+                    setErrorMessage(data.error || 'Registration failed due to validation errors.');
+                } else if (error.response.status === 409) {
+                    // Username already exists
+                    setErrorMessage('Username already exists.');
+                } else {
+                    // Other errors
+                    setErrorMessage('An error occurred during registration. Please try again later.');
+                }
+            } else {
+                // Network or server error
+                setErrorMessage('Network or server error. Please try again later.');
+            }
+        }
     };
     
     const isFutureDate = (selectedDate) =>{

@@ -7,6 +7,7 @@ const ProtectedRoute = ({ element: Component, requiredRoles, ...rest }) => {
     const userRoles = TokenManager.getUserRoles();
 
     if(!isAuthenticated){
+        TokenManager.clear();
         return <Navigate to="/login" />;
     }
     if(isAuthenticated && !userRoles.some(role => requiredRoles.includes(role))){
