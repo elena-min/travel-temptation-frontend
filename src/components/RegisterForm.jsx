@@ -1,13 +1,16 @@
 import React, { useState } from "react";
 import './style/TripListing.css'
 import { useForm } from "react-hook-form";
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import AuthAPI from "../apis/AuthAPI";
 
 function RegisterForm() {
     const {register, handleSubmit, formState : {errors}} = useForm();
     const [errorMessage, setErrorMessage] = useState('');
     const [registerAsTravelAgency, setRegisterAsTravelAgency] = useState(false);
+    const [passwordVisible, setPasswordVisible] = useState(false);
 
+    
     const onSubmit = async(formData) =>{
       formData.gender = formData.gender.toUpperCase(); 
       const registerFunction = registerAsTravelAgency ? AuthAPI.registerTravelAgency : AuthAPI.registerUser;
@@ -46,6 +49,10 @@ function RegisterForm() {
         const selected = new Date(selectedDate);
         return selected < today;
       };
+
+      const togglePasswordVisibility = () => {
+        setPasswordVisible(!passwordVisible);
+    };
 
     return (
       <form onSubmit={handleSubmit(onSubmit)} className="form-container">
@@ -93,16 +100,29 @@ function RegisterForm() {
         </label>
 
         <label className="form-label">
-            EMail:
+            Email:
            <input type="text" {... register("email", {required: true, pattern: /^\S+@\S+$/i})} className="form-input"/>
             {errors.email && <span className="error-message">Email is required!</span>}
         </label>
 
-          <label className="form-label">
-            Password:
-            <input type="text" {... register("password", {required: true, minLength: 6})} className="form-input"/>
-            {errors.password && <span className="error-message">Password should be ar least of 6 characters long!</span>}
-          </label>
+        <label className="form-label">
+                Password:
+                <div className="password-input-container">
+                    <input
+                        type={passwordVisible ? "text" : "password"}
+                        {...register("password", { required: true, minLength: 6 })}
+                        className="form-input"
+                    />
+                    <span className="password-toggle-icon" onClick={togglePasswordVisibility}>
+                        {passwordVisible ? <FaEyeSlash /> : <FaEye />}
+                    </span>
+                </div>
+                {errors.password && (
+                    <span className="error-message">
+                        Password should be at least 6 characters long!
+                    </span>
+                )}
+            </label>
 
           <label className="form-label">
             Register as travel agency:

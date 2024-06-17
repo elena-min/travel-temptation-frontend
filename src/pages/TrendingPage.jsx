@@ -34,7 +34,7 @@ function TrendingPage() {
         <div className="home-container">
         {errorMessage && <p className="error-message">{errorMessage}</p>}
           <h1>Trending Trips</h1>
-          <div className="trips">
+          <div className="trips-home">
               {excursions.length > 0 ? (
                 <TripListContainer excursions={excursions} />
               ) : (

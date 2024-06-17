@@ -52,6 +52,13 @@ function TripListingForm(){
     const end = new Date(endDate); 
     return start <= end;
   };
+
+  const handleFileUploaded = (uploadedFileName) => {
+    setMeeting(prevMeeting => ({
+        ...prevMeeting,
+        fileName: uploadedFileName
+    }));
+};
   
       //Async means can contain asynchronous operations, meaning it can wait for things to finish before proceeding.
       const onSubmit = async (data) => {
@@ -109,8 +116,13 @@ function TripListingForm(){
           </label>
           <label className="form-label">
             Trip Description:
-            <input type="text" {... register("description", {required: true})} className="form-input"/>
-            {errors.description && <span className="error-message">Trip description is required!</span>}
+                <textarea 
+                    {...register("description", { required: true })} 
+                    className="form-textarea" 
+                    rows="5" 
+                    cols="50"
+                />
+              {errors.description && <span className="error-message">Trip description is required!</span>}
           </label>
           <label className="form-label">
             Start Date:
@@ -157,7 +169,7 @@ function TripListingForm(){
             {errors.numberOfAvaliableSpaces && <span className="error-message">Number of avaliable spaces is required!</span>}
           </label>
           <button type="submit" className="form-button">List Trip</button>
-        </form>
+        </form>             
       </>    
       );
 

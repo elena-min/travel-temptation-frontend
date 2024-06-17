@@ -8,7 +8,11 @@ const AuthAPI ={
             TokenManager.setAccessToken(accessToken);
             TokenManager.updateAxiosToken(accessToken);
             return accessToken
-         }),
+         })
+         .catch(error => {
+             throw error; 
+         })
+         ,
     registerUser: (userData) => axios.post('http://localhost:8080/register/user', userData)
          .then(response => response.data.accessToken)
          .then(accessToken => {

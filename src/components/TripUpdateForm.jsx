@@ -4,7 +4,8 @@ import './style/TripListing.css'
 import { useParams } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 import TokenManager from '../apis/TokenManager';
-
+import FileService from '../services/FileService';
+import FileUploadComponent from './fileUploads/FileUploadComponent';
 
 function TripUpdateForm(){
 
@@ -15,6 +16,8 @@ function TripUpdateForm(){
     const {register, handleSubmit, formState : {errors}, setValue} = useForm();
     const [loading, setLoading] = useState(true);
     const [errorMessage, setErrorMessage] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
+    const [fileName, setFileName] = useState('');
 
   
     useEffect(() => {
@@ -129,6 +132,7 @@ if (loading) {
     return (
       <div style={{padding: 30}}>
         {errorMessage && <p className="error-message">{errorMessage}</p>}
+        {successMessage && <p className="success-message">{successMessage}</p>}
         {updateStatus && (
             <div className={updateStatus.success ? "success-message" : "error-message"}>
                     {updateStatus.success ? "Trip information updated successfully!" : "Error updating information. Please try again."}
@@ -151,8 +155,13 @@ if (loading) {
           <label className="form-label">
             Trip Description:
             {/*The register registers the field using React Hook Form with validation and it tracks the value*/}
-            <input type="text" {... register("description", {required: true})} className="form-input"/>
-            {errors.description && <span className="error-message">Trip description is required!</span>}
+            <textarea 
+                {...register("description", { required: true })} 
+                className="form-textarea" 
+                rows="5" 
+                cols="50"
+             />
+              {errors.description && <span className="error-message">Trip description is required!</span>}
           </label>
           <label className="form-label">
             Start Date:
@@ -206,6 +215,18 @@ if (loading) {
           </label>
           <button type="submit" className="form-button">Update Trip</button>
         </form>
+
+        {excursionId && (
+            <div>
+                <h2>Upload a picture for your trip</h2>
+                {fileName && <p>Current file: {fileName}</p>}
+                <FileUploadComponent
+                    excursionId={excursionId}
+                    onFileUploaded={(fileName) => setSuccessMessage(`File ${fileName} uploaded successfully!`)}
+                    isUpdate={false}
+                />
+            </div>
+        )}
         </div>
         
       );

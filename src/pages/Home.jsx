@@ -83,7 +83,7 @@ function Home() {
         <div className="home-container">
         {errorMessage && <p className="error-message">{errorMessage}</p>}
           <h1>Featured Trips</h1>
-          <div className="trips">
+          <div className="trips-home">
             <TripListContainer excursions={displayedExcursions} />
           </div>
           <div className="pagination">

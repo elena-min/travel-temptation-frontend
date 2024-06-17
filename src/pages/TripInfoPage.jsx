@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { deleteExcursion, getExcursion } from "../services/ExcursionService";
 import './style/TripInfoPage.css';
-import maldives from '../images/maldives.jpg';
+import tripPhoto2 from '../images/tripPhoto2.jpg';
 import TokenManager from '../apis/TokenManager';
 import { getBookingsByExcursion } from '../services/BookingService';
 import BookingListSmallContainer from '../components/BookingListSmallContainer';
@@ -14,6 +14,7 @@ function TripInfoPage() {
     const { id } = useParams();
     const excursionId = parseInt(id, 10); // Convert id to integer
     const [trip, setTrip] = useState(null);
+    const [tripfileName, setTripfileName] = useState("");
     const [showConfirmation, setShowConfirmation] = useState(false);
     const [deleteStatus, setDeleteStatus] = useState(null);
     const [errorMessage, setErrorMessage] = useState('');
@@ -36,6 +37,9 @@ function TripInfoPage() {
           try {
               const excursionData = await getExcursion(excursionId);
               setTrip(excursionData);
+              setTripfileName(excursionData.fileName);
+              console.log(excursionData.fileName)
+              console.log(tripfileName);
           } catch (error) {
               if (error.response) {
                   if (error.response.status === 404) {
@@ -163,7 +167,12 @@ function TripInfoPage() {
                 <h1>{trip.name}</h1>
                 <div className="trip-info-wrapper">
                    <div className='trip-image'>
-                    <img src={maldives} alt="Maldvives" />
+                    {tripfileName ? (
+                                <img src={`http://localhost:8080/files/download/${tripfileName}`} alt="Trip Photo" />
+                            ) : (
+                                <img src={tripPhoto2} alt="Trip Photo" />
+                    )}
+
                    </div>
                    <div className='trip-info'>
                     <p><strong>Travel Agency:</strong> {trip.travelAgency.firstName} {trip.travelAgency.lastName}</p>

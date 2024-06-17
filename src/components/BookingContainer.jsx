@@ -3,6 +3,8 @@ import './style/Trip.css';
 import { Link } from "react-router-dom";
 import { deleteBooking } from "../services/BookingService";
 import TokenManager from "../apis/TokenManager";
+import tripPhoto2 from '../images/tripPhoto2.jpg';
+
 
 function BookingContainer({booking}){
   const [deleteStatus, setDeleteStatus] = useState({ success: false, error: null });
@@ -52,30 +54,41 @@ function BookingContainer({booking}){
       
       return (
         <div className="trip-container">
-          <h2>
-            <Link to={`/trip/${booking.excursion.id}`}>{booking.excursion.name}</Link>
-            </h2>          
-            <h4>'{booking.excursion.travelAgency.firstName} {booking.excursion.travelAgency.lastName}'</h4>
-          <p><i>{booking.excursion.destinations.join(', ')}</i></p>
-          <p><b>{formatDate(booking.excursion.startDate)} - {formatDate(booking.excursion.endDate)}</b></p>
-          <p><i>Number of traveleres: </i>{booking.numberOfTravelers}</p>
-          <p><i>Booking status: </i>
-            <span className={getStatusClass(booking.status)}>{booking.status}</span>
-          </p>
-            {userRole.includes("USER") && (
-                <>
-                  <button className='more-info-button'>
-                     <Link to={`/booking/${booking.id}`}>More info</Link>
-                  </button> 
-                </>
-            )}
-      
-          {deleteStatus.error && <p className="error">{deleteStatus.error}</p>}
-          {deleteStatus.success ?
-            <p className="success">Booking deleted successfully!</p> :
-            <button className='cancel-button' onClick={handleCancelTrip}>Cancel Trip</button>
 
-          }
+          <div className="trip-image-home">
+              {booking.excursion.fileName ? (
+                  <img src={`http://localhost:8080/files/download/${booking.excursion.fileName}`} alt="Trip" />
+                      ) : (
+                  <img src={tripPhoto2} alt="Trip Photo" />
+               )}
+          </div>
+          <div className="trip-information">
+              <h2>
+                <Link to={`/trip/${booking.excursion.id}`}>{booking.excursion.name}</Link>
+                </h2>          
+                <h4>'{booking.excursion.travelAgency.firstName} {booking.excursion.travelAgency.lastName}'</h4>
+              <p><i>{booking.excursion.destinations.join(', ')}</i></p>
+              <p><b>{formatDate(booking.excursion.startDate)} - {formatDate(booking.excursion.endDate)}</b></p>
+              <p><i>Number of traveleres: </i>{booking.numberOfTravelers}</p>
+              <p><i>Booking status: </i>
+                <span className={getStatusClass(booking.status)}>{booking.status}</span>
+              </p>
+                {userRole.includes("USER") && (
+                    <>
+                      <button className='more-info-button'>
+                        <Link to={`/booking/${booking.id}`}>More info</Link>
+                      </button> 
+                    </>
+                )}
+          
+              {deleteStatus.error && <p className="error">{deleteStatus.error}</p>}
+              {deleteStatus.success ?
+                <p className="success">Booking deleted successfully!</p> :
+                <button className='cancel-button' onClick={handleCancelTrip}>Cancel Trip</button>
+
+              }
+
+          </div>
 
         </div>
       );

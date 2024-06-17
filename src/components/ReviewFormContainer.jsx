@@ -65,18 +65,30 @@ useEffect(() => {
           setSuccessMessage("Review created successfully!");
           setErrorMessage('');
         } catch (error) {
-            if (error.response && error.response.data) {
-                const serverErrors = error.response.data;
-                const errorMessages = Object.values(serverErrors).join(' ');
-                setErrorMessage(errorMessages);
-            } else {
-                setErrorMessage("An error occurred while creating the review. Please try again later or contact us!");
-            }
-            console.error("Error creating review:", error);
-        }
-        
-        
-      };
+          console.error("Error creating review:", error);
+          if (error.response && error.response.data) {
+              const serverErrors = error.response.data;
+              console.log("Server error data:", serverErrors);
+  
+              // Check if serverErrors is an object and handle it appropriately
+              if (typeof serverErrors === 'object') {
+                  let errorMessages = [];
+                  for (const [key, value] of Object.entries(serverErrors)) {
+                      if (typeof value === 'string' && value.includes('Data truncation: Data too long for column')) {
+                          errorMessages.push("Description is too long. Please shorten your review.");
+                      } else {
+                          errorMessages.push(value);
+                      }
+                  }
+                  setErrorMessage(errorMessages.join(' '));
+              } else {
+                  setErrorMessage("An error occurred while creating the review. Please try again later or contact us!");
+              }
+          } else {
+              setErrorMessage("An error occurred while creating the review. Please try again later or contact us!");
+          }
+      }
+  };
 
       const handleStarClick = (value) => {
         console.log(value);

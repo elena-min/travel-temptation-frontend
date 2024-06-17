@@ -1,8 +1,11 @@
 import React from "react";
 import './style/Trip.css';
 import { Link } from "react-router-dom";
+import tripPhoto2 from '../images/tripPhoto2.jpg';
+
 
 function TripContainer({trip}){
+
 
   function formatDate(dateString) {
     const date = new Date(dateString);
@@ -20,12 +23,21 @@ function TripContainer({trip}){
   
     return (
         <div className="trip-container">
-          <h2>
-            <Link to={`/trip/${trip.id}`}>{trip.name}</Link>
-            </h2>          
-            <h4><Link to={`/travel-agency/${trip.travelAgency.id}`}>'{trip.travelAgency.firstName} {trip.travelAgency.lastName}'</Link></h4>
-          <p><i>{trip.destinations.join(', ')}</i></p>
-          <p><b>{formatDate(trip.startDate)} - {formatDate(trip.endDate)}</b></p>
+          <div className="trip-image-home">
+              {trip.fileName ? (
+                  <img src={`http://localhost:8080/files/download/${trip.fileName}`} alt="Trip" />
+                      ) : (
+                  <img src={tripPhoto2} alt="Trip Photo" />
+               )}
+          </div>
+          <div className="trip-information">
+            <h2>
+              <Link to={`/trip/${trip.id}`}>{trip.name}</Link>
+              </h2>          
+              <h4><Link to={`/travel-agency/${trip.travelAgency.id}`}>'{trip.travelAgency.firstName} {trip.travelAgency.lastName}'</Link></h4>
+            <p><i>{trip.destinations.join(', ')}</i></p>
+            <p><b>{formatDate(trip.startDate)} - {formatDate(trip.endDate)}</b></p>
+          </div>
         </div>
       );
 }

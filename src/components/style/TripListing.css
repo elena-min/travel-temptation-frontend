@@ -48,23 +48,35 @@
 
   
 .success-message {
-  background-color: #d4edda; /* Light green background */
-  color: #155724; /* Dark green text */
+  background-color: #d4edda; 
+  color: #155724; 
   padding: 10px;
   max-width: 900px;
     margin: 0 auto;
   margin-bottom: 10px;
-  border: 1px solid #c3e6cb; /* Dark green border */
+  border: 1px solid #c3e6cb; 
   border-radius: 5px;
 }
 
 .error-message {
-  background-color: #f8d7da; /* Light red background */
-  color: #721c24; /* Dark red text */
+  background-color: #f8d7da; 
+  color: #721c24; 
   padding: 10px;
   max-width: 1200px;
     margin: 0 auto;
   margin-bottom: 10px;
-  border: 1px solid #f5c6cb; /* Dark red border */
+  border: 1px solid #f5c6cb; 
   border-radius: 5px;
+}
+
+
+.form-textarea {
+  width: 90%; 
+  height: 150px;
+  padding: 10px;
+  border: 1px solid #ccc; 
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 16px; 
+  resize: vertical;
 }

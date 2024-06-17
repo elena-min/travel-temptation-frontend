@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import { getExcursion } from "../services/ExcursionService";
-import maldives from '../images/maldives.jpg';
+import tripPhoto2 from '../images/tripPhoto2.jpg';
 import './style/Booking.css';
 
 
@@ -47,10 +47,10 @@ function BookingPage() {
       
       const handleBookNow = () =>{
         if (numTravelers > trip.numberOfSpacesLeft) {
-            setBookingError('The number of travelers exceeds the available spaces.');
+            setErrorMessage('The number of travelers exceeds the available spaces.');
             return;
         }
-        setBookingError('');
+        setErrorMessage('');
         window.location.href = `/excursions/${excursionId}/booking-details?numTravelers=${numTravelers}`;
     }
 
@@ -62,8 +62,13 @@ function BookingPage() {
         <h1>{trip.name}</h1>
         <div className="trip-info-wrapper">
             <div className='trip-image'>
-                <img src={maldives} alt="Maldvives" />
-            </div>
+                    {trip.fileName ? (
+                                <img src={`http://localhost:8080/files/download/${trip.fileName}`} alt="Trip" />
+                            ) : (
+                                <img src={tripPhoto2} alt="Trip Photo" />
+                    )}
+
+             </div>
             <div className='trip-info'>
             <p><strong>Travel Agency:</strong> {trip.travelAgency.firstName} {trip.travelAgency.lastName}</p>
                 <p><strong>Destinations:</strong> {trip.destinations.join(', ')}</p>

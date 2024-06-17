@@ -67,10 +67,10 @@ function TravelAgencyChatHistoryPage() {
         return `${formattedDay}.${formattedMonth}.${year}`;
       }
 
-      const fetchTravelAgency = async (username) => {
+      async function fetchTravelAgency(username) {
         try {
             const travelAgencyData = await getUserByUsername(username);
-            setChosenChatUser(travelAgencyData);
+            return travelAgencyData; // Return the fetched data
         } catch (error) {
             console.error("Error fetching travel agency:", error);
             if (error.response && error.response.status === 404) {
@@ -78,21 +78,32 @@ function TravelAgencyChatHistoryPage() {
             } else {
                 setErrorMessage("An error occurred while fetching travel agency data. Please try again later.");
             }
+            throw error; // Re-throw the error to propagate it
         }
     };
     
 
-    function handleClick(chat) {
-            const otherUsername = chat.from === user.username ? chat.to : chat.from;
-            console.log(otherUsername);
-            if (!chosenChatUser) {
-                fetchTravelAgency(otherUsername);
-              }
-            console.log(chosenChatUser);
-            console.log(chosenChatUser.id);
-            window.location.href = `/chat/${chosenChatUser.id}`; 
+    async function handleClick(chat) {
+      const otherUsername = chat.from === user.username ? chat.to : chat.from;
+      console.log(otherUsername);
+      
+      try {
+          let travelAgencyData = chosenChatUser; // Initialize with current state
+          if (!travelAgencyData) {
+              // If chosenChatUser is not set, fetch travel agency data
+              travelAgencyData = await fetchTravelAgency(otherUsername);
+              setChosenChatUser(travelAgencyData); // Update chosenChatUser state
           }
-
+          
+          // After fetching or using existing chosenChatUser, redirect to chat page
+          window.location.href = `/chat/${travelAgencyData.id}`;
+          
+      } catch (error) {
+          console.error('Error handling click:', error);
+          // Handle error (e.g., set error message)
+      }
+  }
+  
       return (
         <div>
       <h2>Chat History</h2>

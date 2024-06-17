@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import './style/Trip.css';
 import { Link } from "react-router-dom";
 import { deleteExcursion } from "../services/ExcursionService";
+import tripPhoto2 from '../images/tripPhoto2.jpg';
 
 function ListingContainer({listing}){
   const [deleteStatus, setDeleteStatus] = useState({ success: false, error: null });
@@ -53,20 +54,29 @@ function ListingContainer({listing}){
 
       return (
         <div className="trip-container">
-          <h2>
-            <Link to={`/trip/${listing.id}`}>{listing.name}</Link>
-            </h2>          
-            <h4>'{listing.travelAgency.firstName} {listing.travelAgency.lastName}'</h4>
-          <p><i>{listing.destinations.join(', ')}</i></p>
-          <p><b>{formatDate(listing.startDate)} - {formatDate(listing.endDate)}</b></p>
-          <p><b>Price:</b> {listing.price} &euro;/p.p.</p>
+          <div className="trip-image-home">
+              {listing.fileName ? (
+                  <img src={`http://localhost:8080/files/download/${listing.fileName}`} alt="Trip" />
+                      ) : (
+                  <img src={tripPhoto2} alt="Trip Photo" />
+               )}
+          </div>
+          <div className="trip-information">
+            <h2>
+              <Link to={`/trip/${listing.id}`}>{listing.name}</Link>
+              </h2>          
+              <h4>'{listing.travelAgency.firstName} {listing.travelAgency.lastName}'</h4>
+            <p><i>{listing.destinations.join(', ')}</i></p>
+            <p><b>{formatDate(listing.startDate)} - {formatDate(listing.endDate)}</b></p>
+            <p><b>Price:</b> {listing.price} &euro;/p.p.</p>
 
-          {deleteStatus.error && <p className="error">{deleteStatus.error}</p>}
-          {deleteStatus.success ?
-            <p className="success">Listing deleted successfully!</p> :
-            <button className='cancel-button' onClick={handleCancelTrip}>Remove Listing</button>
+            {deleteStatus.error && <p className="error">{deleteStatus.error}</p>}
+            {deleteStatus.success ?
+              <p className="success">Listing deleted successfully!</p> :
+              <button className='cancel-button' onClick={handleCancelTrip}>Remove Listing</button>
 
-          }
+            }
+          </div>
 
         </div>
       );
