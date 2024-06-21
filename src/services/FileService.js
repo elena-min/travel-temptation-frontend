@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = "http://localhost:8090/files";
+const API_URL = "http://localhost:8080/files";
 
 const FileService = {
     uploadFile: (file, excursionId) => {

@@ -68,7 +68,7 @@ function BookingPage() {
         <div className="trip-info-wrapper">
             <div className='trip-image'>
                     {trip.fileName ? (
-                                <img src={`http://localhost:8090/files/download/${trip.fileName}`} alt="Trip" />
+                                <img src={`http://localhost:8080/files/download/${trip.fileName}`} alt="Trip" />
                             ) : (
                                 <img src={tripPhoto2} alt="Trip Photo" />
                     )}

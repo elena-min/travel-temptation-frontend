@@ -42,7 +42,7 @@ describe('Booking a trip', () =>{
     cy.contains('Total price').should('be.visible');
     cy.get('.form-control').should('have.length', 4); 
 
-    cy.intercept('POST', 'http://localhost:8090/bookings', {
+    cy.intercept('POST', 'http://localhost:8080/bookings', {
       statusCode: 500, 
       body: 'Internal Server Error',
     }).as('savePaymentDetails');

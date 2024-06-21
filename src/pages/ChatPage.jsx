@@ -55,7 +55,7 @@ function ChatPage() {
 
     useEffect(() => {
         const stompClient = new Client({
-            brokerURL: 'ws://localhost:8090/ws',
+            brokerURL: 'ws://localhost:8080/ws',
             reconnectDelay: 5000,
             heartbeatIncoming: 4000,
             heartbeatOutgoing: 4000,

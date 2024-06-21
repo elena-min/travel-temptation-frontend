@@ -25,7 +25,7 @@ function TripContainer({trip}){
         <div className="trip-container">
           <div className="trip-image-home">
               {trip.fileName ? (
-                  <img src={`http://localhost:8090/files/download/${trip.fileName}`} alt="Trip" />
+                  <img src={`http://localhost:8080/files/download/${trip.fileName}`} alt="Trip" />
                       ) : (
                   <img src={tripPhoto2} alt="Trip Photo" />
                )}

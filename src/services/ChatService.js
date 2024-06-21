@@ -1,7 +1,7 @@
 import { Client } from '@stomp/stompjs';
 import { v4 as uuidv4 } from 'uuid';
 
-const CHAT_ENDPOINT = 'ws://localhost:8090/ws';
+const CHAT_ENDPOINT = 'ws://localhost:8080/ws';
 
 const ChatService = {
   stompClient: null,

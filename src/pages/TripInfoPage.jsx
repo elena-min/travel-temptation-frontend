@@ -187,7 +187,7 @@ function TripInfoPage() {
                 <div className="trip-info-wrapper">
                    <div className='trip-image'>
                     {tripfileName ? (
-                                <img src={`http://localhost:8090/files/download/${tripfileName}`} alt="Trip Photo" />
+                                <img src={`http://localhost:8080/files/download/${tripfileName}`} alt="Trip Photo" />
                             ) : (
                                 <img src={tripPhoto2} alt="Trip Photo" />
                     )}

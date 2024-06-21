@@ -1,7 +1,7 @@
 import axios from "axios";
 
 function getTotalSalesLastQuarter(startDate, endDate, status){
-    return axios.get(`http://localhost:8090/bookings/total-sales-last-quarter`, {
+    return axios.get(`http://localhost:8080/bookings/total-sales-last-quarter`, {
         params: {
             startDate: startDate,
             endDate: endDate,
@@ -15,7 +15,7 @@ function getTotalSalesLastQuarter(startDate, endDate, status){
     });  
 }
 function getTotalSalesLastQuarterPerExcursion(excursionId, startDate, endDate, status){
-    return axios.get(`http://localhost:8090/excursions/${excursionId}/total-sales-last-quarter`, {
+    return axios.get(`http://localhost:8080/excursions/${excursionId}/total-sales-last-quarter`, {
         params: {
             startDate: startDate,
             endDate: endDate,
@@ -29,7 +29,7 @@ function getTotalSalesLastQuarterPerExcursion(excursionId, startDate, endDate, s
     });  
 }
 function getWeeklyStatistics(excursionId, status){
-    return axios.get(`http://localhost:8090/excursions/${excursionId}/weekly-statistics`, {
+    return axios.get(`http://localhost:8080/excursions/${excursionId}/weekly-statistics`, {
         params: { status: status}    
         })
         .then(response => response.data)
@@ -39,7 +39,7 @@ function getWeeklyStatistics(excursionId, status){
         });  
 }
 function getBookingDataByDateRangePerExcursion(excursionId, startDate, endDate){
-    return axios.get(`http://localhost:8090/excursions/${excursionId}/booking-statistics`, {
+    return axios.get(`http://localhost:8080/excursions/${excursionId}/booking-statistics`, {
         params: {
             startDate: startDate.toISOString(),
             endDate: endDate.toISOString(),

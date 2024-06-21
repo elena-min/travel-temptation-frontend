@@ -61,7 +61,7 @@ function BookingContainer({booking}){
 
           <div className="trip-image-home">
               {booking.excursion.fileName ? (
-                  <img src={`http://localhost:8090/files/download/${booking.excursion.fileName}`} alt="Trip" />
+                  <img src={`http://localhost:8080/files/download/${booking.excursion.fileName}`} alt="Trip" />
                       ) : (
                   <img src={tripPhoto2} alt="Trip Photo" />
                )}
