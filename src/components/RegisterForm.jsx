@@ -12,6 +12,7 @@ function RegisterForm() {
 
     
     const onSubmit = async(formData) =>{
+    console.log(formData.password);
       formData.gender = formData.gender.toUpperCase(); 
       const registerFunction = registerAsTravelAgency ? AuthAPI.registerTravelAgency : AuthAPI.registerUser;
       

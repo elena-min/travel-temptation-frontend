@@ -64,6 +64,10 @@ function ProfileUpdateForm(){
   
   
     const onSubmit = async (data) => {
+        if(TokenManager.isTokenExpired()){
+            TokenManager.clear();
+            return <Navigate to="/login" />;
+        }
         data.birthDate = formatDateForSubmit(data.birthDate);
         try {
             await updateUser(user.id, data);

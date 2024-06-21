@@ -2,7 +2,7 @@ import React from "react";
 import './style/Home.css';
 import { useState, useEffect } from "react";
 import TokenManager from "../apis/TokenManager";
-import { getBookingsByUser, getFutureBookingsByUser, getPastBookingsByUser } from "../services/BookingService";
+import { getBookingsByUser, getFutureBookingsByUser, getPastBookingsByUser } from "../services/UserService";
 import BookingListContainer from "../components/BookingListContainer";
 
 
@@ -13,32 +13,38 @@ function MyBookingsPage() {
    const [errorMessage, setErrorMessage] = useState('');
 
    useEffect(() => {
-    const fetchBookings = async () => {
-       try {
-          const userID = TokenManager.getUserIdFromToken();
-          console.log(userID);
-          console.log(TokenManager.getAccessToken());
-          const past = await getPastBookingsByUser(userID);
-          const future = await getFutureBookingsByUser(userID);
-          setPastBookings(past);
-          setFutureBookings(future);
-          console.log(past);
-          console.log(future);
-
-
-       } catch (error) {
-          console.error('Error fetching bookings:', error);
-       }
-    };
-
-    if (TokenManager.getAccessToken()) {
-       TokenManager.updateAxiosToken(TokenManager.getAccessToken());
-       fetchBookings();
-    } else {
-      TokenManager.clear();
-       window.location.href = `/login`;
-    }
- }, []);
+      const fetchBookings = async () => {
+          try {
+              const userID = TokenManager.getUserIdFromToken();
+              console.log(userID);
+              console.log(TokenManager.getAccessToken());
+              
+              const past = await getPastBookingsByUser(userID);
+              const future = await getFutureBookingsByUser(userID);
+              
+              setPastBookings(past);
+              setFutureBookings(future);
+              
+              console.log(past);
+              console.log(future);
+          } catch (error) {
+              console.error('Error fetching bookings:', error);
+          }
+      };
+  
+      const checkTokenAndFetchBookings = async () => {
+          if (TokenManager.getAccessToken() && !TokenManager.isTokenExpired()) {
+              TokenManager.updateAxiosToken(TokenManager.getAccessToken());
+                await fetchBookings();
+          } else {
+              TokenManager.clear();
+              window.location.href = '/login';
+          }
+      };
+  
+      checkTokenAndFetchBookings();
+  }, []);
+  
 
     const [showOldBookings, setShowOldBookings] = useState(true);
 

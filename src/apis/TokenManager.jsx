@@ -45,7 +45,17 @@ const TokenManager = {
         if(!token) return false;
         const claims  = TokenManager.getClaims();
         return claims && claims.userID ?  claims.userID : null;
-    }
+    },
+    isTokenExpired: () => {
+        const token = TokenManager.getAccessToken();
+        if (!token) {
+          return true; 
+        }
+    
+        const decodedToken = jwtDecode(token);
+        const expirationTime = decodedToken.exp * 1000;
+        return Date.now() >= expirationTime; 
+      },
 }
 
 export default TokenManager;

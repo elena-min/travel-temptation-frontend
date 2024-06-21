@@ -13,13 +13,17 @@ function ProfilePage() {
   const [user, setUser] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
 
+
   useEffect(() => {
+    
       // Use user ID from token if available, otherwise use the ID from URL params
       const userId = userIdFromToken || parseInt(id, 10);
 
       getUser(userId)
           .then(data => {
               setUser(data);
+              TokenManager.updateAxiosToken(TokenManager.getAccessToken());
+              console.log(TokenManager.getAccessToken());
           })
           .catch(error => {
             console.error("Error fetching user:", error);
@@ -37,6 +41,10 @@ function ProfilePage() {
       }
 
       const handleDelete = () =>{
+        if(TokenManager.isTokenExpired()){
+          TokenManager.clear();
+          return <Navigate to="/login" />;
+      }
         const confirmDelete = window.confirm("Are you sure you want to delete your profile?")
         if(confirmDelete){
           deleteUser(userIdFromToken)
@@ -47,18 +55,18 @@ function ProfilePage() {
           .catch(error => {
             if (error.response) {
                 if (error.response.status === 404) {
-                    setDeleteStatus({ success: false, error: "User profile not found." });
+                  setErrorMessage("User profile not found." );
                 } else if (error.response.status === 400) {
-                    setDeleteStatus({ success: false, error: error.response.data.error });
+                  setErrorMessage(error.response.data.error);
                 } else {
-                    setDeleteStatus({ success: false, error: "An unexpected error occurred. Please try again later." });
+                  setErrorMessage("An unexpected error occurred. Please try again later.");
                 }
             } else if (error.request) {
                 console.error("Request made but no response received:", error.request);
-                setDeleteStatus({ success: false, error: "No response received from the server. Please try again later." });
+                setErrorMessage("No response received from the server. Please try again later.");
             } else {
                 console.error("Error setting up request:", error.message);
-                setDeleteStatus({ success: false, error: "An unexpected error occurred. Please try again later." });
+                setErrorMessage("An unexpected error occurred. Please try again later.");
             }
         });
         }
@@ -66,6 +74,7 @@ function ProfilePage() {
       }
   return (
     <div className="user-info-container">
+      
       {errorMessage && <p className="error-message">{errorMessage}</p>}
                 {user && (
                 <>

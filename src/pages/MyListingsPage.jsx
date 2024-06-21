@@ -14,8 +14,13 @@ function MyListingsPage() {
     const [errorMessage, setErrorMessage] = useState('');
 
    useEffect(() => {
+    if (TokenManager.isTokenExpired()) {
+      TokenManager.clear();
+      window.location.href = `/login`;
+      return;
+    }
+
     console.log(TokenManager.getAccessToken());
-    if(TokenManager.getAccessToken()){
       TokenManager.updateAxiosToken(TokenManager.getAccessToken());
       const userID = TokenManager.getUserIdFromToken();
     
@@ -32,11 +37,7 @@ function MyListingsPage() {
             setErrorMessage("An error occurred while fetching excursions. Please try again later.");
         }
     });
-    }
-    else{
-      TokenManager.clear();
-      window.location.href = `/login`;
-    } }, []);
+    }, []);
 
     const totalPages = Math.ceil(listings.length / itemsPerPage);
 

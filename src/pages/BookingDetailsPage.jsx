@@ -89,6 +89,10 @@ const months = [
     const handleSubmit = async (e) => {
         e.preventDefault();
         setFormErrors({});
+        if(TokenManager.isTokenExpired()){
+            TokenManager.clear();
+            return <Navigate to="/login" />;
+        }
 
         const errors = {};
         if (!cardNumber || cardNumber.length !== 16) {

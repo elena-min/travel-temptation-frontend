@@ -52,7 +52,7 @@ function TravelAgencyChatHistoryPage() {
       fetchChats();
   }, [userId]);
   
-    
+  
 
     function formatDate(dateString) {
         const date = new Date(dateString);
@@ -84,6 +84,10 @@ function TravelAgencyChatHistoryPage() {
     
 
     async function handleClick(chat) {
+      if(TokenManager.isTokenExpired()){
+        TokenManager.clear();
+        return <Navigate to="/login" />;
+    }
       const otherUsername = chat.from === user.username ? chat.to : chat.from;
       console.log(otherUsername);
       

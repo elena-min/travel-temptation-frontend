@@ -22,6 +22,10 @@ function ListingContainer({listing}){
       }
     
       const handleCancelTrip = () =>{
+        if(TokenManager.isTokenExpired()){
+          TokenManager.clear();
+          return <Navigate to="/login" />;
+      }
         const confirmDelete = window.confirm("Are you sure you want to delete this listin?")
         if(confirmDelete){
             deleteExcursion(listing.id)
@@ -56,7 +60,7 @@ function ListingContainer({listing}){
         <div className="trip-container">
           <div className="trip-image-home">
               {listing.fileName ? (
-                  <img src={`http://localhost:8080/files/download/${listing.fileName}`} alt="Trip" />
+                  <img src={`http://localhost:8090/files/download/${listing.fileName}`} alt="Trip" />
                       ) : (
                   <img src={tripPhoto2} alt="Trip Photo" />
                )}

@@ -90,6 +90,11 @@ function TripUpdateForm(){
   };
   
   const onSubmit = async (data) => {
+    if(TokenManager.isTokenExpired()){
+      TokenManager.clear();
+      return <Navigate to="/login" />;
+  }
+  
     data.destinations = data.destinations.split(',').map(destination => destination.trim());
     data.startDate = formatDateForSubmit(data.startDate);
     data.endDate = formatDateForSubmit(data.endDate);

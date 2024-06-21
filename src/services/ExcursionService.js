@@ -1,37 +1,37 @@
 import axios from "axios";
 
 function getAllExcursions(){
-    return axios.get('http://localhost:8080/excursions')
+    return axios.get('http://localhost:8090/excursions')
         .then(response => response.data);
 }
 function getExcursionsByTravelAgency(travelAgencyID){
-    return axios.get(`http://localhost:8080/excursions/travelAgency/${travelAgencyID}`)
+    return axios.get(`http://localhost:8090/excursions/travel-agency/${travelAgencyID}`)
         .then(response => response.data);
 }
 
 function getExcursion(id) {
-    return axios.get(`http://localhost:8080/excursions/${id}`)
+    return axios.get(`http://localhost:8090/excursions/${id}`)
         .then(response => response.data);
 }
 
 function saveExcursion(excursion) {
-    return axios.post('http://localhost:8080/excursions', excursion)
+    return axios.post('http://localhost:8090/excursions', excursion)
         .then(response => response.data)
 }
 
 function deleteExcursion(id){
-    return axios.delete(`http://localhost:8080/excursions/${id}`)
+    return axios.delete(`http://localhost:8090/excursions/${id}`)
     .then(response => response.data)
 }
 
 function updateExcursion(id, updatedExcursion){
-    return axios.put(`http://localhost:8080/excursions/${id}`, updatedExcursion)
+    return axios.put(`http://localhost:8090/excursions/${id}`, updatedExcursion)
     .then(response => response.data)
 }
 
 
 function searchExcursionsByNameAndTravelAgencyAndPrice(searchTerm, minPrice, maxPrice) {
-    let url = `http://localhost:8080/excursions/searchNameAndPrice`;
+    let url = `http://localhost:8090/excursions/search-name-and-price`;
 
     // Check if any parameter exists, then append it to the URL
     if (searchTerm || minPrice || maxPrice) {
@@ -60,6 +60,10 @@ function searchExcursionsByNameAndTravelAgencyAndPrice(searchTerm, minPrice, max
         });
 }
 
+function getBookingsByExcursion(excursionId){
+    return axios.get(`http://localhost:8090/excursions/${excursionId}/bookings`)
+        .then(response => response.data);   
+}
 
 export {
     getAllExcursions,
@@ -68,5 +72,6 @@ export {
     getExcursion,
     deleteExcursion,
     updateExcursion,
-    searchExcursionsByNameAndTravelAgencyAndPrice
+    searchExcursionsByNameAndTravelAgencyAndPrice,
+    getBookingsByExcursion
 }

@@ -23,6 +23,10 @@ function ReviewContainer({review}){
     
       
       const handleDeleteReview = () => {
+        if(TokenManager.isTokenExpired()){
+          TokenManager.clear();
+          return <Navigate to="/login" />;
+      }
         const confirmDelete = window.confirm("Are you sure you want to delete this review?");
         if (confirmDelete) {
           deleteReview(review.id)

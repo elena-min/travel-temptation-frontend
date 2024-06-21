@@ -1,31 +1,26 @@
 import axios from "axios";
 
 function getReviews(){
-    return axios.get('http://localhost:8080/reviews')
+    return axios.get('http://localhost:8090/reviews')
         .then(response => response.data);
 }
 
 function getReview(id) {
-    return axios.get(`http://localhost:8080/reviews/${id}`)
+    return axios.get(`http://localhost:8090/reviews/${id}`)
         .then(response => response.data);
 }
 
 function saveReview(booking) {
-    return axios.post('http://localhost:8080/reviews', booking)
+    return axios.post('http://localhost:8090/reviews', booking)
         .then(response => response.data)
 }
 
 function deleteReview(id){
-    return axios.delete(`http://localhost:8080/reviews/${id}`)
+    return axios.delete(`http://localhost:8090/reviews/${id}`)
     .then(response => response.data)
 }
-
-function getReviewsByUser(userId){
-    return axios.get(`http://localhost:8080/reviews/user/${userId}`)
-        .then(response => response.data);   
-}
 function getReviewsByTravelAgency(travelAgenycId){
-    return axios.get(`http://localhost:8080/reviews/travelagency/${travelAgenycId}`)
+    return axios.get(`http://localhost:8090/reviews/travel-agency/${travelAgenycId}`)
         .then(response => response.data);   
 }
 
@@ -34,6 +29,5 @@ export {
     getReview,
     saveReview,
     deleteReview,
-    getReviewsByUser,
     getReviewsByTravelAgency
 }

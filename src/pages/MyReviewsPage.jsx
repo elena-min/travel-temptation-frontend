@@ -4,7 +4,7 @@ import "../components/style/Review.css";
 import { useState, useEffect } from "react";
 import TokenManager from "../apis/TokenManager";
 import ReviewsListContainer from "../components/ReviewsListContainer";
-import { getReviewsByUser } from "../services/ReviewService";
+import { getReviewsByUser } from "../services/UserService";
 
 
 function MyReviewsPage() {
@@ -12,8 +12,12 @@ function MyReviewsPage() {
    const [errorMessage, setErrorMessage] = useState('');
 
    useEffect(() => {
-    console.log(TokenManager.getAccessToken());
-    if(TokenManager.getAccessToken()){
+    if (TokenManager.isTokenExpired()) {
+      TokenManager.clear();
+      window.location.href = `/login`;
+      return;
+    }
+    
       TokenManager.updateAxiosToken(TokenManager.getAccessToken());
       const userID = TokenManager.getUserIdFromToken();
     
@@ -30,11 +34,7 @@ function MyReviewsPage() {
             setErrorMessage("An error occurred while fetching reviews. Please try again later.");
         }
       });
-    }
-    else{
-      TokenManager.clear();
-      window.location.href = `/login`;
-    } }, []);
+   }, []);
 
    
       return (

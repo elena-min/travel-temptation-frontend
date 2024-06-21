@@ -2,7 +2,7 @@ import React from "react";
 import './style/Home.css';
 import { useState, useEffect } from "react";
 import TokenManager from "../apis/TokenManager";
-import { getBookingsByUser } from "../services/BookingService";
+import { getBookingsByUser } from "../services/UserService";
 import BookingListContainer from "../components/BookingListContainer";
 
 
@@ -11,8 +11,13 @@ function TripBookingsPage() {
     const [errorMessage, setErrorMessage] = useState('');
 
    useEffect(() => {
+
+    if (TokenManager.isTokenExpired()) {
+      TokenManager.clear();
+      window.location.href = `/login`;
+      return;
+    }
     console.log(TokenManager.getAccessToken());
-    if(TokenManager.getAccessToken()){
       TokenManager.updateAxiosToken(TokenManager.getAccessToken());
       const userID = TokenManager.getUserIdFromToken();
     
@@ -36,11 +41,7 @@ function TripBookingsPage() {
             setErrorMessage("An unexpected error occurred: " + error.message);
         }
     });
-    }
-    else{
-      TokenManager.clear();
-      window.location.href = `/login`;
-    } }, []);
+   }, []);
 
    
       return (

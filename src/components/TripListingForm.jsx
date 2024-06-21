@@ -62,6 +62,11 @@ function TripListingForm(){
   
       //Async means can contain asynchronous operations, meaning it can wait for things to finish before proceeding.
       const onSubmit = async (data) => {
+        if(TokenManager.isTokenExpired()){
+          TokenManager.clear();
+          return <Navigate to="/login" />;
+      }
+      
         data.destinations = data.destinations.split(',').map(destination => destination.trim());
 
         const tripData = {

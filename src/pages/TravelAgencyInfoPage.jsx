@@ -94,13 +94,25 @@ function TravelAgencyInfoPage() {
 
       
       const handleShowReviews = () => {
+        if(TokenManager.isTokenExpired()){
+          TokenManager.clear();
+          return <Navigate to="/login" />;
+      }
+      else{
         setShowReviews(true);
         setShowListings(false);
+      }
       };
     
       const handleShowListings = () => {
+        if(TokenManager.isTokenExpired()){
+          TokenManager.clear();
+          return <Navigate to="/login" />;
+      }
+      else{
         setShowListings(true);
         setShowReviews(false);
+      }
       };
 
       const handleReviewNow = () =>{

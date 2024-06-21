@@ -9,7 +9,7 @@ function BookingForm(){
   const {register, handleSubmit, formState : {errors}} = useForm();
   
   const onSubmit = async (data) => { 
-    if(!TokenManager.isUserAuthenticated()){
+    if(!TokenManager.isUserAuthenticated() && !TokenManager.isTokenExpired()){
         alert('You need to be logged in to book a trip!');
         TokenManager.clear();
         window.location.href = `/login`;

@@ -18,7 +18,7 @@ describe('The Login Page', () => {
   it('should display error message for invalid credentials', () => {
     cy.visit('http://localhost:5173/login')
 
-    cy.intercept('POST', 'http://localhost:8080/login', {
+    cy.intercept('POST', 'http://localhost:8090/login', {
       statusCode: 401, 
       body: { message: 'Invalid username or password' }
     }).as('login');

@@ -4,10 +4,11 @@ import { deleteExcursion, getExcursion } from "../services/ExcursionService";
 import './style/TripInfoPage.css';
 import tripPhoto2 from '../images/tripPhoto2.jpg';
 import TokenManager from '../apis/TokenManager';
-import { getBookingsByExcursion } from '../services/BookingService';
+import { getBookingsByExcursion } from '../services/ExcursionService';
 import BookingListSmallContainer from '../components/BookingListSmallContainer';
 import ExcursionSales from '../components/statistics/ExcursionSales';
 import BookingStatisticsGraphContainer from '../components/statistics/BookingStatisticsGraphContainer';
+import { Link } from "react-router-dom";
 
 function TripInfoPage() {
 
@@ -102,40 +103,58 @@ function TripInfoPage() {
       }
 
       const handleDelete = () =>{
+        if(TokenManager.isTokenExpired()){
+            TokenManager.clear();
+            return <Navigate to="/login" />;
+        }
+        else{
         const confirmDelete = window.confirm("Are you sure you want to delete this trip?")
-        if(confirmDelete){
-          deleteExcursion(excursionId)
-          .then( () =>{
-              window.location.href = "/";
-          })
-          .catch(error => {
-            if (error.response) {
-                if (error.response.status === 403) {
-                    setDeleteStatus({ success: false, error: "You are not authorized to delete this listing." });
-                } else if (error.response.status === 404) {
-                    setDeleteStatus({ success: false, error: "Listing not found." });
-                } else if (error.response.status === 400) {
-                    setDeleteStatus({ success: false, error: error.response.data.error });
+            if(confirmDelete){
+            deleteExcursion(excursionId)
+            .then( () =>{
+                window.location.href = "/";
+            })
+            .catch(error => {
+                if (error.response) {
+                    if (error.response.status === 403) {
+                        setDeleteStatus({ success: false, error: "You are not authorized to delete this listing." });
+                    } else if (error.response.status === 404) {
+                        setDeleteStatus({ success: false, error: "Listing not found." });
+                    } else if (error.response.status === 400) {
+                        setDeleteStatus({ success: false, error: error.response.data.error });
+                    } else {
+                        setDeleteStatus({ success: false, error: "An unexpected error occurred. Please try again later." });
+                    }
+                } else if (error.request) {
+                    console.error("Request made but no response received:", error.request);
+                    setDeleteStatus({ success: false, error: "No response received from the server. Please try again later." });
                 } else {
+                    console.error("Error setting up request:", error.message);
                     setDeleteStatus({ success: false, error: "An unexpected error occurred. Please try again later." });
                 }
-            } else if (error.request) {
-                console.error("Request made but no response received:", error.request);
-                setDeleteStatus({ success: false, error: "No response received from the server. Please try again later." });
-            } else {
-                console.error("Error setting up request:", error.message);
-                setDeleteStatus({ success: false, error: "An unexpected error occurred. Please try again later." });
+            });
             }
-        });
         }
         
       }
 
       const handleCheckBookings = () => {
-        setShowBookings(true);
+        if(TokenManager.isTokenExpired()){
+            TokenManager.clear();
+            return <Navigate to="/login" />;
+        }
+        else{
+            setShowBookings(true);
+        }
       };
       const handleCheckSales = () => {
-        setshowSales(true);
+        if(TokenManager.isTokenExpired()){
+            TokenManager.clear();
+            return <Navigate to="/login" />;
+        }
+        else{
+            setshowSales(true);
+        }
       };
       
       const handleBookNow = () =>{
@@ -157,8 +176,8 @@ function TripInfoPage() {
             <div className="trip-info-container">
               {errorMessage && <p className="error-message">{errorMessage}</p>}
               {deleteStatus && (
-              <div className={updateStatus.success ? "success-message" : "error-message"}>
-                    {updateStatus.success ? "Trip deleted successfully!" : "Error deleting information. Please try again."}
+              <div className={deleteStatus.success ? "success-message" : "error-message"}>
+                    {deleteStatus.success ? "Trip deleted successfully!" : "Error deleting information. Please try again."}
               </div>
               )}
 
@@ -168,14 +187,14 @@ function TripInfoPage() {
                 <div className="trip-info-wrapper">
                    <div className='trip-image'>
                     {tripfileName ? (
-                                <img src={`http://localhost:8080/files/download/${tripfileName}`} alt="Trip Photo" />
+                                <img src={`http://localhost:8090/files/download/${tripfileName}`} alt="Trip Photo" />
                             ) : (
                                 <img src={tripPhoto2} alt="Trip Photo" />
                     )}
 
                    </div>
                    <div className='trip-info'>
-                    <p><strong>Travel Agency:</strong> {trip.travelAgency.firstName} {trip.travelAgency.lastName}</p>
+                    <p><strong>Travel Agency:</strong><Link to={`/travel-agency/${trip.travelAgency.id}`}> {trip.travelAgency.firstName} {trip.travelAgency.lastName}</Link></p>
                     <p><strong>Destinations:</strong> {trip.destinations.join(', ')}</p>
                     <p><strong>Description:</strong> {trip.description}</p>
                     <p><strong>Start Date:</strong> {formatDate(trip.startDate)}</p>

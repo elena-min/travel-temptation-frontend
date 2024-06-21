@@ -46,6 +46,11 @@ function BookingPage() {
       }
       
       const handleBookNow = () =>{
+        if(TokenManager.isTokenExpired()){
+            TokenManager.clear();
+            return <Navigate to="/login" />;
+        }
+
         if (numTravelers > trip.numberOfSpacesLeft) {
             setErrorMessage('The number of travelers exceeds the available spaces.');
             return;
@@ -63,7 +68,7 @@ function BookingPage() {
         <div className="trip-info-wrapper">
             <div className='trip-image'>
                     {trip.fileName ? (
-                                <img src={`http://localhost:8080/files/download/${trip.fileName}`} alt="Trip" />
+                                <img src={`http://localhost:8090/files/download/${trip.fileName}`} alt="Trip" />
                             ) : (
                                 <img src={tripPhoto2} alt="Trip Photo" />
                     )}

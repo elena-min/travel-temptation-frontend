@@ -5,7 +5,7 @@ import TokenManager from "./TokenManager"
 const ProtectedRoute = ({ element: Component, requiredRoles, ...rest }) => {
     const isAuthenticated = TokenManager.isAuthenticated();
     const userRoles = TokenManager.getUserRoles();
-
+    const isTokenExpired = TokenManager.isTokenExpired();
     if(!isAuthenticated){
         TokenManager.clear();
         return <Navigate to="/login" />;
@@ -14,6 +14,10 @@ const ProtectedRoute = ({ element: Component, requiredRoles, ...rest }) => {
         return <Navigate to="/unauthorized" />;
     }
 
+    if(isTokenExpired){
+        TokenManager.clear();
+        return <Navigate to="/login" />;
+    }
     return <Component/>;
     //return TokenManager.isUserAuthenticated() ? Component : <Navigate to="/login" />;
   };

@@ -30,7 +30,7 @@ Cypress.Commands.add('login', (username, password) =>{
     const validToken = 'eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJlbGVuYTEyMyIsImlhdCI6MTcxNzc3NDgzOCwiZXhwIjoxNzI1OTM4MzYwLCJyb2xlcyI6WyJVU0VSIl0sInVzZXJJRCI6N30.wKLfNPPwj6_Xp1r5SF0JW60fPoIv-LZxxi27kbNaR0hwUlqNI9dK2UMbOfM4cj7s'
     cy.visit('http://localhost:5173/login')
   
-      cy.intercept('POST', 'http://localhost:8080/login', {
+      cy.intercept('POST', 'http://localhost:8090/login', {
           statusCode: 200,
           body: { accessToken: validToken }
       }).as('login');
@@ -54,7 +54,7 @@ Cypress.Commands.add('login', (username, password) =>{
     const validToken = 'eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJnbG9iYWwuYWR2ZW50dXJlcyIsImlhdCI6MTcxNzc3ODg1NSwiZXhwIjoxNzI1OTM4MzYwLCJyb2xlcyI6WyJUUkFWRUxBR0VOQ1kiXSwidXNlcklEIjoxMX0.Qhv_lMAkRfwq0nQTCyvyc0zPY4k4GIczDifwtRuv_sKefgtFysFgmJMejHorp_eJ'
     cy.visit('http://localhost:5173/login')
   
-      cy.intercept('POST', 'http://localhost:8080/login', {
+      cy.intercept('POST', 'http://localhost:8090/login', {
           statusCode: 200,
           body: { accessToken: validToken }
       }).as('login');

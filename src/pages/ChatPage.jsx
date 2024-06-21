@@ -55,7 +55,7 @@ function ChatPage() {
 
     useEffect(() => {
         const stompClient = new Client({
-            brokerURL: 'ws://localhost:8080/ws',
+            brokerURL: 'ws://localhost:8090/ws',
             reconnectDelay: 5000,
             heartbeatIncoming: 4000,
             heartbeatOutgoing: 4000,
@@ -126,6 +126,11 @@ function ChatPage() {
       };
 
     const sendMessage = () => {
+        if(TokenManager.isTokenExpired()){
+            TokenManager.clear();
+            return <Navigate to="/login" />;
+        }
+
         if (client !== null) {
             const chatMessage = {
                 from: user.username, 

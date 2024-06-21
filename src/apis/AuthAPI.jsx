@@ -2,7 +2,7 @@ import axios from "axios";
 import TokenManager from './TokenManager';
 
 const AuthAPI ={
-    login: (username, password) => axios.post('http://localhost:8080/login', {username, password})
+    login: (username, password) => axios.post('http://localhost:8090/login', {username, password})
          .then(response => response.data.accessToken)
          .then(accessToken => {
             TokenManager.setAccessToken(accessToken);
@@ -13,7 +13,7 @@ const AuthAPI ={
              throw error; 
          })
          ,
-    registerUser: (userData) => axios.post('http://localhost:8080/register/user', userData)
+    registerUser: (userData) => axios.post('http://localhost:8090/register/user', userData)
          .then(response => response.data.accessToken)
          .then(accessToken => {
             TokenManager.setAccessToken(accessToken);
@@ -21,7 +21,7 @@ const AuthAPI ={
             return accessToken
          })
          ,
-    registerTravelAgency: (userData) => axios.post('http://localhost:8080/register/traveling-agency', userData)
+    registerTravelAgency: (userData) => axios.post('http://localhost:8090/register/traveling-agency', userData)
          .then(response => response.data.accessToken)
          .then(accessToken => {
             TokenManager.setAccessToken(accessToken);

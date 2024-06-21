@@ -25,6 +25,10 @@ function BookingContainer({booking}){
       }
     
       const handleCancelTrip = () =>{
+        if(TokenManager.isTokenExpired()){
+          TokenManager.clear();
+          return <Navigate to="/login" />;
+      }8
         const confirmDelete = window.confirm("Are you sure you want to cancel this trip?")
         if(confirmDelete){
           deleteBooking(booking.id)
@@ -57,7 +61,7 @@ function BookingContainer({booking}){
 
           <div className="trip-image-home">
               {booking.excursion.fileName ? (
-                  <img src={`http://localhost:8080/files/download/${booking.excursion.fileName}`} alt="Trip" />
+                  <img src={`http://localhost:8090/files/download/${booking.excursion.fileName}`} alt="Trip" />
                       ) : (
                   <img src={tripPhoto2} alt="Trip Photo" />
                )}

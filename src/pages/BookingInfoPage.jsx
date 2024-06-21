@@ -64,6 +64,11 @@ function BookingInfoPage() {
     };
 
     const handleStatusUpdate = async () => {
+        if(TokenManager.isTokenExpired()){
+            TokenManager.clear();
+            return <Navigate to="/login" />;
+        }
+
         const updateBookingRequest = {
             id: booking.id,
             user: booking.user,
