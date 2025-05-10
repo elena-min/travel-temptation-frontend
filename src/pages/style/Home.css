@@ -1,0 +1,25 @@
+
+.image-container {
+    position: relative;
+  }
+  
+  .image-container img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .home-container{
+    padding: 20px;
+  }
+ .trip-listing-form{
+    padding: 20px;
+ }
+
+
+.trips-home {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  justify-content: center;
+
+}

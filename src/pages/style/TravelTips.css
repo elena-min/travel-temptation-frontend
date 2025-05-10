@@ -1,0 +1,84 @@
+  .tips-container {
+    padding: 20px;
+    margin-left: 150px;
+    margin-right: 150px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    font-family: Arial, sans-serif;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 20px; 
+    background-color: #f9f9f9;
+  }
+  
+  .tips-heading {
+    color: #381431;
+    text-align: center;
+    padding: 10px;
+  }
+  
+  .tips-list {
+    list-style-type: none;
+    padding-left: 0;
+  }
+  
+  .tip-item {
+    margin-bottom: 10px;
+  }
+  
+  .contact-details {
+    margin-bottom: 20px;
+  }
+  
+  .contact-details p {
+    margin: 5px 0;
+  }
+  
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .contact-form label {
+    margin-bottom: 10px;
+  }
+  
+  .contact-form input,
+  .contact-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .contact-form button {
+    padding: 10px 15px;
+    background-color: #2E8B57;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+  .contact-form button:hover {
+    background-color: #276846;
+  }
+
+  .contact-form button{
+    background-color: #381431;
+    color: #fff;
+    border: #381431 solid 4px;
+    border-radius: 8px;
+    margin:10px;
+    padding: 15px 30px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.5s;
+  }
+  .contact-form button:hover{
+    border: #381431 solid 4px;
+    background-color: #EFDAD1;
+    color: #381431;
+  }
